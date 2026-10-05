@@ -18,41 +18,91 @@ Fighter is the **first** game in the trilogy, despite the tactics RPG (now Game 
 
 ## 2. Core Concept
 
-Fighter is a **turn-based fantasy tournament fighter** built around the 64 hexagrams of the King Wen I Ching sequence as its structural and cosmological foundation. The cast maps directly to the hexagram space:
+Fighter is a **turn-based fantasy tournament fighter** built on the 64 hexagrams of the King Wen I Ching sequence. Every fighter is a full hexagram: two of the eight trigrams stacked, one on the bottom and one on top, and **the order matters**.
 
-- **28 unordered trigram combinations** (non-mirror pairings, collapsed the same way Game 2 collapses them — order-agnostic)
-- **+ 8 self-pair outcomes** (a trigram mirrored with itself)
-- **= 36 total fighters/characters**
+- **56 mixed fighters:** two different trigrams. The same pair in the opposite order (Fire over Mountain vs. Mountain over Fire) is a different fighter.
+- **8 pure fighters:** a trigram doubled with itself. These keep the named archetypes (see Section 3).
+- **= 64 fighters**, one per hexagram.
 
-This roster size and structure intentionally mirrors the hexagram-space logic already established for Game 2, giving the trilogy a consistent cosmological backbone from the very first game.
-
----
-
-## 3. Roster & Unlock Curve
-
-- **Roster size:** 36 fighters, drawn from the hexagram space (see above)
-- **Unlock curve:** Triangular progression — 1 match unlocks fighter 2, 2 more matches unlock fighter 3, and so on, with the required match count increasing by one each time
-- **Total matches to fully unlock the roster:** 630 matches
-- **Estimated playtime:** a substantial but fully completable arc, at a few minutes per match
+The roster's hexagram logic carries across the trilogy, giving all three games one cosmological backbone.
 
 ---
 
-## 4. Spawn Mechanic — Fate as Onboarding
+## 3. The Eight Trigrams
 
-- On **first launch**, the game performs an **automatic I Ching coin-cast** to assign the player's starting fighter.
-- This is not cosmetic — it's a **functional randomization system** for player onboarding, consistent with the trilogy's cosmological theme.
-- This spawn mechanic is the Fighter-scale echo of Game 2's much larger "Fate over Choice" philosophy (where fate, not player choice, determines a unit's ultimate class) — Fighter establishes the fate-driven identity of the whole trilogy at its smallest, most immediate scale.
+Each trigram brings one archetype and one weapon to every fighter it appears in.
+
+| Trigram | Archetype | Weapon | Mount | Shuo Gua animal | Pure fighter (doubled) |
+|---|---|---|---|---|---|
+| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Ground | Horse | Paladin |
+| ☳ Zhèn (Thunder) | Damage Magic | Staff | — | Dragon | Shaman |
+| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | — | Pig | Jester |
+| ☶ Gèn (Mountain) | Heavy Armor | Shields | — | Dog | Bastion |
+| ☷ Kūn (Earth) | Support Magic | Club/Hammer | — | Ox | Sage |
+| ☴ Xùn (Wind) | Flying Cavalry | Lance | Flying | Rooster | Valkyrie |
+| ☲ Lí (Fire) | Rogue | Blades | — | Pheasant | Samurai |
+| ☱ Duì (Lake) | Brawler | Gauntlets | — | Sheep/Goat | Captain |
 
 ---
 
-## 5. Unlock Reveal — "New Challenger Approaches"
+## 4. How the Two Trigrams Combine
 
-- Each new character is revealed via a **silhouette mechanic**: the player sees a shadowed outline of the upcoming fighter before earning them.
-- The player must **defeat** each new challenger to unlock them — unlocking is earned through combat, not simply awarded for reaching a match-count threshold.
+- **Both weapons:** a fighter wields the weapons of both its trigrams, so Fire over Mountain fights with blades and a shield. A pure fighter wields its trigram's single weapon.
+- **Bottom trigram = base archetype:** who the fighter started as.
+- **Top trigram = what they became:** the class their base grew into.
+- **No leveling up in Fighter:** every fighter arrives as a full hexagram. Promotion as a mechanic (starting as a single-trigram unit and growing into a hexagram) arrives in Game 2.
+- **Order matters:** because bottom and top play different roles, the two orders of a pair are different fighters. *How the order shows up in combat (for example, which weapon a fighter leads with) — OPEN, see Section 13.*
 
 ---
 
-## 6. Combat System
+## 5. The 64 Fighters — King Wen Grid
+
+Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each cell is the traditional King Wen hexagram number, which gives every fighter an authentic I Ching identity (number, name, imagery) to draw names and lore from. The bold diagonal holds the 8 pure fighters.
+
+| Bottom ↓ / Top → | ☰ Heaven | ☳ Thunder | ☵ Water | ☶ Mountain | ☷ Earth | ☴ Wind | ☲ Fire | ☱ Lake |
+|---|---|---|---|---|---|---|---|---|
+| **☰ Heaven** | **1** | 34 | 5 | 26 | 11 | 9 | 14 | 43 |
+| **☳ Thunder** | 25 | **51** | 3 | 27 | 24 | 42 | 21 | 17 |
+| **☵ Water** | 6 | 40 | **29** | 4 | 7 | 59 | 64 | 47 |
+| **☶ Mountain** | 33 | 62 | 39 | **52** | 15 | 53 | 56 | 31 |
+| **☷ Earth** | 12 | 16 | 8 | 23 | **2** | 20 | 35 | 45 |
+| **☴ Wind** | 44 | 32 | 48 | 18 | 46 | **57** | 50 | 28 |
+| **☲ Fire** | 13 | 55 | 63 | 22 | 36 | 37 | **30** | 49 |
+| **☱ Lake** | 10 | 54 | 60 | 41 | 19 | 61 | 38 | **58** |
+
+*Example: Fire over Mountain (Mountain row, Fire column) is #56; Mountain over Fire is #22.*
+
+---
+
+## 6. Steeds (Heaven & Wind Only)
+
+- Only the two archetypally mounted trigrams ride: **Heaven** (ground) and **Wind** (flying). Any fighter with Heaven or Wind as either of its trigrams rides — 28 of the 64.
+- If Wind is one of the trigrams, the steed flies; otherwise it's a ground steed.
+- Steeds draw on the **trigram animal archetypes** from the Shuo Gua (Section 3), so riders are recognizable by silhouette alone, not as recolored horses. The steed's creature reflects the fighter's other trigram (for example, Heaven + Water rides a boar; Wind + Lake rides a winged ram).
+- The Shuo Gua's longer list adds more to draw from: Heaven — the *bó*, a horse-like beast with saw teeth that eats tigers and leopards; Thunder and Water — horses of different temperaments; Fire — hard-shelled creatures (turtle, crab, tortoise); Mountain — rats and "black-snouted beasts" (read by old commentators as tigers and leopards).
+- The animal look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons.
+- *Final steed for each of the 15 mounted pairs — OPEN, see Section 13.*
+
+---
+
+## 7. Starting Fighter — Fate as Onboarding
+
+- On **first launch**, an automatic I Ching cast assigns the player's starting fighter: one random hexagram from all 64.
+- Casts in Fighter are **plain random hexagrams** — every fighter is equally likely, so pure fighters are no rarer than mixed ones. Changing lines and cast-based rarity are saved for Game 2.
+- This is not cosmetic — it's a **functional randomization system** for player onboarding, and the Fighter-scale echo of Game 2's much larger "Fate over Choice" philosophy (where fate, not player choice, determines a unit's ultimate class).
+
+---
+
+## 8. Unlocking — "New Challenger Approaches"
+
+- New fighters are unlocked by **casting**. Each cast lands on a hexagram, and that fighter shows up as the next challenger.
+- The challenger is revealed in **silhouette** first; the player must **defeat** them to unlock them. Unlocking is earned through combat.
+- A cast that lands on a fighter the player already owns is **re-rolled** until it lands on a new one.
+- *How often a cast happens — OPEN, see Section 13.*
+
+---
+
+## 9. Combat System
 
 **Combat Loop:**
 - **Attacker** chooses an attack type **and** a live cadence (timing of the attack's delivery).
@@ -78,7 +128,7 @@ This roster size and structure intentionally mirrors the hexagram-space logic al
 
 ---
 
-## 7. Art Direction (Locked, Trilogy-Wide)
+## 10. Art Direction (Locked, Trilogy-Wide)
 
 - **In-match animation style:** GBA-era Fire Emblem pixel art — specifically sprites sourced from *Fire Emblem: The Blazing Blade*.
 - **Character portraits & key art:** classic Yu-Gi-Oh OCG card art, Volume 1 through Rise of Destiny (1999–2004 era).
@@ -86,32 +136,43 @@ This roster size and structure intentionally mirrors the hexagram-space logic al
 
 ---
 
-## 8. Voice & Localization Direction (Locked, Trilogy-Wide)
+## 11. Voice & Localization Direction (Locked, Trilogy-Wide)
 
 - **Japanese voice acting with English subtitles** — confirmed as the VO direction for the trilogy, no English dub planned.
 
 ---
 
-## 9. Tools & Art References
+## 12. Tools & Art References
 
 - **GBA-era *Fire Emblem: The Blazing Blade* sprite sheets** as the primary art reference, including:
   - Player Units: Athos (Archsage), Eliwood (Lord & Knight Lord), Hector (Lord), Lyn (Blade Lord), Guy (Swordmaster), Hawkeye
   - Generic Units: Sniper (Female), Archer, Troubadour, Warrior, Cavalier, Assassin, General, Paladin
   - Enemy Units: Magic Seal, Soldier, Sonia, Brigand
-- **King Wen hexagram lookup grid** as the structural reference for the trigram/hexagram system (rows = lower trigram, columns = upper trigram, cells = the traditional King Wen hexagram number).
+- **King Wen hexagram lookup grid** as the structural reference for the trigram/hexagram system (reproduced in Section 5).
+- **Shuo Gua** ("Discussion of the Trigrams," one of the Ten Wings commentaries) as the source for the trigram animals (Sections 3 and 6).
 - **Classic Yu-Gi-Oh OCG card art** (1999–2004 era) as the portrait/key art reference.
 
 ---
 
-## 10. On the Horizon
+## 13. Open Questions
 
-- Establishing **stable base animation timings** for Fighter's combat before introducing cadence variability (see Section 6).
+1. **How trigram order shows up in combat** — for example, which of a fighter's two weapons leads.
+2. **Unlock pacing** — how many matches between casts. The earlier triangular curve (1 match, then 2 more, then 3 more…) was sized for 36 fighters (630 matches); applied to 64 it becomes 2,016 matches, roughly 70–100 hours at 2–3 minutes a match.
+3. **Steed for each mounted pair** — 15 pairs covering 28 fighters (Section 6).
+4. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
+
+---
+
+## 14. On the Horizon
+
+- Establishing **stable base animation timings** for Fighter's combat before introducing cadence variability (see Section 9).
 - Fighter's proven combat/animation engine is intended to be the foundation Game 2 and Game 3 build on — no rework of core timing/feel systems planned once this is locked.
 
 ---
 
-## 11. Trilogy-Wide Design Principles Established Here
+## 15. Trilogy-Wide Design Principles Established Here
 
 - **Risk-front-loading as trilogy strategy:** the hardest shared systems (combat, animation) are solved once, in Fighter, so Games 2 and 3 inherit a tested engine.
 - **Simplification over optionality:** carried forward into Game 2's promotion system, where self-pair hexagram outcomes were collapsed from a dual mirror-outcome model to a single outcome per hexagram — the same "cleaner over more optional" instinct that shapes Fighter's own scope choices (e.g. deferring cadence variability rather than shipping it half-tuned).
-- **Fate as mechanic, not flavor:** Fighter's coin-cast spawn mechanic is the first, smallest-scale expression of a philosophy that becomes Game 2's headline pillar ("Fate over Choice") before Game 3 deliberately inverts it into "Choose Your Own Destiny."
+- **Fate as mechanic, not flavor:** Fighter's casts (for the starting fighter and every challenger) are the first, smallest-scale expression of a philosophy that becomes Game 2's headline pillar ("Fate over Choice") before Game 3 deliberately inverts it into "Choose Your Own Destiny."
+- **Trilogy sync note:** Fighter now uses the full order-sensitive 64 hexagrams, which earlier docs listed as a Game 3 feature. The Game 2 and Game 3 docs (kept outside this repo) need a sync pass.
