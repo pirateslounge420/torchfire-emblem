@@ -32,22 +32,25 @@ The roster's hexagram logic carries across the trilogy, giving all three games o
 
 Each trigram brings one archetype and one weapon to every fighter it appears in.
 
-| Trigram | Archetype | Weapon | Mount | Shuo Gua animal | Pure fighter (doubled) |
-|---|---|---|---|---|---|
-| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Ground | Horse | Paladin |
-| ☳ Zhèn (Thunder) | Damage Magic | Staff | — | Dragon | Shaman |
-| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | — | Pig | Jester |
-| ☶ Gèn (Mountain) | Heavy Armor | Shields | — | Dog | Bastion |
-| ☷ Kūn (Earth) | Support Magic | Club/Hammer | — | Ox | Sage |
-| ☴ Xùn (Wind) | Flying Cavalry | Lance | Flying | Rooster | Valkyrie |
-| ☲ Lí (Fire) | Rogue | Blades | — | Pheasant | Samurai |
-| ☱ Duì (Lake) | Brawler | Gauntlets | — | Sheep/Goat | Captain |
+| Trigram | Archetype | Weapon | Color | Mount | Shuo Gua animal | Pure fighter (doubled) |
+|---|---|---|---|---|---|---|
+| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | Horse | Paladin |
+| ☳ Zhèn (Thunder) | Damage Magic | Staff | Cyan | — | Dragon | Shaman |
+| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | Indigo | — | Pig | Jester |
+| ☶ Gèn (Mountain) | Heavy Armor | Shields | Orange | — | Dog | Bastion |
+| ☷ Kūn (Earth) | Support Magic | Club/Hammer | Yellow | — | Ox | Sage |
+| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Rooster | Valkyrie |
+| ☲ Lí (Fire) | Rogue | Blades | Red | — | Pheasant | Samurai |
+| ☱ Duì (Lake) | Brawler | Gauntlets | Silver | — | Sheep/Goat | Captain |
+
+**Colors** follow the traditional Five Elements colors (as color only — the Five Elements aren't a mechanic in Fighter): Thunder and Wind share Wood's blue-green family, Earth and Mountain share Earth's warm tones, Lake takes Metal's silver, Fire is red and Water is indigo. Heaven is the exception: its purple comes from the Purple Forbidden Enclosure, the Celestial Emperor's star-palace. Shading notes: keep Thunder's cyan leaning blue and Wind's seafoam leaning green, and keep Water's indigo on the blue side so it doesn't drift into Heaven's purple.
 
 ---
 
 ## 4. How the Two Trigrams Combine
 
 - **Both weapons:** a fighter wields the weapons of both its trigrams, so Fire over Mountain fights with blades and a shield. A pure fighter wields its trigram's single weapon.
+- **Both colors:** a fighter carries both of its trigrams' color palettes, each kept clean and readable — never mixed into one blended hue. A pure fighter carries its trigram's single palette.
 - **Bottom trigram = base archetype:** who the fighter started as.
 - **Top trigram = what they became:** the class their base grew into.
 - **No leveling up in Fighter:** every fighter arrives as a full hexagram. Promotion as a mechanic (starting as a single-trigram unit and growing into a hexagram) arrives in Game 2.
@@ -80,7 +83,7 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 - If Wind is one of the trigrams, the steed flies; otherwise it's a ground steed.
 - Steeds draw on the **trigram animal archetypes** from the Shuo Gua (Section 3), so riders are recognizable by silhouette alone, not as recolored horses. The steed's creature reflects the fighter's other trigram (for example, Heaven + Water rides a boar; Wind + Lake rides a winged ram).
 - The Shuo Gua's longer list adds more to draw from: Heaven — the *bó*, a horse-like beast with saw teeth that eats tigers and leopards; Thunder and Water — horses of different temperaments; Fire — hard-shelled creatures (turtle, crab, tortoise); Mountain — rats and "black-snouted beasts" (read by old commentators as tigers and leopards).
-- The animal look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons.
+- The animal look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons and two colors.
 - *Final steed for each of the 15 mounted pairs — OPEN, see Section 13.*
 
 ---
