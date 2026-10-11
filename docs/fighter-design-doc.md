@@ -99,7 +99,8 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 | Crane | Crane — big, elegant, almost dinosaur-like; trumpeting calls and display dancing | Heron — leaner, silent stalking predator |
 | Tortoise | Big, hefty, heavily armored tortoise | Turtle |
 
-- *How a fighter gets its male or female variant — OPEN, see Section 13.*
+- **Launch scope: male variants only.** Fighter ships with just the male creature of each pair (goat, wyvern, war horse, boar, wolf, lion, crane, tortoise) to halve the sprite workload. The female variants (sheep, drake, zebra, warthog, jackal, tiger, heron, turtle) are a planned post-launch quality-of-life update, not part of the initial scope.
+- *How a fighter gets its female variant once those are added — OPEN, see Section 13.*
 - The creature look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons and two colors.
 - *Art and visual design for each of the 28 steeds — OPEN, see Section 13.*
 
@@ -179,7 +180,7 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 1. **How trigram order shows up in combat** — for example, which of a fighter's two weapons leads.
 2. **Unlock pacing** — how many matches between casts. The earlier triangular curve (1 match, then 2 more, then 3 more…) was sized for 36 fighters (630 matches); applied to 64 it becomes 2,016 matches, roughly 70–100 hours at 2–3 minutes a match.
 3. **Steed creature-to-trigram assignment** — the eight creature slots and their male/female variants are set (Section 6), but which slot goes with which trigram is not decided. The grounded/flying rule stays as locked.
-4. **Male/female variant** — how a fighter gets the male or female version of its steed creature. The doc doesn't give fighters a gender yet.
+4. **Female steed variants (post-launch)** — launch is male-only (Section 6), so nothing is needed for launch. For the later update, how a fighter gets the female version is still open; the doc doesn't give fighters a gender yet.
 5. **Steed art for the 28 mounted fighters** — the visual design of each steed.
 6. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
 
