@@ -32,18 +32,18 @@ The roster's hexagram logic carries across the trilogy, giving all three games o
 
 Each trigram brings one archetype and one weapon to every fighter it appears in.
 
-| Trigram | Archetype | Weapon | Color | Mount | Pure fighter (doubled) |
-|---|---|---|---|---|---|
-| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | Paladin |
-| ☳ Zhèn (Thunder) | Damage Magic | Staff | Cyan | — | Shaman |
-| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | Indigo | — | Jester |
-| ☶ Gèn (Mountain) | Heavy Armor | Shields | Orange | — | Bastion |
-| ☷ Kūn (Earth) | Support Magic | Club/Hammer | Yellow | — | Sage |
-| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Valkyrie |
-| ☲ Lí (Fire) | Rogue | Blades | Red | — | Samurai |
-| ☱ Duì (Lake) | Brawler | Gauntlets | Silver | — | Captain |
+| Trigram | Archetype | Weapon | Color | Mount | Steed creature (male / female) | Pure fighter (doubled) |
+|---|---|---|---|---|---|---|
+| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | War horse / zebra | Paladin |
+| ☳ Zhèn (Thunder) | Damage Magic | Staff | Cyan | — | Wolf / jackal | Shaman |
+| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | Indigo | — | Crane / heron | Jester |
+| ☶ Gèn (Mountain) | Heavy Armor | Shields | Orange | — | Tortoise / turtle | Bastion |
+| ☷ Kūn (Earth) | Support Magic | Club/Hammer | Yellow | — | Boar / warthog | Sage |
+| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Wyvern / drake | Valkyrie |
+| ☲ Lí (Fire) | Rogue | Blades | Red | — | Lion / tiger | Samurai |
+| ☱ Duì (Lake) | Brawler | Gauntlets | Silver | — | Mountain goat / sheep | Captain |
 
-*Steed creatures are not tied to trigrams in this table yet — the eight creature pairs are set (Section 6), but which trigram gets which is OPEN, see Section 13.*
+*The steed creature column is the creature a mounted fighter rides when this trigram is its base (Section 6). Only the male creature ships at launch.*
 
 **Colors** follow the traditional Five Elements colors (as color only — the Five Elements aren't a mechanic in Fighter): Thunder and Wind share Wood's blue-green family, Earth and Mountain share Earth's warm tones, Lake takes Metal's silver, Fire is red and Water is indigo. Heaven is the exception: its purple comes from the Purple Forbidden Enclosure, the Celestial Emperor's star-palace. Shading notes: keep Thunder's cyan leaning blue and Wind's seafoam leaning green, and keep Water's indigo on the blue side so it doesn't drift into Heaven's purple.
 
@@ -82,22 +82,22 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 ## 6. Steeds (Heaven & Wind Only)
 
 - Only the two archetypally mounted trigrams grant a steed: **Heaven** (ground) and **Wind** (flying). A fighter is mounted if Heaven or Wind appears in **either** trigram slot, base or top. That is 28 of the 64 fighters (confirmed count).
-- **The base trigram picks the creature.** Each trigram gets one of eight creature slots (listed below), and a mounted fighter's steed comes from the slot of its bottom (base) trigram. *Which slot goes with which trigram — OPEN, see Section 13.*
+- **The base trigram picks the creature.** Each trigram has its own creature (Section 3 and the table below), and a mounted fighter's steed is the creature of its bottom (base) trigram.
 - **Heaven or Wind decides grounded vs. flying.** If Heaven is the mount trigram, the steed is a ground version of the creature; if Wind is, it's a flying version.
-- **Fighters with both Heaven and Wind:** the top (non-base) trigram decides grounded vs. flying, while the base still picks the creature. Heaven over Wind rides a flying version of the Heaven-slot creature; Wind over Heaven rides a ground version of the Wind-slot creature. The pure fighters ride a ground version (Heaven over Heaven) and a flying version (Wind over Wind) of their own trigram's creature.
+- **Fighters with both Heaven and Wind:** the top (non-base) trigram decides grounded vs. flying, while the base still picks the creature. Heaven over Wind rides a flying war horse; Wind over Heaven rides a ground wyvern. The pure fighters ride a ground war horse (Heaven over Heaven) and a flying wyvern (Wind over Wind). For example, Water over Heaven rides a ground crane, and Earth over Wind rides a flying boar.
 - **No hybrid steeds.** Fusing two creatures into one per pairing was considered and rejected in favor of this simpler system: one creature, in a ground or flying variant.
-- **Custom creature set.** The steeds are Mike's own picks, not the traditional Shuo Gua animals. Each slot has a **male** and a **female** variant: two closely related but distinct species, in the spirit of lion and tiger. Silhouettes should read clearly, not as recolored horses.
+- **Custom creature set.** The steeds are Mike's own picks, not the traditional Shuo Gua animals. Each trigram's creature has a **male** and a **female** variant: two closely related but distinct species, in the spirit of lion and tiger. Silhouettes should read clearly, not as recolored horses.
 
-| Creature slot | Male | Female |
+| Trigram (base) | Male (ships at launch) | Female (post-launch) |
 |---|---|---|
-| Goat | Horned mountain goat (ram-like) | Sheep (ewe) |
-| Dragon | Wyvern (two-legged) | Drake (four-legged) |
-| Horse | Strong war horse | Zebra |
-| Pig | Wild tusked boar | Warthog |
-| Dog | Wolf | Jackal |
-| Cat | Lion | Tiger |
-| Crane | Crane — big, elegant, almost dinosaur-like; trumpeting calls and display dancing | Heron — leaner, silent stalking predator |
-| Tortoise | Big, hefty, heavily armored tortoise | Turtle |
+| ☰ Heaven | Strong war horse | Zebra |
+| ☳ Thunder | Wolf | Jackal |
+| ☵ Water | Crane — big, elegant, almost dinosaur-like; trumpeting calls and display dancing | Heron — leaner, silent stalking predator |
+| ☶ Mountain | Big, hefty, heavily armored tortoise | Turtle |
+| ☷ Earth | Wild tusked boar | Warthog |
+| ☴ Wind | Wyvern (two-legged) | Drake (four-legged) |
+| ☲ Fire | Lion | Tiger |
+| ☱ Lake | Horned mountain goat (ram-like) | Sheep (ewe) |
 
 - **Launch scope: male variants only.** Fighter ships with just the male creature of each pair (goat, wyvern, war horse, boar, wolf, lion, crane, tortoise) to halve the sprite workload. The female variants (sheep, drake, zebra, warthog, jackal, tiger, heron, turtle) are a planned post-launch quality-of-life update, not part of the initial scope.
 - *How a fighter gets its female variant once those are added — OPEN, see Section 13.*
@@ -179,10 +179,9 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 
 1. **How trigram order shows up in combat** — for example, which of a fighter's two weapons leads.
 2. **Unlock pacing** — how many matches between casts. The earlier triangular curve (1 match, then 2 more, then 3 more…) was sized for 36 fighters (630 matches); applied to 64 it becomes 2,016 matches, roughly 70–100 hours at 2–3 minutes a match.
-3. **Steed creature-to-trigram assignment** — the eight creature slots and their male/female variants are set (Section 6), but which slot goes with which trigram is not decided. The grounded/flying rule stays as locked.
-4. **Female steed variants (post-launch)** — launch is male-only (Section 6), so nothing is needed for launch. For the later update, how a fighter gets the female version is still open; the doc doesn't give fighters a gender yet.
-5. **Steed art for the 28 mounted fighters** — the visual design of each steed.
-6. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
+3. **Female steed variants (post-launch)** — launch is male-only (Section 6), so nothing is needed for launch. For the later update, how a fighter gets the female version is still open; the doc doesn't give fighters a gender yet.
+4. **Steed art for the 28 mounted fighters** — the visual design of each steed.
+5. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
 
 ---
 
