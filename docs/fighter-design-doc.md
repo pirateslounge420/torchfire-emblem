@@ -32,16 +32,18 @@ The roster's hexagram logic carries across the trilogy, giving all three games o
 
 Each trigram brings one archetype and one weapon to every fighter it appears in.
 
-| Trigram | Archetype | Weapon | Color | Mount | Shuo Gua animal | Pure fighter (doubled) |
-|---|---|---|---|---|---|---|
-| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | Horse | Paladin |
-| ☳ Zhèn (Thunder) | Damage Magic | Staff | Cyan | — | Dragon | Shaman |
-| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | Indigo | — | Pig | Jester |
-| ☶ Gèn (Mountain) | Heavy Armor | Shields | Orange | — | Dog | Bastion |
-| ☷ Kūn (Earth) | Support Magic | Club/Hammer | Yellow | — | Ox | Sage |
-| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Rooster | Valkyrie |
-| ☲ Lí (Fire) | Rogue | Blades | Red | — | Pheasant | Samurai |
-| ☱ Duì (Lake) | Brawler | Gauntlets | Silver | — | Sheep/Goat | Captain |
+| Trigram | Archetype | Weapon | Color | Mount | Pure fighter (doubled) |
+|---|---|---|---|---|---|
+| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | Paladin |
+| ☳ Zhèn (Thunder) | Damage Magic | Staff | Cyan | — | Shaman |
+| ☵ Kǎn (Water) | Ranged Skirmisher | Bows | Indigo | — | Jester |
+| ☶ Gèn (Mountain) | Heavy Armor | Shields | Orange | — | Bastion |
+| ☷ Kūn (Earth) | Support Magic | Club/Hammer | Yellow | — | Sage |
+| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Valkyrie |
+| ☲ Lí (Fire) | Rogue | Blades | Red | — | Samurai |
+| ☱ Duì (Lake) | Brawler | Gauntlets | Silver | — | Captain |
+
+*Steed creatures are not tied to trigrams in this table yet — the eight creature pairs are set (Section 6), but which trigram gets which is OPEN, see Section 13.*
 
 **Colors** follow the traditional Five Elements colors (as color only — the Five Elements aren't a mechanic in Fighter): Thunder and Wind share Wood's blue-green family, Earth and Mountain share Earth's warm tones, Lake takes Metal's silver, Fire is red and Water is indigo. Heaven is the exception: its purple comes from the Purple Forbidden Enclosure, the Celestial Emperor's star-palace. Shading notes: keep Thunder's cyan leaning blue and Wind's seafoam leaning green, and keep Water's indigo on the blue side so it doesn't drift into Heaven's purple.
 
@@ -80,13 +82,25 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 ## 6. Steeds (Heaven & Wind Only)
 
 - Only the two archetypally mounted trigrams grant a steed: **Heaven** (ground) and **Wind** (flying). A fighter is mounted if Heaven or Wind appears in **either** trigram slot, base or top. That is 28 of the 64 fighters (confirmed count).
-- **The base trigram picks the animal.** The steed is the Shuo Gua animal of the fighter's bottom (base) trigram: Heaven = Horse, Thunder = Dragon, Water = Pig, Mountain = Dog, Earth = Ox, Wind = Rooster, Fire = Pheasant, Lake = Sheep/Goat.
-- **Heaven or Wind decides grounded vs. flying.** If Heaven is the mount trigram, the steed is a ground version of the animal; if Wind is, it's a flying version. So Heaven over Water rides a ground horse, Water over Wind rides a flying pig, and Wind over Lake rides a flying rooster.
-- **Fighters with both Heaven and Wind:** the top (non-base) trigram decides grounded vs. flying, while the base still picks the animal. Heaven over Wind rides a flying horse; Wind over Heaven rides a ground rooster. The pure fighters (Heaven over Heaven, Wind over Wind) ride a ground horse and a flying rooster.
-- **No hybrid steeds.** Fusing two trigram animals into one creature per pairing was considered and rejected in favor of this simpler system: one animal, in a ground or flying variant.
-- Steeds draw on the **trigram animal archetypes** from the Shuo Gua (Section 3), so riders are recognizable by silhouette alone, not as recolored horses.
-- The Shuo Gua's longer list adds more to draw from: Heaven — the *bó*, a horse-like beast with saw teeth that eats tigers and leopards; Thunder and Water — horses of different temperaments; Fire — hard-shelled creatures (turtle, crab, tortoise); Mountain — rats and "black-snouted beasts" (read by old commentators as tigers and leopards).
-- The animal look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons and two colors.
+- **The base trigram picks the creature.** Each trigram gets one of eight creature slots (listed below), and a mounted fighter's steed comes from the slot of its bottom (base) trigram. *Which slot goes with which trigram — OPEN, see Section 13.*
+- **Heaven or Wind decides grounded vs. flying.** If Heaven is the mount trigram, the steed is a ground version of the creature; if Wind is, it's a flying version.
+- **Fighters with both Heaven and Wind:** the top (non-base) trigram decides grounded vs. flying, while the base still picks the creature. Heaven over Wind rides a flying version of the Heaven-slot creature; Wind over Heaven rides a ground version of the Wind-slot creature. The pure fighters ride a ground version (Heaven over Heaven) and a flying version (Wind over Wind) of their own trigram's creature.
+- **No hybrid steeds.** Fusing two creatures into one per pairing was considered and rejected in favor of this simpler system: one creature, in a ground or flying variant.
+- **Custom creature set.** The steeds are Mike's own picks, not the traditional Shuo Gua animals. Each slot has a **male** and a **female** variant: two closely related but distinct species, in the spirit of lion and tiger. Silhouettes should read clearly, not as recolored horses.
+
+| Creature slot | Male | Female |
+|---|---|---|
+| Goat | Horned mountain goat (ram-like) | Sheep (ewe) |
+| Dragon | Wyvern (two-legged) | Drake (four-legged) |
+| Horse | Strong war horse | Zebra |
+| Pig | Wild tusked boar | Warthog |
+| Dog | Wolf | Jackal |
+| Cat | Lion | Tiger |
+| Crane | Crane — big, elegant, almost dinosaur-like; trumpeting calls and display dancing | Heron — leaner, silent stalking predator |
+| Tortoise | Big, hefty, heavily armored tortoise | Turtle |
+
+- *How a fighter gets its male or female variant — OPEN, see Section 13.*
+- The creature look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons and two colors.
 - *Art and visual design for each of the 28 steeds — OPEN, see Section 13.*
 
 ---
@@ -155,7 +169,7 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
   - Generic Units: Sniper (Female), Archer, Troubadour, Warrior, Cavalier, Assassin, General, Paladin
   - Enemy Units: Magic Seal, Soldier, Sonia, Brigand
 - **King Wen hexagram lookup grid** as the structural reference for the trigram/hexagram system (reproduced in Section 5).
-- **Shuo Gua** ("Discussion of the Trigrams," one of the Ten Wings commentaries) as the source for the trigram animals (Sections 3 and 6).
+- **Shuo Gua** ("Discussion of the Trigrams," one of the Ten Wings commentaries) as the traditional source of trigram animals. Fighter's steeds now use a custom creature set instead (Section 6).
 - **Classic Yu-Gi-Oh OCG card art** (1999–2004 era) as the portrait/key art reference.
 
 ---
@@ -164,8 +178,10 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 
 1. **How trigram order shows up in combat** — for example, which of a fighter's two weapons leads.
 2. **Unlock pacing** — how many matches between casts. The earlier triangular curve (1 match, then 2 more, then 3 more…) was sized for 36 fighters (630 matches); applied to 64 it becomes 2,016 matches, roughly 70–100 hours at 2–3 minutes a match.
-3. **Steed art for the 28 mounted fighters** — the assignment rule is locked (Section 6); what remains is the visual design of each steed.
-4. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
+3. **Steed creature-to-trigram assignment** — the eight creature slots and their male/female variants are set (Section 6), but which slot goes with which trigram is not decided. The grounded/flying rule stays as locked.
+4. **Male/female variant** — how a fighter gets the male or female version of its steed creature. The doc doesn't give fighters a gender yet.
+5. **Steed art for the 28 mounted fighters** — the visual design of each steed.
+6. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
 
 ---
 
