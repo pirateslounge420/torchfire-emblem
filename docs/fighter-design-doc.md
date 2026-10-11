@@ -79,12 +79,15 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 
 ## 6. Steeds (Heaven & Wind Only)
 
-- Only the two archetypally mounted trigrams ride: **Heaven** (ground) and **Wind** (flying). Any fighter with Heaven or Wind as either of its trigrams rides — 28 of the 64.
-- If Wind is one of the trigrams, the steed flies; otherwise it's a ground steed.
-- Steeds draw on the **trigram animal archetypes** from the Shuo Gua (Section 3), so riders are recognizable by silhouette alone, not as recolored horses. The steed's creature reflects the fighter's other trigram (for example, Heaven + Water rides a boar; Wind + Lake rides a winged ram).
+- Only the two archetypally mounted trigrams grant a steed: **Heaven** (ground) and **Wind** (flying). A fighter is mounted if Heaven or Wind appears in **either** trigram slot, base or top. That is 28 of the 64 fighters (confirmed count).
+- **The base trigram picks the animal.** The steed is the Shuo Gua animal of the fighter's bottom (base) trigram: Heaven = Horse, Thunder = Dragon, Water = Pig, Mountain = Dog, Earth = Ox, Wind = Rooster, Fire = Pheasant, Lake = Sheep/Goat.
+- **Heaven or Wind decides grounded vs. flying.** If Heaven is the mount trigram, the steed is a ground version of the animal; if Wind is, it's a flying version. So Heaven over Water rides a ground horse, Water over Wind rides a flying pig, and Wind over Lake rides a flying rooster.
+- **Fighters with both Heaven and Wind:** the top (non-base) trigram decides grounded vs. flying, while the base still picks the animal. Heaven over Wind rides a flying horse; Wind over Heaven rides a ground rooster. The pure fighters (Heaven over Heaven, Wind over Wind) ride a ground horse and a flying rooster.
+- **No hybrid steeds.** Fusing two trigram animals into one creature per pairing was considered and rejected in favor of this simpler system: one animal, in a ground or flying variant.
+- Steeds draw on the **trigram animal archetypes** from the Shuo Gua (Section 3), so riders are recognizable by silhouette alone, not as recolored horses.
 - The Shuo Gua's longer list adds more to draw from: Heaven — the *bó*, a horse-like beast with saw teeth that eats tigers and leopards; Thunder and Water — horses of different temperaments; Fire — hard-shelled creatures (turtle, crab, tortoise); Mountain — rats and "black-snouted beasts" (read by old commentators as tigers and leopards).
 - The animal look is **reserved for riders**. Non-mounted fighters are recognized by their two weapons and two colors.
-- *Final steed for each of the 15 mounted pairs — OPEN, see Section 13.*
+- *Art and visual design for each of the 28 steeds — OPEN, see Section 13.*
 
 ---
 
@@ -161,7 +164,7 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 
 1. **How trigram order shows up in combat** — for example, which of a fighter's two weapons leads.
 2. **Unlock pacing** — how many matches between casts. The earlier triangular curve (1 match, then 2 more, then 3 more…) was sized for 36 fighters (630 matches); applied to 64 it becomes 2,016 matches, roughly 70–100 hours at 2–3 minutes a match.
-3. **Steed for each mounted pair** — 15 pairs covering 28 fighters (Section 6).
+3. **Steed art for the 28 mounted fighters** — the assignment rule is locked (Section 6); what remains is the visual design of each steed.
 4. **Names for the 56 mixed fighters** — each already has a King Wen number and traditional name to draw from (Section 5).
 
 ---
