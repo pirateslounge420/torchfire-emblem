@@ -13,5 +13,6 @@ This repo is **Fighter**, Game 1 of Mike's I Ching / Ba Gua trilogy: a turn-base
 
 ## Tech
 
-- Planned engine: Godot (not set up yet).
+- Engine: Godot 4.3+. The project lives in `godot/` — open that folder in Godot. All timing numbers are in `godot/scripts/FrameData.gd` (frames at 60 fps); change them there, nowhere else.
+- Prototype art is generated in code (`Fighter.gd`). Hand-drawn GBA-style frames are the plan; when they exist they go in `godot/art/` as original work only.
 - The repo is public, so keep ripped reference art (like the Fire Emblem sprite sheets) out of it.
