@@ -19,8 +19,8 @@ SCALE = 0.8
 PAL = Palette(NAME, {
     "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
     "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),
-    "C": (112, 118, 146), "c": (60, 62, 88), "k": (30, 30, 46),
-    "I": (150, 140, 255), "i": (88, 72, 200), "n": (46, 36, 120),
+    "C": (44, 40, 62), "c": (222, 72, 162), "k": (156, 34, 118),         # C = dark lacquer (saya); the gi: magenta lit / mid (Kenshin)
+    "I": (238, 238, 246), "i": (184, 190, 210), "n": (148, 148, 176),    # the hakama: white lit / mid (= steel light) / shadow
     "R": (200, 56, 64), "r": (120, 24, 40),          # obi; r doubles as the hair shadow
     "A": (255, 150, 70), "a": (214, 88, 36),          # Kenshin-orange hair: light, mid
     "L": (136, 86, 66), "l": (136, 86, 66),           # leather (hilt wrap, soles) shares the skin-dark brown
@@ -45,7 +45,7 @@ def stance(bob=0):
     hak.fold([(72, 66), (68, 90), (65, 112)], "n")
     hak.fold([(78, 66), (76, 90), (74, 112)], "n")
     hak.fold([(85, 66), (88, 84)], "n")
-    hak.fold([(90, 70), (94, 92), (96, 112)], "k")
+    hak.fold([(90, 70), (94, 92), (96, 112)], "n")
     # ---- feet: small tabi on sandals, peeking out under the hem (hem overlaps their tops)
     foot_near = Part("foot_near", [(62, 111), (70, 111), (72, 114), (70, 118), (60, 118), (59, 114)], "h")
     foot_near.band([(59, 115), (72, 115), (70, 118), (60, 118)], "L")            # the sandal sole
@@ -64,12 +64,12 @@ def stance(bob=0):
     # ---- obi
     obi = Part("obi", [(69, 59 + b), (93, 59 + b), (93, 66 + b), (69, 66 + b)], "r")
     obi.band([(69, 59 + b), (93, 59 + b), (93, 62 + b), (69, 62 + b)], "R")
-    obi.fold([(80, 59 + b), (82, 66 + b)], "k")
+    obi.fold([(80, 59 + b), (82, 66 + b)], "r")
     knot = Part("knot", [(93, 60 + b), (100, 58 + b), (104, 64 + b), (102, 72 + b), (97, 68 + b), (94, 66 + b)], "r")
     knot.band([(93, 60 + b), (98, 59 + b), (98, 64 + b), (94, 64 + b)], "R")
     # ---- saya (worn on the near hip, in front of the hakama) and the hilt
-    saya = Part("saya", [(62, 66 + b), (66, 64 + b), (124, 94 + b), (124, 98 + b), (120, 99 + b), (60, 70 + b)], "k")
-    saya.band([(63, 66 + b), (66, 64 + b), (124, 94 + b), (124, 96 + b)], "c")
+    saya = Part("saya", [(62, 66 + b), (66, 64 + b), (124, 94 + b), (124, 98 + b), (120, 99 + b), (60, 70 + b)], "C")
+    saya.band([(63, 66 + b), (66, 64 + b), (124, 94 + b), (124, 96 + b)], "g")
     saya.fold([(121, 95 + b), (121, 99 + b)], "g")                                       # the kojiri cap
     tsuba = Part("tsuba", [(60, 62 + b), (66, 60 + b), (68, 66 + b), (62, 70 + b)], "g")
     hilt = Part("hilt", [(40, 50 + b), (62, 62 + b), (60, 67 + b), (37, 55 + b)], "L")
@@ -107,7 +107,7 @@ def stance(bob=0):
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
     ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE))
     for x in (43, 44, 49, 50):
-        g.g[ey][x] = "k"
+        g.g[ey][x] = "o"
     return g
 
 
