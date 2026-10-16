@@ -62,49 +62,71 @@ def breathe(k):
 
 
 # ------------------------------------------------------------------ the open-arms torso
-# the crossed arms are replaced by the suit's chest and two straight arms (overlays in sprite rows 14-28)
-CHEST = [R(s) for s in [
-    "...kkkkkkkkkk....",
-    "..kffhhffhhffk...",
-    "..kffhhffhhffak..",
-    ".kaffhhfhhffaak..",
-    ".kaffhhfhhffaak..",
-    ".kaaffhhhffaaak..",
-    ".kaaffhhhffaaak..",
-    ".kaaaffhffaaaek..",
-    ".kaaaafffaaaeek..",
-    ".kaaaaafaaaeeek..",
-    "..kaaaaaaaeeek...",
-    "..kkkkkkkkkkkk...",
+# The crossed arms (sprite rows 13-23, cols 3-29) are erased; the neck and shoulder tops (rows 10-12) stay.
+# Over the gap: the suit's chest, a thick bare near arm ending in the dark glove, and the far arm.
+CHEST = [R(s) for s in [          # stamped at sprite (9, 13)
+    "kkffhhhhhaakk..",
+    "kffffhhhhhaaak.",
+    "kfffkhhhkhaaaak",
+    "kffffkhkhhaaaak",
+    "kfffffkhhhaaaak",
+    "kffffhhhhhaaaak",
+    "kffffhhhhhaaaak",
+    ".kfffhhhhhaaak.",
+    ".kfffhhhhhaaak.",
+    ".kffhhhhhhaaak.",
+    ".kkkkkkkkkkkkk.",
 ]]
-ARM_DOWN_NEAR = [R(s) for s in [          # the near arm hanging, fist by the hip
-    "kcjk",
-    "kcjck",
-    "kccjck",
-    ".kcjck",
-    ".kcjck",
-    ".kcclk",
-    ".kjjck",
-    ".kcclk",
-    "..kkk.",
+ARM_DOWN_NEAR = [R(s) for s in [  # stamped at sprite (2, 13): bare upper arm from the shoulder, glove at the hip
+    ".kjjck.",
+    "kjjjcck",
+    "kjjcclk",
+    "kjcccllk",
+    "kjcccllk",
+    ".kccllk.",
+    ".kcclk..",
+    ".keeek..",
+    ".keeeek.",
+    ".kdeeek.",
+    ".kdeeek.",
+    ".kkeeek.",
+    "..kkkk..",
 ]]
-ARM_UP_FAR = [R(s) for s in [             # the far arm reaching up over the shoulder to the hilt
-    ".kjck",
-    "kjcck",
+ARM_UP_FAR = [R(s) for s in [     # stamped at sprite (23, 6): the far arm raised over the shoulder to the hilt
+    "...kjck",
+    "..kjcck",
+    ".kjcclk",
+    ".kjcclk",
+    "kjccllk",
+    "kjcclk.",
+    "kccllk.",
+    ".kcck..",
+    ".kkkk..",
+]]
+ARM_DOWN_FAR = [R(s) for s in [   # the far arm hanging behind the far side of the chest
+    "kcck",
     "kcclk",
-    "kclk.",
-    "kclk.",
-    ".kk..",
+    "kcclk",
+    ".kclk",
+    ".kclk",
+    ".kllk",
+    ".kkk.",
 ]]
 
 
-def open_torso(g, dx=0, dy=0):
-    """erase the crossed arms and lay the open chest + arms"""
-    g.clear(X_OFF + dx + 2, TOP + dy + ARM_ROWS[0], X_OFF + dx + 32, TOP + dy + ARM_ROWS[1])
+def open_torso(g, dx=0, dy=0, far="up"):
+    """erase the crossed arms and lay the open chest + arms; far = 'up' (reaching) or 'down'"""
+    g.clear(X_OFF + dx + 2, TOP + dy + 13, X_OFF + dx + 30, TOP + dy + 24)
     for i, row in enumerate(CHEST):
-        P(g, 15 + i, 9, row, dx, dy)
+        P(g, 13 + i, 9, row, dx, dy)
     for i, row in enumerate(ARM_DOWN_NEAR):
-        P(g, 17 + i, 5, row, dx, dy)
+        P(g, 12 + i, 3, row, dx, dy)
+    if far == "up":
+        for i, row in enumerate(ARM_UP_FAR):
+            P(g, 6 + i, 23, row, dx, dy)
+    else:
+        for i, row in enumerate(ARM_DOWN_FAR):
+            P(g, 14 + i, 24, row, dx, dy)
 
 
 def blade(g, x, y, n, step, dx=0, dy=0):
@@ -120,22 +142,18 @@ def blade(g, x, y, n, step, dx=0, dy=0):
 def reach():
     """beat 2: arms unfold; the far hand goes up over the shoulder to the hilt"""
     g = body()
-    open_torso(g)
-    for i, row in enumerate(ARM_UP_FAR):
-        P(g, 9 + i, 22, row)
+    open_torso(g, far="up")
     return g.tidy()
 
 
 def draw_high():
     """beat 3: the sword comes off the back, raised up and behind the head"""
     g = body()
-    open_torso(g)
+    open_torso(g, far="up")
     # the back sheath now empty: the little hilt that stuck up behind the head is gone
-    g.clear(X_OFF + 24, TOP + 1, X_OFF + 34, TOP + 10)
-    for i, row in enumerate(ARM_UP_FAR):
-        P(g, 6 + i, 20, row)
-    P(g, 5, 20, R("kllk")); P(g, 4, 21, R("kllk"))               # the hilt in the hand
-    blade(g, 24, 3, 12, (1, -1))                            # blade up-right
+    g.clear(X_OFF + 27, TOP + 1, X_OFF + 34, TOP + 9)
+    P(g, 5, 26, R("kllk")); P(g, 4, 27, R("kllk"))               # the hilt in the raised hand
+    blade(g, 29, 3, 12, (1, -1))                                 # blade up-right
     return g.tidy()
 
 
@@ -148,8 +166,8 @@ SMEAR = [(y, x, R(t)) for y, x, t in [  # a wedge sweeping from over the head do
 
 def smear():
     g = body(dx=-2)
-    open_torso(g, dx=-2)
-    g.clear(X_OFF + 22, TOP + 1, X_OFF + 32, TOP + 10)
+    open_torso(g, dx=-2, far="up")
+    g.clear(X_OFF + 25, TOP + 1, X_OFF + 34, TOP + 9)
     for y, x, t in SMEAR:
         P(g, y + 6, x, t, -2)
     return g.tidy()
@@ -159,8 +177,8 @@ def slash():
     """beat 5: full extension — the torso leans in, the blade ends low in front"""
     g = body(dx=-4)
     g.shift_region(0, TOP, BOX, TOP + 29, -2, 0)             # the upper body leans toward the foe
-    open_torso(g, dx=-6)
-    g.clear(X_OFF + 20, TOP + 1, X_OFF + 30, TOP + 10)
+    open_torso(g, dx=-6, far="down")
+    g.clear(X_OFF + 21, TOP + 1, X_OFF + 32, TOP + 9)
     # the far arm swung down and forward past the near side
     P(g, 20, 1, R("kcjk"), -6); P(g, 21, -1, R("kjcck"), -6); P(g, 22, -3, R("kcclk"), -6); P(g, 23, -4, R("kllk"), -6)
     blade(g, -6, 24, 10, (-1, 1), dx=-6)                    # blade down-left
@@ -169,8 +187,8 @@ def slash():
 
 def recover():
     g = body(dx=-2)
-    open_torso(g, dx=-2)
-    g.clear(X_OFF + 22, TOP + 1, X_OFF + 32, TOP + 10)
+    open_torso(g, dx=-2, far="down")
+    g.clear(X_OFF + 25, TOP + 1, X_OFF + 34, TOP + 9)
     P(g, 24, 2, R("kcjk"), -2); P(g, 25, 1, R("kcck"), -2); P(g, 26, 1, R("kllk"), -2)
     blade(g, 0, 27, 9, (-1, 1), dx=-2)
     return g.tidy()
@@ -178,9 +196,7 @@ def recover():
 
 def select_frames():
     a = body(); b = reach()
-    c = body(); open_torso(c)
-    for i, row in enumerate([R("kjck"), R("kcck"), R("kllk")]):
-        P(c, 22 + i, 22, row)
+    c = body(); open_torso(c, far="down")
     # eye flash: the visor slit glints
     d = c.copy(); P(d, 7, 12, R("bb")); P(d, 7, 16, R("bb"))
     return [a, b, c, d, d, c, b, a]
