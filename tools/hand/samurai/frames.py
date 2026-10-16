@@ -184,7 +184,7 @@ def stance(bob=0, sway=0):
 
 def grip():
     """knees sink, the front foot slides back, both hands on the hilt"""
-    f = Fig(P.LEGS_COIL, STANCE_X + 2, lean=0.08)
+    f = Fig(P.LEGS_COIL, STANCE_X + 2)
     f.far_sleeve(dx=-2, dy=1)
     f.tail(P.TAIL_HANG, dx=1)
     f.body()
@@ -200,7 +200,7 @@ def grip():
 
 def draw(tremble=0):
     """the blade partway out: hilt pulled up-left, 9 px of steel showing"""
-    f = Fig(P.LEGS_COIL, STANCE_X + 2, lean=0.12)
+    f = Fig(P.LEGS_COIL, STANCE_X + 2, lean=0.06)
     f.far_sleeve(dx=-2, dy=1)
     f.tail(P.TAIL_SWING_BACK)
     f.body(hdy=tremble)
