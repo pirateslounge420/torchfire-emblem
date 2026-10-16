@@ -91,7 +91,7 @@ def stance(bob=0):
     face = Part("face", [(73, 16 + b), (87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (81, 35 + b), (75, 32 + b), (70, 27 + b), (70, 21 + b)], "S")
     face.band([(87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (86, 24 + b)], "s")   # narrow far-cheek shadow
     face.fold([(75, 31 + b), (81, 34 + b), (87, 31 + b)], "z")                                 # small chin
-    face.fold([(73, 22 + b), (77, 21 + b)], "z"); face.fold([(81, 21 + b), (85, 22 + b)], "z")   # brows
+    face.fold([(73, 20 + b), (77, 19 + b)], "z"); face.fold([(81, 19 + b), (85, 20 + b)], "z")   # brows
     face.fold([(73, 23 + b), (70, 27 + b), (73, 28 + b)], "z")                                # the nose: bridge down to a tip, back under
     face.fold([(77, 30 + b), (81, 30 + b)], "z")                                               # mouth
     hair = Part("hair", [(68, 14 + b), (74, 8 + b), (82, 6 + b), (92, 8 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b),
@@ -110,11 +110,11 @@ def stance(bob=0):
     f.w, f.h = W, H
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
-    ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE))
-    # anime eyes, 2x2: a dark lash line on top, the iris below (violet-magenta) with a light glint pixel
+    ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE)) - 2
+    # anime eyes, 2x2, no lash line: a light glint top-left, violet iris, dark pupil bottom-right
     for x in (44, 50):
-        g.g[ey][x] = "o"; g.g[ey][x + 1] = "o"
-        g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "h"
+        g.g[ey][x] = "h"; g.g[ey][x + 1] = "k"
+        g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "o"
     return g
 
 
