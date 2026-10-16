@@ -26,13 +26,14 @@ GROUND = 53          # row the feet stand on
 X_OFF = 8            # body grid column 0 -> box column
 ORIGIN = (26, 54)         # ground point between the stance feet
 
-# 14 opaque colours. H/h double as steel edge, chain and smear; g is iron (chain links, weight).
+# 15 opaque colours. H doubles as steel edge and smear core; e is the red-tinted smear fringe; g is iron (chain links, weight).
 PAL = Palette(NAME, {
     "H": (248, 248, 248), "h": (178, 186, 204), "g": (104, 110, 130),   # steel edge, steel, iron/chain
     "S": (236, 190, 150), "s": (182, 126, 94),                          # skin (eye slot, hands)
     "K": (130, 136, 164), "k": (80, 84, 110), "n": (46, 50, 72),        # black cloth: highlight, mid, shadow
     "R": (236, 52, 52), "r": (164, 22, 36), "q": (96, 8, 26),           # red ramp (trigram)
     "L": (118, 84, 56), "l": (70, 48, 32),                              # bandage / wrap
+    "e": (255, 196, 186),                                               # smear fringe, red-tinted (the trigram)
 })
 
 
@@ -146,7 +147,7 @@ def whirl(tremble=0):
     sash_tail(g, 22, 25, 1, -2)
     cx, cy = 32, 2 + tremble            # hand centre (body coords); ring radius ~5
     for dy, dx in RING:
-        U(g, cy + dy, cx + dx, "H" if dy <= -3 or (dy <= 0 and dx < 0) else "h", -3)
+        U(g, cy + dy, cx + dx, "H" if dy <= -3 or (dy <= 0 and dx < 0) else "e", -3)
     # the weight itself, smeared, at the front of the ring (upper left)
     U(g, cy - 4, cx - 3, "gg", -3); U(g, cy - 3, cx - 4, "Hg", -3); U(g, cy - 2, cx - 5, "g", -3)
     return g.tidy()
@@ -164,16 +165,16 @@ def smear():
         x = x0 - i
         y = y0 + (i * i * 24) // (n * n)
         if i < 6:
-            P(g, y, x, "h", -5)
+            P(g, y, x, "e", -5)
         elif i < 13:
-            P(g, y, x, "H", -5); P(g, y + 1, x, "h", -5)
+            P(g, y, x, "H", -5); P(g, y + 1, x, "e", -5)
         elif i < 21:
-            P(g, y - 1, x, "h", -5); P(g, y, x, "H", -5); P(g, y + 1, x, "h", -5)
+            P(g, y - 1, x, "e", -5); P(g, y, x, "H", -5); P(g, y + 1, x, "e", -5)
         else:
-            P(g, y - 1, x, "h", -5); P(g, y, x, "H", -5); P(g, y + 1, x, "H", -5); P(g, y + 2, x, "h", -5)
+            P(g, y - 1, x, "e", -5); P(g, y, x, "H", -5); P(g, y + 1, x, "H", -5); P(g, y + 2, x, "e", -5)
     xh, yh = x0 - n, y0 + 24            # head of the streak: the weight, still a blur
-    P(g, yh - 2, xh - 1, "hhh", -5); P(g, yh - 1, xh - 2, "hHHHh", -5); P(g, yh, xh - 3, "hHgHHH", -5)
-    P(g, yh + 1, xh - 2, "hHgHH", -5); P(g, yh + 2, xh - 1, "hhhh", -5)
+    P(g, yh - 2, xh - 1, "eee", -5); P(g, yh - 1, xh - 2, "eHHHe", -5); P(g, yh, xh - 3, "eHgHHH", -5)
+    P(g, yh + 1, xh - 2, "eHgHH", -5); P(g, yh + 2, xh - 1, "eeee", -5)
     return g.tidy()
 
 

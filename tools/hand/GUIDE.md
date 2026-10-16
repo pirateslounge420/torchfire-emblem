@@ -16,7 +16,8 @@ every revision. `scratchpad/study/scan.py` shows how to crop single frames.
 
 - Infantry stand **32–41 px**; the head is ~10–11 px of that and the **legs are
   almost half the height** (hips at mid-height). Mounted figures run 45–58 px.
-- **Exactly 15 opaque colours + transparency** per sprite. The jumps between
+- **Exactly 15 opaque colours + transparency** per sprite — and all 15 painted
+  (Mike, Oct 16): a fighter using fewer is leaving tone on the table. The jumps between
   tones are hard: deep red → bright red → white, not five near-identical darks.
   Our palettes: 3 tones for the trigram colour, 3 skin, 3 hair/neutral, 2 for a
   second cloth, 2 leather, 1 steel mid (steel edge = white), 1 outline = 15.

@@ -35,6 +35,8 @@ class Palette:
         used = set(self.map.values()) if grids is None else {self.map[c] for g in grids for r in g.g for c in r if c in self.map}
         if len(used) > 15:
             raise ValueError(f"{self.name}: {len(used)} opaque colours, the budget is 15")
+        if len(used) < 15:
+            print(f"warning: {self.name} paints only {len(used)} of its 15 colours (Mike wants all 15 used)")
         return len(used)
 
 

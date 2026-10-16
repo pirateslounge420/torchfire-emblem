@@ -24,12 +24,13 @@ BODY_H = 44          # rows in each body .txt (feet on the last row)
 X_OFF = 12           # body grid column 0 -> box column
 ORIGIN = (34, 54)
 
-# 13 opaque colours. G doubles as the plate edge, the smear fringe and the dust; H is the brightest edge.
+# 15 opaque colours. G is the plate edge; h the orange-tinted smear fringe; d the impact dust.
 PAL = Palette(NAME, {
     "O": (255, 168, 56), "p": (216, 104, 24), "q": (140, 52, 16),      # orange enamel ramp
     "V": (255, 232, 120),                                               # visor glow (the accent)
     "K": (48, 50, 66), "k": (98, 102, 124), "G": (176, 180, 200),       # plate: near-black, dark grey, light edge
-    "H": (248, 248, 248), "h": (176, 180, 200),                         # white edge / smear core, smear fringe
+    "H": (248, 248, 248), "h": (255, 226, 176),                         # white edge / smear core, orange-tinted smear fringe
+    "d": (150, 124, 92),                                                # impact dust
     "C": (104, 64, 88), "c": (56, 32, 48),                              # dark cloth
     "L": (120, 80, 44), "l": (72, 46, 26),                              # leather grip
 })
@@ -195,7 +196,7 @@ def smear():
     return g.tidy()
 
 
-DUST = [(40, -8, "Gh"), (38, -7, "H"), (41, 3, "hG"), (39, 2, "H"), (36, -3, "H"), (42, -9, "h"), (42, 5, "h")]
+DUST = [(40, -8, "dh"), (38, -7, "H"), (41, 3, "hd"), (39, 2, "H"), (36, -3, "H"), (42, -9, "d"), (42, 5, "d")]
 
 
 def impact():

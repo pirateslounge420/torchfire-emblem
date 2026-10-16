@@ -25,14 +25,14 @@ X_OFF = 8            # body grid column 0 -> box column (lunge frames get the ro
 ORIGIN = (48, 86)
 BODY_H = 60          # rows in a body grid
 
-# 14 opaque colours (+ transparency). H/h double as the lance smear.
+# 15 opaque colours (+ transparency). H is the smear core, h its violet-tinted fringe.
 PAL = Palette(NAME, {
     "V": (196, 140, 255), "v": (126, 66, 220), "u": (66, 30, 134),        # violet ramp
     "W": (248, 248, 248), "M": (178, 182, 204), "m": (110, 112, 138),     # steel: edge, light, mid
     "k": (56, 54, 74), "K": (34, 30, 46),                                 # black plate / black mane, tail, barding
     "A": (164, 108, 80), "B": (120, 70, 52), "b": (72, 42, 36),           # dark bay coat
     "L": (116, 80, 48), "l": (64, 44, 28),                                # leather, lance shaft
-    "H": (248, 248, 248), "h": (178, 182, 204),                           # smear
+    "H": (248, 248, 248), "h": (222, 204, 255),                           # smear core, violet-tinted fringe
 })
 
 
