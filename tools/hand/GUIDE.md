@@ -68,6 +68,12 @@ Water **blue**, Lake **indigo**, Heaven **violet**, Wind **magenta**.
   pixel-by-pixel in letter grids in the 64×64 box, ground row 53. Hand-pixel
   work lives in `tools/fe/<name>/`; `tools/big/` (shape method) is parked.
 
+## Proportions (Mike, Oct 16, after a 16-bit Ryu reference)
+
+- Fighting-game build at GBA size: **head about 1/6 of the height** (6–7 px on a
+  36–38 px figure), broad shoulders (~16 px), short neck, **legs about half**
+  the height, small feet. Not the big-headed FE lord look.
+
 ## Mike's notes from the Samurai pass (Oct 15)
 
 - Stand **tall and upright**, slim; no hunch; hips at mid-height.
