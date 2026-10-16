@@ -7,6 +7,12 @@ two-handed mace, the smear and the impact dust. The attack follows the six
 beats of the GBA General / Hawkeye sheets: stance → mace hauled back-low →
 raised behind the helm (two hands) → one big smear → ground smash → haul up.
 
+idle (8, loops): at rest with the mace head on the ground; the pauldrons breathe 1 px, the
+visor glow pulses V → G → V, the tabard tail sways through three hand-drawn states.
+select (10, one-shot): haul → mace level at the chest (mid-haft grip) → swung up-forward →
+one ring smear whirling over the helm (+ glint) → caught pointing up → up on the toes →
+slam streak → head buried with a 1-px body drop and dust → dust spreads → idle frame 0.
+
 Run:  python3 tools/hand/bastion/frames.py
   -> bastion_attack.png / .gif next to this file, Godot sheet in godot/art/bastion_v2/
 """
@@ -227,29 +233,26 @@ def haul():
 
 
 # --- idle: an 8-frame at-rest loop -------------------------------------------------------------
-# The tabard tail hanging behind the far leg, rows 30-35, cols 29-35 of the body grid.
+# The tabard tail hanging behind the far leg, rows 28-32, cols 29-35 of the body grid.
 # '?' = the leg underneath, '.' clears a pixel. Three hand-drawn states of the cloth.
 TAIL_REST = """
 ?Cco...
-?Ccco..
 ??Cco..
-??cco..
+???cco.
 ???co..
-???oo..
+???o...
 """
 TAIL_OUT = """
 ?Cco...
-?Ccco..
 ??Ccco.
-??ccco.
-???cco.
-???ooo.
+???ccco
+???occo
+???.ooo
 """
 TAIL_TUCK = """
 ?Cco...
-?Cco...
-??Cco..
-??co...
+??Co...
+???co..
 ???o...
 ???....
 """
@@ -270,7 +273,7 @@ def idle(up=0, visor="VVV", tail=TAIL_REST):
     g = body()
     breathe(g, up)
     P(g, 6, 15, visor)                                       # the glow pulses: V -> G (plate edge) -> V
-    B(g, 30, 29, tail)
+    B(g, 28, 29, tail)
     haft(g, -2, 36, 15, 24, grip=range(23, 31))
     mace_head(g, 37, -6)
     P(g, 23, 15, "oKo"); P(g, 24, 15, "oKKo")                # pommel knob
@@ -325,17 +328,18 @@ def spin_fwdup():
 
 def ring_pixels():
     """the spin smear: one thick crescent of the mace head's path over the helm, pointed at both ends.
-    Centre is the grip (6,20); the core 'H' rides radius 16-17 with an 'h' fringe either side."""
+    Exaggerated like the GBA crit crescents: centred above the grip at (10,14), radius ~20, so the
+    crown of the ring clears the horns and the back end tapers off over the far pauldron."""
     import math
-    cx, cy = 6.0, 20.0
+    cx, cy = 10.0, 14.0
     px = {}
     steps = 240
     for i in range(steps + 1):
         t = i / steps
-        ang = math.pi + 0.35 - t * (math.pi + 0.35 - 0.15)   # from forward-low, over the top, to the back
-        thick = 1.0 + 3.2 * math.sin(math.pi * t) ** 0.9     # thin tips, thick crown
-        for r in (15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 18.5, 19.0):
-            dr = abs(r - 17.0)
+        ang = math.pi + 0.45 - t * (math.pi + 0.45 - 0.55)   # from forward-low, over the top, down the back
+        thick = 1.0 + 3.4 * math.sin(math.pi * t) ** 0.8     # thin tips, thick crown
+        for r in (17.5, 18.0, 18.5, 19.0, 19.5, 20.0, 20.5, 21.0, 21.5, 22.0):
+            dr = abs(r - 19.75)
             if dr > thick / 2:
                 continue
             x = round(cx + r * math.cos(ang)); y = round(cy - r * math.sin(ang))
@@ -354,13 +358,16 @@ def spin_ring():
     front_grip(g)
     for (y, x), ch in RING.items():
         P(g, y, x, ch)
-    for y, x, t in [(14, -14, "h"), (2, 24, "h"), (0, 16, "h")]:                     # loose flecks
+    for y, x, t in [(26, -11, "h"), (-7, 24, "h"), (-9, 4, "h"), (18, 33, "h")]:    # loose flecks
+        P(g, y, x, t)
+    for y, x, t in [(13, 3, "h"), (11, 2, "h"), (9, 1, "h"), (7, 0, "h"), (5, -1, "h")]:   # the blurred haft, grip to ring
         P(g, y, x, t)
     return g.tidy()
 
 
-def spin_up(glint=True):
-    """select beat 5: caught pointing straight up (3:1 lean forward so the head clears the horn)"""
+def spin_up(glint=True, rise=0):
+    """select beat 5: caught pointing straight up (3:1 lean forward so the head clears the horn);
+    rise=1 lifts the whole figure onto its toes for the one-frame anticipation before the slam"""
     g = body()
     haft(g, 9, 30, 3, 10)
     P(g, 31, 9, "oKo"); P(g, 32, 9, "oKo")                                         # pommel knob
@@ -369,11 +376,14 @@ def spin_up(glint=True):
     if glint:
         for y, x, t in GLINT:
             P(g, y, x, t)
-    return g.tidy()
+    g = g.tidy()
+    return g.shift(0, -rise) if rise else g
 
 
-STREAK = [(9, 1, "hh"), (11, -1, "hHh"), (13, -3, "hHHh"), (15, -5, "hHHh"), (17, -6, "hHHHh"), (19, -7, "hHHHh"),
-          (21, -8, "hHHHh"), (23, -9, "hHHh"), (25, -9, "hHHh"), (27, -10, "hHh"), (29, -10, "hh")]
+STREAK = [(8, 2, "hh"), (9, 1, "hh"), (10, 0, "hHh"), (11, -1, "hHh"), (12, -2, "hHHh"), (13, -3, "hHHh"), (14, -4, "hHHh"),
+          (15, -5, "hHHHh"), (16, -5, "hHHHh"), (17, -6, "hHHHh"), (18, -6, "hHHHh"), (19, -7, "hHHHh"), (20, -7, "hHHHh"),
+          (21, -8, "hHHHh"), (22, -8, "hHHh"), (23, -9, "hHHh"), (24, -9, "hHHh"), (25, -9, "hHh"), (26, -10, "hHh"),
+          (27, -10, "hh"), (28, -10, "hh"), (29, -10, "h")]
 
 
 def slam_streak():
@@ -391,11 +401,11 @@ def slam_streak():
     return g.tidy()
 
 
-SLAM_DUST = [(36, -10, "d"), (38, -11, "dd"), (40, -13, "d"), (42, -11, "d"), (37, 2, "d"), (39, 3, "dd"), (41, 5, "d"),
-             (35, -4, "H"), (36, -1, "h"), (36, 1, "H"), (34, 3, "h")]
-SLAM_DUST2 = [(33, -12, "d"), (35, -8, "d"), (36, -13, "dd"), (39, -14, "d"), (32, -5, "d"), (34, 6, "d"), (33, 3, "d"),
-              (37, 6, "dd"), (40, 8, "d"), (41, -10, "d")]
-SETTLE_DUST = [(30, -13, "d"), (31, -7, "d"), (30, 7, "d"), (32, 9, "d")]
+SLAM_DUST = [(36, -12, "dd"), (37, -13, "ddd"), (38, -12, "dd"), (39, -14, "d"), (33, -9, "d"), (31, -6, "d"),
+             (38, 2, "dd"), (39, 2, "ddd"), (40, 3, "dd"), (41, 6, "d"), (33, 4, "d"),
+             (35, -3, "H"), (34, -2, "h"), (36, 2, "H"), (35, 3, "h")]
+SLAM_DUST2 = [(32, -14, "dd"), (33, -15, "d"), (34, -9, "d"), (30, -5, "d"), (38, -14, "d"), (40, -15, "d"),
+              (31, 4, "d"), (33, 7, "dd"), (35, 8, "d"), (41, 8, "d"), (36, 5, "d")]
 
 
 def slam_impact(drop=1, dust=SLAM_DUST):
@@ -414,12 +424,12 @@ def slam_impact(drop=1, dust=SLAM_DUST):
 
 def animations():
     idle_frames = [
-        idle(0, "VVV", TAIL_REST), idle(0, "VVV", TAIL_REST), idle(0, "VVV", TAIL_OUT), idle(1, "VVV", TAIL_OUT),
-        idle(1, "GVG", TAIL_REST), idle(1, "GGG", TAIL_TUCK), idle(0, "GVG", TAIL_TUCK), idle(0, "VVV", TAIL_REST),
+        idle(0, "VVV", TAIL_REST), idle(0, "VVV", TAIL_OUT), idle(1, "VVV", TAIL_OUT), idle(1, "VVV", TAIL_REST),
+        idle(1, "GVG", TAIL_TUCK), idle(0, "GGG", TAIL_TUCK), idle(0, "GVG", TAIL_REST), idle(0, "VVV", TAIL_REST),
     ]
     select_frames = [
-        haul(), spin_level(), spin_fwdup(), spin_ring(), spin_up(True), spin_up(False),
-        slam_streak(), slam_impact(1, SLAM_DUST), slam_impact(0, SLAM_DUST2), slam_impact(0, SETTLE_DUST), idle_frames[0],
+        haul(), spin_level(), spin_fwdup(), spin_ring(), spin_up(True), spin_up(False, rise=1),
+        slam_streak(), slam_impact(1, SLAM_DUST), slam_impact(0, SLAM_DUST2), idle_frames[0],
     ]
     return {
         "idle": (idle_frames, 6, True),
@@ -436,13 +446,13 @@ def main():
     n = PAL.check([g for frames, _, _ in anims.values() for g in frames])
     imgs = {k: ([render(g, PAL) for g in frames], fps, loop) for k, (frames, fps, loop) in anims.items()}
     sel = imgs["select"][0]
-    beats = [imgs["idle"][0][0], sel[1], sel[2], sel[3], sel[4], sel[6], sel[7], sel[9],
+    beats = [imgs["idle"][0][0], sel[1], sel[2], sel[3], sel[4], sel[6], sel[7], sel[8],
              imgs["lean"][0][0], imgs["lean"][0][1], imgs["lunge"][0][0], imgs["lunge"][0][1], imgs["recover"][0][0]]
     strip(beats, os.path.join(HERE, f"{NAME}_attack.png"), zoom=5,
-          labels=["idle", "sel: level", "sel: swing up", "sel: ring", "sel: caught", "sel: slam", "sel: impact", "sel: settle",
+          labels=["idle", "sel: level", "sel: swing up", "sel: ring", "sel: caught", "sel: slam", "sel: impact", "sel: dust",
                   "mace back-low", "raised, two hands", "smear", "ground smash", "haul up"])
     gif(imgs["idle"][0] + sel + beats[8:] + [imgs["idle"][0][0]], os.path.join(HERE, f"{NAME}_attack.gif"),
-        [160] * 8 + [100] * 11 + [160, 260, 70, 360, 200, 500])
+        [160] * 8 + [100] * 10 + [160, 260, 70, 360, 200, 500])
     out_dir = os.path.join(HERE, "..", "..", "..", "godot", "art", f"{NAME}_v2")
     sheet(imgs, out_dir, NAME, BOX, ORIGIN)
     print(f"{NAME}: {sum(len(f) for f, _, _ in imgs.values())} frames, {n} colours -> {os.path.abspath(out_dir)}")

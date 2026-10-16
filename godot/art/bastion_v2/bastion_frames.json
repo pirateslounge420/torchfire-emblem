@@ -17,30 +17,30 @@
     },
     "select": {
       "start": 8,
-      "count": 11,
+      "count": 10,
       "loop": false,
       "fps": 10
     },
     "lean": {
-      "start": 19,
+      "start": 18,
       "count": 3,
       "loop": false,
       "fps": 10
     },
     "hold": {
-      "start": 22,
+      "start": 21,
       "count": 2,
       "loop": true,
       "fps": 5
     },
     "lunge": {
-      "start": 24,
+      "start": 23,
       "count": 3,
       "loop": false,
       "fps": 20
     },
     "recover": {
-      "start": 27,
+      "start": 26,
       "count": 3,
       "loop": false,
       "fps": 9

@@ -86,11 +86,11 @@ def blade_up(g, y, x, dx=0):
 def sickle_back(g, dx=0):
     """far arm from the far shoulder down-back to a hand at hip height holding the sickle level
     behind the body, blade hanging and curving in. Used for the stance / swing-back / whirl beats."""
-    P(g, 15, 23, "kko", dx); P(g, 16, 24, "RRo", dx); P(g, 17, 24, "oRro", dx)
-    P(g, 18, 25, "okko", dx); P(g, 19, 25, "oknko", dx); P(g, 20, 26, "oLlo", dx); P(g, 21, 27, "oLlo", dx)
-    P(g, 22, 27, "oSSsoooooooo", dx); P(g, 23, 27, "oSssLLLLLLL", dx); P(g, 24, 27, "osssoooooooo", dx)
-    P(g, 25, 27, "ooooo", dx)
-    blade_down(g, 23, 38, dx)
+    P(g, 13, 21, "kko", dx); P(g, 14, 22, "RRo", dx); P(g, 15, 22, "oRro", dx)
+    P(g, 16, 23, "okko", dx); P(g, 17, 23, "oknko", dx); P(g, 18, 24, "oLlo", dx); P(g, 19, 25, "oLlo", dx)
+    P(g, 20, 25, "oSSsoooooooo", dx); P(g, 21, 25, "oSssLLLLLLL", dx); P(g, 22, 25, "osssoooooooo", dx)
+    P(g, 23, 25, "ooooo", dx)
+    blade_down(g, 21, 36, dx)
 
 
 def sash_tail(g, y, x, whip=0, dx=0):
@@ -136,16 +136,20 @@ def idle(bob=0, swing=0, drift=False, sash=0):
     if drift:
         hood_tail_drift(g)
     if bob:
-        g.shift_region(0, 0, BOX, GROUND - 12, 0, bob)
-        P(g, 28, 5, "ooooo")               # the hand's bottom outline, lost under the shifted rows
+        g.shift_region(0, 0, BOX, GROUND - 15, 0, bob)   # everything above the hips breathes down a pixel
+        P(g, 25, 5, "oooo")                # the hand's bottom outline, lost under the shifted rows
     sickle_back(g)
-    sash_tail(g, 22, 25, sash)
-    # chain looped twice across the fist, one link out of the bottom, the weight dangling below
-    P(g, 25 + bob, 6, "hgh"); P(g, 26 + bob, 6, "ghg")
-    P(g, 27 + bob, 4, "ho")
-    chain(g, [(28 + bob, 3 + swing)])
-    weight(g, 30 + bob, 2 + swing)
+    sash_tail(g, 23, 22, sash)
+    fist(g, bob)
+    chain(g, [(25 + bob, 4 + swing)])
+    weight(g, 27 + bob, 2 + swing)
     return g.tidy()
+
+
+def fist(g, dy=0, dx=0):
+    """the chain looped round the near fist (body rows 21-23, x 6-7), one link out of the bottom"""
+    P(g, 21 + dy, 6, "hg", dx); P(g, 22 + dy, 6, "gh", dx); P(g, 23 + dy, 6, "hg", dx)
+    P(g, 24 + dy, 5, "ho", dx)
 
 
 def idle_loop():
@@ -161,7 +165,7 @@ def idle_loop():
 # --- select flourish ------------------------------------------------------------
 import math  # noqa: E402
 
-HAND = (17, 2)       # centre of the open palm in body_spin.txt (row, col)
+HAND = (16, 2)       # centre of the open palm in body_spin.txt (row, col)
 R = 8                # ring radius: a chain's length
 
 
@@ -193,23 +197,24 @@ def composite_effect(g, fx):
 
 
 def ring_smear(theta):
-    """the ring smear as an effect grid: a white core with a red-tinted fringe, thickest just behind the
-    weight and thinning to a single fringe line opposite it, the weight itself an iron blur with
-    afterimage dots a beat behind"""
+    """the ring smear as an effect grid, a comet chasing its own tail: a white core with a red-tinted
+    fringe for the quarter-turn just behind the weight, a single white line for the next, a dotted
+    fringe for the far side, the weight itself an iron blur with a steel edge and afterimage dots"""
     fx = Grid(BOX, BOX)
     for t in range(0, 360, 2):
         back = (theta - t) % 360
-        radii = (6, 7, 8) if back < 110 else (7, 8) if back < 230 else (8,)
-        for r in radii:
-            y, x = polar(t, r)
-            P(fx, y, x, "H" if r == 7 else "e")
+        if back < 100:
+            P(fx, *polar(t, 7), "H"); P(fx, *polar(t, 8), "e")
+            if back < 50:
+                P(fx, *polar(t, 6), "e")
+        elif back < 210:
+            P(fx, *polar(t, 8), "H" if back < 160 else "e")
+        elif (t // 2) % 3 == 0:
+            P(fx, *polar(t, 8), "e")
     y, x = polar(theta)
-    P(fx, y, x, "gg"); P(fx, y + 1, x, "gh"); P(fx, y - 1, x + 1, "g")
-    ty, tx = polar(theta - 15)
-    P(fx, ty, tx, "h")
-    for back in (150, 250):
-        y, x = polar(theta - back, R + 1)
-        P(fx, y, x, "g")
+    P(fx, y - 1, x - 1, "Hgg"); P(fx, y, x - 1, "ggg"); P(fx, y + 1, x - 1, "ggh")
+    for back in (140, 230, 300):
+        P(fx, *polar(theta - back, 9), "g")
     return fx
 
 
@@ -218,7 +223,7 @@ def spin_body(sash=1, drift=True):
     if drift:
         hood_tail_drift(g)
     sickle_back(g)
-    sash_tail(g, 22, 25, sash)
+    sash_tail(g, 23, 22, sash)
     return g
 
 
@@ -226,7 +231,7 @@ def swing_start():
     """select 1: arm thrust out, the weight dropped off the palm and swinging back under the hand"""
     g = spin_body(0, False)
     wy, wx = polar(160)
-    chain_to(g, (19, 2), (wy - 2, wx), )
+    chain_to(g, (18, 2), (wy - 2, wx))
     weight(g, wy - 1, wx - 1)
     return g.tidy()
 
@@ -235,7 +240,7 @@ def swing_forward():
     """select 2: the pendulum swings forward and up, the chain straightening"""
     g = spin_body(0, False)
     wy, wx = polar(235)
-    chain_to(g, (18, 1), (wy - 1, wx + 1))
+    chain_to(g, (17, 1), (wy - 1, wx + 1))
     weight(g, wy - 1, wx - 1)
     return g.tidy()
 
@@ -244,7 +249,7 @@ def swing_up():
     """select 3: faster — the weight rising past the shoulder, the first red smear behind it"""
     g = spin_body(0, True)
     wy, wx = polar(290)
-    chain_to(g, (17, 1), (wy + 1, wx + 1))
+    chain_to(g, (16, 0), (wy + 1, wx + 1))
     for t in (255, 265, 275):
         y, x = polar(t)
         U(g, y, x, "e")
@@ -289,7 +294,7 @@ def snap():
 def settle():
     """select 8: back down into the ready crouch, the last of the glint fading off the fist"""
     g = idle(0, 1, True, 1)
-    P(g, 22, 4, "H"); P(g, 27, 2, "e"); P(g, 24, 10, "e")
+    P(g, 19, 5, "H"); P(g, 24, 2, "e"); P(g, 21, 10, "e")
     return g.tidy()
 
 
@@ -302,12 +307,12 @@ def swing_back():
     """beat 2: the weight swung back behind the body, chain crossing the front thigh"""
     g = body(dx=1)
     sickle_back(g, 1)
-    sash_tail(g, 22, 25, 0, 1)
-    P(g, 25, 6, "hgh", 1); P(g, 26, 6, "ghg", 1)
+    sash_tail(g, 23, 22, 0, 1)
+    fist(g, 0, 1)
     # chain leaves the fist down-back over the near thigh; the weight hangs low behind it, at the
     # bottom of the pendulum swing, in the gap between the shins
-    chain(g, [(27, 8), (27, 9), (28, 10), (28, 11), (29, 12), (29, 13), (30, 14), (30, 15), (31, 16), (31, 17), (32, 18)], 1)
-    weight(g, 33, 20, 1)
+    chain_to(g, (24, 5), (32, 19), 1)
+    weight(g, 33, 19, 1)
     return g.tidy()
 
 
@@ -320,8 +325,8 @@ def whirl(tremble=0):
     """beat 3: body leaning away, the near hand high, the weight whirling in a pale ring around it"""
     g = body("body_back", dx=-3, dy=tremble)
     sickle_back(g, -1)
-    sash_tail(g, 22, 25, 1, -2)
-    cx, cy = 32, 2 + tremble            # hand centre (body coords); ring radius ~5
+    sash_tail(g, 23, 26, 1, -2)
+    cx, cy = 33, 2 + tremble            # hand centre (body coords); ring radius ~5
     for dy, dx in RING:
         U(g, cy + dy, cx + dx, "H" if dy <= -3 or (dy <= 0 and dx < 0) else "e", -3)
     # the weight itself, smeared, at the front of the ring (upper left)
@@ -333,10 +338,10 @@ def smear():
     """beat 4: the chain and weight become one long pale streak shooting forward and down"""
     g = body("body_back", dx=-5, dy=1)
     sickle_back(g, -3)
-    sash_tail(g, 22, 25, 1, -4)
+    sash_tail(g, 23, 26, 1, -4)
     # comet streak from the top of the whirl (body (30,-2)) arcing over the hood and dipping to the
     # foe's chest: a 1-px tail at the hand thickening to 4 px, no outline, the weight a pale blur
-    x0, y0, n = 30, -2, 30
+    x0, y0, n = 31, -2, 30
     for i in range(n):
         x = x0 - i
         y = y0 + (i * i * 24) // (n * n)
@@ -358,10 +363,10 @@ def impact():
     """beat 5: full extension — the weight out front, chain taut, body lunged, sash streaming back"""
     g = body("body_lunge", dx=8)
     # far arm trailing straight back at shoulder height, sickle level behind, blade rising
-    P(g, 21, 22, "ooooooooo", 8); P(g, 22, 22, "kkkLLlSSsoooooooo", 8); P(g, 23, 22, "kkkLllSssLLLLLL", 8)
-    P(g, 24, 23, "oooooosssooooooo", 8); P(g, 25, 28, "ooooo", 8)
-    blade_up(g, 23, 37, 8)
-    sash_tail(g, 27, 26, 2, 8)
+    P(g, 21, 19, "ooooooooo", 8); P(g, 22, 19, "kkkLLlSSsoooooooo", 8); P(g, 23, 19, "kkkLllSssLLLLLL", 8)
+    P(g, 24, 20, "oooooosssooooooo", 8); P(g, 25, 25, "ooooo", 8)
+    blade_up(g, 23, 34, 8)
+    sash_tail(g, 27, 24, 2, 8)
     # taut chain leftward from the hand (hand x 1-3, rows 22-24) and the weight at full extension
     chain(g, [(23, -1 - i) for i in range(11)], 8)
     weight(g, 22, -15, 8)
@@ -374,14 +379,14 @@ def yank():
     """beat 6: the chain snapping back into a wave, the sickle coming up over the shoulder"""
     g = body("body_lunge", dx=4)
     # far arm up and back behind the hood tails, hand above them, the sickle raised over the head
-    U(g, 20, 21, "okko", 4); U(g, 19, 22, "okko", 4); U(g, 18, 22, "okko", 4); U(g, 17, 23, "oRRo", 4); U(g, 16, 23, "oRro", 4)
-    U(g, 15, 24, "oLlo", 4); U(g, 14, 24, "oLlo", 4); U(g, 13, 24, "oLlo", 4)
-    P(g, 9, 24, "ooooo", 4); P(g, 10, 24, "oSSso", 4); P(g, 11, 24, "oSsso", 4); P(g, 12, 24, "ossso", 4)
+    U(g, 20, 18, "okko", 4); U(g, 19, 19, "okko", 4); U(g, 18, 19, "okko", 4); U(g, 17, 20, "oRRo", 4); U(g, 16, 20, "oRro", 4)
+    U(g, 15, 21, "oLlo", 4); U(g, 14, 21, "oLlo", 4); U(g, 13, 21, "oLlo", 4)
+    P(g, 9, 21, "ooooo", 4); P(g, 10, 21, "oSSso", 4); P(g, 11, 21, "oSsso", 4); P(g, 12, 21, "ossso", 4)
     for i in range(6):                        # handle up-left from the hand
-        P(g, 9 - i, 23 - i, "oLo", 4)
-    P(g, 10, 23, "o", 4)
-    blade_up(g, 3, 18, 4)
-    sash_tail(g, 27, 26, 2, 4)
+        P(g, 9 - i, 20 - i, "oLo", 4)
+    P(g, 10, 20, "o", 4)
+    blade_up(g, 3, 15, 4)
+    sash_tail(g, 27, 24, 2, 4)
     # slack chain: a wave left of the hand, the weight lifted at the end
     chain(g, [(23, -1), (24, -2), (25, -3), (25, -4), (24, -5), (23, -6), (22, -7), (21, -8), (20, -9), (19, -9)], 4)
     weight(g, 16, -11, 4)
