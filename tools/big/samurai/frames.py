@@ -1,7 +1,10 @@
-"""Samurai at CPS2 scale (~105 px) — rest stance first, built from hand-placed shapes (bigkit).
+"""Samurai, big build — drawn FROM SCRATCH to GBA Fire Emblem proportions (Mike, Oct 16).
 
-Facing LEFT. Drawn at ~105 px in a 160x128 design space, then scaled onto the
-96x96 BASE BOX Mike chose (Oct 16): figure ~84 px, ground row 89, origin (48, 90).
+The FE skeleton, measured off the sheets and fe-battle-animations.neocities.org, for a
+34-px man: head ~11 (a third), neck 1, torso 10 (short), legs 12, shoulders 13 wide, a
+20-wide stance. Here every FE pixel is ~3 box pixels: a ~104-px figure in a 128x128 box,
+ground row 119, origin (64, 120). Facing LEFT. Hand-placed shapes (bigkit), 15 colours.
+
 Run: python3 tools/big/samurai/frames.py  -> samurai_big.png next to this file.
 """
 import os
@@ -12,127 +15,122 @@ sys.path.insert(0, os.path.join(HERE, ".."))
 from bigkit import Part, Frame, Palette, render, strip  # noqa: E402
 
 NAME = "samurai"
-DW, DH, DGROUND = 160, 128, 117        # design space
-W, H, GROUND = 128, 128, 119           # the base box (Mike, Oct 16: try 128x128)
-SCALE = 1.06                            # figure ~111 px
+W, H, GROUND = 128, 128, 119
 
 PAL = Palette(NAME, {
-    "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
-    "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),
-    "C": (40, 40, 40), "c": (226, 70, 136), "k": (164, 34, 104),         # C = saya lacquer (shares the outline black); the gi: magenta lit / mid
-    "P": (124, 72, 212),                                                  # Kenshin's violet eyes
-    "I": (238, 238, 246), "i": (184, 190, 210), "n": (148, 148, 176),    # the hakama: white lit / mid (= steel light) / shadow
-    "R": (200, 56, 64), "r": (120, 24, 40),          # obi; r doubles as the hair shadow
-    "A": (255, 128, 64), "a": (222, 64, 30),          # Kenshin scarlet hair (anime): light, mid
-    "L": (136, 86, 66), "l": (136, 86, 66),           # leather (hilt wrap, soles) shares the skin-dark brown
-    "m": (184, 190, 210),
+    "H": (236, 236, 246), "h": (184, 190, 210), "g": (148, 148, 176),   # hakama light / steel light / grey (= hakama shadow n)
+    "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),      # skin
+    "c": (226, 70, 136), "k": (164, 34, 104), "q": (104, 18, 70),        # the gi: lit / mid / shadow (red-magenta)
+    "n": (148, 148, 176),                                                # hakama shadow
+    "R": (200, 56, 64), "r": (120, 24, 40),                              # obi; r doubles as hair shadow
+    "A": (255, 128, 64), "a": (222, 64, 30),                             # scarlet hair: light, mid
+    "P": (124, 72, 212),                                                 # violet eyes
+    "L": (136, 86, 66), "l": (136, 86, 66),                              # leather shares skin-dark (sandal soles, hilt wrap)
+    "C": (40, 40, 40),                                                   # saya lacquer shares the outline black
 })
+
+# landmarks (box pixels)
+CX = 64            # body centre line
+HAIR_TOP = 15
+FACE_TOP, CHIN = 25, 47
+SHOULDER = 50
+OBI_TOP, WAIST = 66, 73
+HEM = 115
 
 
 def stance(bob=0):
-    f = Frame(DW, DH)
     b = bob
-    # ---- hair tail, hanging down the back (behind everything)
-    tail = Part("tail", [(96, 31 + b), (102, 30 + b), (105, 44 + b), (104, 60 + b), (102, 76 + b), (99, 86 + b), (97, 80 + b), (98, 64 + b), (97, 48 + b)], "a")
-    tail.band([(99, 40 + b), (104, 48 + b), (103, 76 + b), (100, 84 + b), (100, 60 + b)], "r")
-    tail.fold([(100, 44 + b), (101, 70 + b)], "A")
-    # ---- far sleeve (behind the torso)
-    far_sleeve = Part("far_sleeve", [(90, 38 + b), (100, 38 + b), (103, 56 + b), (100, 70 + b), (92, 70 + b), (88, 56 + b)], "k")
-    # ---- hakama: one wide skirt, two legs under it
-    hak = Part("hakama", [(66, 64), (92, 64), (96, 80), (100, 98), (104, 112), (83, 112), (81, 100), (79, 112), (56, 112), (58, 96), (62, 80)], "i")
-    hak.band([(66, 64), (74, 64), (70, 80), (64, 98), (60, 112), (56, 112), (58, 96), (62, 80)], "I")
-    hak.band([(88, 66), (92, 64), (96, 80), (100, 98), (104, 112), (94, 112), (92, 96), (90, 80)], "n")
-    hak.band([(81, 84), (86, 84), (86, 112), (83, 112), (81, 100)], "n")     # the split between the legs
-    hak.fold([(72, 66), (68, 90), (65, 112)], "n")
-    hak.fold([(78, 66), (76, 90), (74, 112)], "n")
-    hak.fold([(85, 66), (88, 84)], "n")
-    hak.fold([(90, 70), (94, 92), (96, 112)], "n")
-    # ---- feet: small tabi on sandals, peeking out under the hem (hem overlaps their tops)
-    foot_near = Part("foot_near", [(62, 111), (70, 111), (72, 114), (70, 118), (60, 118), (59, 114)], "h")
-    foot_near.band([(59, 115), (72, 115), (70, 118), (60, 118)], "L")            # the sandal sole
-    foot_near.fold([(64, 112), (64, 115)], "g")                                   # the tabi split
-    foot_far = Part("foot_far", [(89, 111), (97, 111), (100, 114), (98, 118), (88, 118), (86, 114)], "h")
-    foot_far.band([(86, 115), (100, 115), (98, 118), (88, 118)], "L")
-    foot_far.band([(89, 111), (97, 111), (100, 114), (95, 114), (92, 112)], "g")
-    # ---- torso: the gi, narrow, lit from the upper left
-    torso = Part("torso", [(69, 36 + b), (95, 36 + b), (95, 50 + b), (93, 66 + b), (70, 66 + b), (68, 50 + b)], "k")
-    torso.band([(69, 36 + b), (80, 36 + b), (77, 50 + b), (74, 66 + b), (70, 66 + b), (68, 50 + b)], "c")
-    torso.fold([(84, 36 + b), (80, 46 + b), (77, 58 + b), (76, 66 + b)], "H")           # the lapel edge
-    torso.fold([(78, 38 + b), (83, 48 + b), (84, 58 + b)], "c")                         # the far lapel, dim
-    # ---- neck + chest skin in the V
-    neck = Part("neck", [(77, 30 + b), (87, 30 + b), (87, 37 + b), (85, 42 + b), (79, 41 + b), (77, 36 + b)], "s")
-    neck.band([(77, 30 + b), (81, 30 + b), (80, 39 + b), (77, 36 + b)], "S")
-    # ---- obi
-    obi = Part("obi", [(69, 59 + b), (93, 59 + b), (93, 66 + b), (69, 66 + b)], "r")
-    obi.band([(69, 59 + b), (93, 59 + b), (93, 62 + b), (69, 62 + b)], "R")
-    obi.fold([(80, 59 + b), (82, 66 + b)], "r")
-    knot = Part("knot", [(93, 60 + b), (100, 58 + b), (104, 64 + b), (102, 72 + b), (97, 68 + b), (94, 66 + b)], "r")
-    knot.band([(93, 60 + b), (98, 59 + b), (98, 64 + b), (94, 64 + b)], "R")
-    # ---- saya (worn on the near hip, in front of the hakama) and the hilt
-    saya = Part("saya", [(62, 66 + b), (66, 64 + b), (124, 94 + b), (124, 98 + b), (120, 99 + b), (60, 70 + b)], "C")
-    saya.band([(63, 66 + b), (66, 64 + b), (124, 94 + b), (124, 96 + b)], "g")
-    saya.fold([(121, 95 + b), (121, 99 + b)], "g")                                       # the kojiri cap
-    tsuba = Part("tsuba", [(60, 62 + b), (66, 60 + b), (68, 66 + b), (62, 70 + b)], "g")
-    hilt = Part("hilt", [(40, 50 + b), (62, 62 + b), (60, 67 + b), (37, 55 + b)], "L")
-    hilt.fold([(44, 52 + b), (46, 56 + b), (50, 55 + b), (52, 59 + b), (56, 58 + b), (58, 62 + b)], "k")
-    # ---- near sleeve: long, thin, flaring to a point at the wrist
-    sleeve = Part("sleeve", [(66, 37 + b), (76, 37 + b), (74, 50 + b), (72, 62 + b), (70, 72 + b), (60, 76 + b), (56, 70 + b), (62, 60 + b), (64, 48 + b)], "k")
-    sleeve.band([(66, 37 + b), (71, 37 + b), (68, 50 + b), (65, 62 + b), (60, 72 + b), (56, 70 + b), (62, 60 + b), (64, 48 + b)], "c")
-    sleeve.fold([(66, 37 + b), (68, 36 + b), (72, 36 + b)], "g")
-    sleeve.fold([(70, 52 + b), (67, 64 + b), (63, 72 + b)], "k")
-    # ---- near hand resting on the hilt
-    hand = Part("hand", [(58, 62 + b), (65, 60 + b), (68, 63 + b), (67, 68 + b), (62, 70 + b), (58, 68 + b), (57, 65 + b)], "s")
-    hand.band([(59, 62 + b), (64, 61 + b), (64, 64 + b), (59, 64 + b)], "S")             # the back of the hand, lit
-    for i, (x0, y0) in enumerate([(58, 65), (60, 66), (62, 67), (64, 67)]):              # fingers curling over the hilt
-        hand.fold([(x0, y0 + b), (x0, y0 + 3 + b)], "z")
-    hand.fold([(58, 68 + b), (66, 69 + b)], "z")                                          # the fingertips' edge
-    hand.fold([(65, 60 + b), (68, 63 + b)], "z")                                          # the thumb
-    # ---- head (Kenshin build): a short, soft face with big eyes and a small pointed chin; spiky long
-    # bangs parting over the brow; two long side locks down past the jaw; the tail tied at the back of the head
-    face = Part("face", [(73, 16 + b), (87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (81, 35 + b), (75, 32 + b), (70, 27 + b), (70, 21 + b)], "S")
-    face.band([(87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (86, 24 + b)], "s")   # narrow far-cheek shadow
-    face.fold([(75, 31 + b), (81, 34 + b), (87, 31 + b)], "z")                                 # small chin
-    face.fold([(73, 20 + b), (77, 19 + b)], "z"); face.fold([(81, 19 + b), (85, 20 + b)], "z")   # brows
-    face.fold([(73, 23 + b), (70, 27 + b), (73, 28 + b)], "z")                                # the nose: bridge down to a tip, back under
-    face.fold([(77, 30 + b), (81, 30 + b)], "z")                                               # mouth
-    hair = Part("hair", [(67, 14 + b), (72, 7 + b), (78, 4 + b), (84, 5 + b), (90, 4 + b), (96, 9 + b), (99, 16 + b), (100, 26 + b), (97, 35 + b), (93, 38 + b), (92, 26 + b),
-                         (91, 18 + b), (89, 22 + b), (87, 15 + b), (85, 21 + b), (83, 15 + b), (81, 22 + b), (79, 15 + b), (77, 21 + b), (75, 15 + b), (73, 21 + b), (71, 16 + b), (70, 22 + b), (68, 19 + b)], "a")
-    hair.band([(71, 12 + b), (77, 6 + b), (88, 6 + b), (93, 9 + b), (84, 11 + b), (75, 14 + b)], "A")
-    hair.fold([(79, 15 + b), (79, 20 + b)], "A"); hair.fold([(87, 15 + b), (87, 20 + b)], "A")
-    hair.band([(93, 10 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b), (92, 16 + b)], "r")
-    hair.fold([(85, 8 + b), (91, 13 + b), (94, 24 + b)], "r")
-    hair.fold([(78, 10 + b), (76, 16 + b)], "A"); hair.fold([(82, 9 + b), (81, 16 + b)], "A")
-    lock_near = Part("lock_near", [(70, 22 + b), (74, 22 + b), (75, 36 + b), (74, 48 + b), (71, 52 + b), (69, 44 + b), (69, 32 + b)], "a")
-    lock_near.band([(70, 22 + b), (72, 22 + b), (72, 48 + b), (71, 52 + b), (69, 44 + b), (69, 32 + b)], "A")
-    lock_far = Part("lock_far", [(88, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (88, 46 + b), (87, 32 + b)], "a")
-    lock_far.band([(91, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (91, 40 + b)], "r")
-    tie = Part("tie", [(95, 28 + b), (100, 27 + b), (101, 32 + b), (96, 33 + b)], "R")
-    # ---- reframe to GBA Fire Emblem proportions (Mike, Oct 16): a bigger head (~1/3 of the height),
-    # a broader, shorter body, shorter legs and a wider stance. Applied as group stretches in design space.
-    head_parts = [face, hair, lock_near, lock_far, tie, tail]
-    body_parts = [far_sleeve, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand]
-    leg_parts = [foot_near, foot_far, hak]
-    head_parts = [p.stretched(1.14, 1.14, 82, 36 + b) for p in head_parts]        # about the neck base
-    body_parts = [p.stretched(1.16, 1.0, 82, 36 + b) for p in body_parts]         # broader shoulders/torso
-    leg_parts = [p.stretched(1.22, 0.86, 81, DGROUND + 1) for p in leg_parts]      # shorter legs, wider stance
-    body_parts = [p.stretched(1.0, 1.0, 0, 0) for p in body_parts]
-    hak_top = 64 * 0.86 + (DGROUND + 1) * 0.14                                     # where the shortened hakama now starts
-    body_parts = [p.stretched(1.0, (hak_top - 36) / (64 - 36), 82, 36 + b) for p in body_parts]   # torso reaches the new waist
-    f.add(*[p for p in [head_parts[5], body_parts[0]] ], *leg_parts, *body_parts[1:], *head_parts[:5])
-    f.scale(SCALE * 0.94, 80, DGROUND + 1, W // 2, GROUND + 1)
-    f.w, f.h = W, H
+    f = Frame(W, H)
+
+    # ---- hair tail: from the tie at the back of the head, down the back to the obi
+    tail = Part("tail", [(82, 36 + b), (90, 35 + b), (93, 48 + b), (92, 62 + b), (90, 74 + b), (86, 80 + b), (84, 72 + b), (85, 58 + b), (83, 46 + b)], "a")
+    tail.band([(86, 36 + b), (90, 35 + b), (93, 48 + b), (92, 62 + b), (90, 74 + b), (89, 58 + b), (88, 46 + b)], "r")
+    tail.fold([(87, 40 + b), (88, 60 + b)], "A")
+
+    # ---- far sleeve (behind the torso): a big bell hanging from the far shoulder
+    far_sleeve = Part("far_sleeve", [(76, 52 + b), (86, 52 + b), (92, 66 + b), (92, 82 + b), (80, 84 + b), (76, 70 + b)], "q")
+    far_sleeve.band([(84, 52 + b), (86, 52 + b), (92, 66 + b), (92, 82 + b), (88, 82 + b), (88, 66 + b)], "k")
+
+    # ---- feet: small tabi on sandal soles, under the hem
+    foot_near = Part("foot_near", [(36, 112), (50, 112), (53, 116), (50, 119), (34, 119), (32, 116)], "h")
+    foot_near.band([(32, 116), (53, 116), (50, 119), (34, 119)], "L")
+    foot_near.fold([(42, 112), (42, 116)], "g")
+    foot_far = Part("foot_far", [(80, 112), (94, 112), (97, 116), (95, 119), (79, 119), (77, 116)], "h")
+    foot_far.band([(77, 116), (97, 116), (95, 119), (79, 119)], "L")
+    foot_far.band([(80, 112), (94, 112), (97, 116), (90, 116), (84, 113)], "g")
+
+    # ---- hakama: wide, short, one skirt split into two full legs; pleats as diagonals
+    hak = Part("hakama", [(50, WAIST), (80, WAIST), (90, 86), (96, HEM), (70, HEM), (65, 100), (60, HEM), (34, HEM), (40, 86)], "h")
+    hak.band([(50, WAIST), (62, WAIST), (56, 90), (48, HEM), (34, HEM), (40, 86)], "H")           # lit front leg
+    hak.band([(76, WAIST), (80, WAIST), (90, 86), (96, HEM), (84, HEM), (82, 90)], "n")            # shadowed back leg
+    hak.band([(62, 92), (68, 92), (70, HEM), (60, HEM), (65, 100)], "n")                          # the split
+    hak.fold([(56, 74), (50, 94), (44, HEM)], "n"); hak.fold([(64, 74), (60, 94), (56, HEM)], "n")
+    hak.fold([(72, 74), (74, 94), (76, HEM)], "n"); hak.fold([(80, 76), (86, 96), (90, HEM)], "g")
+    hak.fold([(34, HEM), (96, HEM)], "n")
+
+    # ---- torso: short and broad, the gi crossing left over right, lit from the camera side
+    torso = Part("torso", [(46, SHOULDER + b), (82, SHOULDER + b), (82, 60 + b), (78, WAIST + b), (52, WAIST + b), (46, 60 + b)], "k")
+    torso.band([(46, SHOULDER + b), (62, SHOULDER + b), (58, 60 + b), (56, WAIST + b), (52, WAIST + b), (46, 60 + b)], "c")
+    torso.band([(76, SHOULDER + b), (82, SHOULDER + b), (82, 60 + b), (78, WAIST + b), (74, WAIST + b), (74, 60 + b)], "q")
+    torso.fold([(70, SHOULDER + b), (64, 58 + b), (60, 66 + b), (59, WAIST + b)], "H")         # the lapel edge
+    torso.fold([(62, SHOULDER + 1 + b), (67, 57 + b), (70, 63 + b)], "q")                      # the far lapel, dim
+    neck = Part("neck", [(56, 44 + b), (70, 44 + b), (70, 52 + b), (66, 58 + b), (60, 57 + b), (56, 50 + b)], "s")
+    neck.band([(56, 44 + b), (62, 44 + b), (61, 54 + b), (56, 50 + b)], "S")
+
+    # ---- obi with a knot and tails at the back
+    obi = Part("obi", [(50, OBI_TOP + b), (80, OBI_TOP + b), (79, WAIST + b), (51, WAIST + b)], "r")
+    obi.band([(50, OBI_TOP + b), (80, OBI_TOP + b), (80, 69 + b), (50, 69 + b)], "R")
+    obi.fold([(64, OBI_TOP + b), (66, WAIST + b)], "q")
+    knot = Part("knot", [(79, 66 + b), (88, 64 + b), (92, 70 + b), (90, 80 + b), (84, 76 + b), (80, 72 + b)], "r")
+    knot.band([(79, 66 + b), (86, 65 + b), (86, 70 + b), (80, 70 + b)], "R")
+
+    # ---- the katana: a long saya worn on the near hip in front of the hakama; hilt forward-up
+    saya = Part("saya", [(50, 72 + b), (55, 70 + b), (108, 102 + b), (108, 107 + b), (103, 108 + b), (47, 76 + b)], "C")
+    saya.band([(51, 72 + b), (55, 70 + b), (108, 102 + b), (108, 104 + b)], "g")
+    saya.fold([(105, 103 + b), (105, 108 + b)], "h")
+    tsuba = Part("tsuba", [(47, 67 + b), (54, 65 + b), (56, 72 + b), (49, 75 + b)], "g")
+    hilt = Part("hilt", [(26, 55 + b), (49, 68 + b), (46, 73 + b), (23, 60 + b)], "L")
+    hilt.fold([(30, 57 + b), (32, 61 + b), (36, 60 + b), (38, 64 + b), (42, 63 + b), (44, 67 + b)], "C")
+
+    # ---- near sleeve: FE-big, hanging from the near shoulder and belling out; the hand comes out at the hilt
+    sleeve = Part("sleeve", [(42, SHOULDER + b), (58, SHOULDER + b), (56, 60 + b), (54, 70 + b), (52, 78 + b), (40, 82 + b), (34, 76 + b), (38, 64 + b), (40, 56 + b)], "k")
+    sleeve.band([(42, SHOULDER + b), (50, SHOULDER + b), (47, 60 + b), (44, 70 + b), (40, 80 + b), (34, 76 + b), (38, 64 + b), (40, 56 + b)], "c")
+    sleeve.band([(52, 62 + b), (54, 70 + b), (52, 78 + b), (46, 80 + b), (48, 70 + b)], "q")
+    sleeve.fold([(48, 58 + b), (44, 70 + b), (40, 80 + b)], "q")
+    hand = Part("hand", [(42, 64 + b), (52, 62 + b), (56, 66 + b), (54, 73 + b), (46, 76 + b), (41, 72 + b), (40, 67 + b)], "s")
+    hand.band([(43, 64 + b), (51, 63 + b), (51, 67 + b), (43, 67 + b)], "S")
+    for x0, y0 in [(42, 68), (45, 69), (48, 70), (51, 71)]:
+        hand.fold([(x0, y0 + b), (x0, y0 + 4 + b)], "z")
+    hand.fold([(42, 73 + b), (53, 75 + b)], "z"); hand.fold([(52, 62 + b), (56, 66 + b)], "z")
+
+    # ---- head: FE-big, a third of the figure. Short soft face, pointed chin, big violet eyes
+    face = Part("face", [(52, FACE_TOP + b), (72, FACE_TOP + b), (77, 32 + b), (77, 40 + b), (70, CHIN - 1 + b), (62, CHIN + 2 + b), (54, CHIN - 1 + b), (48, 40 + b), (48, 32 + b)], "S")
+    face.band([(72, FACE_TOP + b), (77, 32 + b), (77, 40 + b), (70, CHIN - 1 + b), (69, 34 + b)], "s")
+    face.fold([(54, 45 + b), (62, 48 + b), (70, 45 + b)], "z")                                 # jaw to a small chin
+    face.fold([(52, 31 + b), (58, 30 + b)], "z"); face.fold([(63, 30 + b), (69, 31 + b)], "z")   # brows
+    face.fold([(52, 34 + b), (48, 39 + b), (52, 40 + b)], "z")                                # nose: bridge, tip, under
+    face.fold([(57, 43 + b), (63, 43 + b)], "z")                                               # mouth
+    hair = Part("hair", [(44, 30 + b), (48, 20 + b), (54, 15 + b), (62, 13 + b), (72, 14 + b), (82, 18 + b), (87, 26 + b), (88, 38 + b), (84, 46 + b), (80, 36 + b),
+                         (78, 28 + b), (76, 33 + b), (73, 25 + b), (70, 33 + b), (67, 25 + b), (64, 33 + b), (61, 25 + b), (58, 33 + b), (55, 26 + b), (52, 33 + b), (49, 27 + b), (46, 35 + b)], "a")
+    hair.band([(50, 20 + b), (56, 15 + b), (70, 14 + b), (78, 17 + b), (66, 20 + b), (56, 24 + b)], "A")
+    hair.band([(80, 18 + b), (87, 26 + b), (88, 38 + b), (84, 46 + b), (80, 36 + b), (79, 24 + b)], "r")
+    hair.fold([(61, 25 + b), (61, 31 + b)], "A"); hair.fold([(73, 25 + b), (73, 31 + b)], "A")
+    hair.fold([(72, 15 + b), (80, 22 + b), (83, 36 + b)], "r")
+    lock_near = Part("lock_near", [(45, 32 + b), (51, 32 + b), (52, 50 + b), (50, 66 + b), (46, 72 + b), (43, 62 + b), (43, 46 + b)], "a")
+    lock_near.band([(45, 32 + b), (48, 32 + b), (48, 66 + b), (46, 72 + b), (43, 62 + b), (43, 46 + b)], "A")
+    lock_far = Part("lock_far", [(74, 34 + b), (80, 34 + b), (82, 50 + b), (81, 66 + b), (77, 74 + b), (74, 62 + b), (73, 48 + b)], "a")
+    lock_far.band([(78, 34 + b), (80, 34 + b), (82, 50 + b), (81, 66 + b), (77, 74 + b), (78, 54 + b)], "r")
+    tie = Part("tie", [(82, 32 + b), (89, 31 + b), (90, 37 + b), (83, 38 + b)], "R")
+
+    f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, lock_near, lock_far, tie)
     g = f.raster()
-    # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
-    s = SCALE * 0.94
-    eyy = 36 + b + (22 + b - 36 - b) * 1.14
-    ey = GROUND + 1 + int(round((eyy - DGROUND - 1) * s))
-    ex = [W // 2 + int(round((82 + (dx - 82) * 1.14 - 80) * s)) for dx in (73, 80)]
-    # bigger anime eyes, 3x3 like the pixeljoint reference: a thin dark upper edge, a tall violet iris
-    # with a light glint top-left and a dark pupil bottom-right
-    for x in ex:
-        g.g[ey - 1][x] = "o"; g.g[ey - 1][x + 1] = "o"; g.g[ey - 1][x + 2] = "o"
-        g.g[ey][x] = "h"; g.g[ey][x + 1] = "P"; g.g[ey][x + 2] = "P"
-        g.g[ey + 1][x] = "P"; g.g[ey + 1][x + 1] = "P"; g.g[ey + 1][x + 2] = "o"
+    # eyes 3x3: dark upper edge, tall violet iris with a light glint top-left and a dark pupil bottom-right
+    for x in (52, 62):
+        y = 33 + b
+        for i in range(3):
+            g.g[y][x + i] = "o"
+        g.g[y + 1][x] = "h"; g.g[y + 1][x + 1] = "P"; g.g[y + 1][x + 2] = "P"
+        g.g[y + 2][x] = "P"; g.g[y + 2][x + 1] = "P"; g.g[y + 2][x + 2] = "o"
     return g
 
 
