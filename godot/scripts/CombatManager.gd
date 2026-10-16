@@ -152,7 +152,8 @@ func _resolve() -> void:
 
 	if damage > 0:
 		target.take_damage(damage)
-		target.set_pose("hit")
+		# A parried attacker staggers (its own weapon's reel); a struck defender flinches.
+		target.set_pose("stagger" if result == "parry" else "hit")
 	exchange_resolved.emit(result, damage, target)
 
 	if attacker.hp <= 0 or defender.hp <= 0:

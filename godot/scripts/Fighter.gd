@@ -8,7 +8,7 @@ extends Node2D
 ## editor and the placeholder builder is skipped. Pose names must match POSES.
 
 const POSES := ["idle", "lean", "hold", "lunge", "recover", "block", "hit",
-				"dodge_up", "dodge_down", "dodge_forward", "dodge_back", "parry"]
+				"dodge_up", "dodge_down", "dodge_forward", "dodge_back", "parry", "stagger"]
 
 @export var fighter_name := "Fighter"
 @export var archetype := "default"
@@ -123,6 +123,9 @@ func _frames_for_pose(p: String) -> Array[Texture2D]:
 			out.append(_figure(6, 0, 1))
 		"dodge_back":
 			out.append(_figure(-8, 0, -1))
+		"stagger":
+			out.append(_figure(5, 1, 3, Color.RED))
+			out.append(_figure(-2, 0, 0, Color.RED))
 	return out
 
 

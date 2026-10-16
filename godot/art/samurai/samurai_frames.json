@@ -72,6 +72,12 @@
       "count": 1,
       "loop": false,
       "fps": 8
+    },
+    "stagger": {
+      "start": 13,
+      "count": 2,
+      "loop": false,
+      "fps": 6
     }
   }
 }
