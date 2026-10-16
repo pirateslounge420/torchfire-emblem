@@ -212,7 +212,7 @@ def ring_smear(theta):
         elif (t // 2) % 3 == 0:
             P(fx, *polar(t, 8), "e")
     y, x = polar(theta)
-    P(fx, y - 1, x - 1, "Hgg"); P(fx, y, x - 1, "ggg"); P(fx, y + 1, x - 1, "ggh")
+    P(fx, y - 1, x - 1, "Hhg"); P(fx, y, x - 1, "hgg"); P(fx, y + 1, x - 1, "ggh")
     for back in (140, 230, 300):
         P(fx, *polar(theta - back, 9), "g")
     return fx

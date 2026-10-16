@@ -49,6 +49,40 @@ Trigram colours (Mike, Oct 15 — Thunder/Wind pending his confirmation):
 Fire **red**, Mountain **orange**, Thunder **yellow**, Earth **green**,
 Water **blue**, Lake **indigo**, Heaven **violet**, Wind **magenta**.
 
+## The vibe (Mike, Oct 16): LANKY and SNAPPY, never blocky or basic
+
+- **Lanky**: long thin limbs, narrow shoulders and hips, a long waist, small
+  head (~1/4 of the height at most), big loose cloth hanging off a thin frame.
+  Silhouettes made of diagonals and points (a sleeve that flares to a tip, a
+  slanted hem, jagged hair), not rectangles. Break every straight edge longer
+  than ~6 px with a 1-px step or a fold line.
+- **Snappy**: poses at full extension, one smear frame between them, short
+  holds; the anticipation frame is small and quick, the hit frame is extreme.
+  No two consecutive frames with the same silhouette.
+- Eyes are plain dark dots (no glint pixel).
+- Every unit paints all 15 colours (+ transparent), with the smear fringe
+  tinted in the unit's trigram colour.
+- **Scale (Oct 16)**: Mike's target is Street Fighter Alpha / CPS2 size —
+  figures ~105 px tall (Ryu is ~110) in a 160×128 box, still 15 colours and
+  hard pixels. The Samurai is being rebuilt at that scale first; the others
+  follow once the look is approved.
+
+## Mike's notes from the Samurai pass (Oct 15)
+
+- Stand **tall and upright**, slim; no hunch; hips at mid-height.
+- Hair **falls** (no spiked-back ponytail): a low tail hanging down the back
+  that swings, trails and whips per beat; bangs over the brow (Kenshin shape).
+- **Cloth moves**: bell sleeves hang from the elbow and swing, obi tails whip,
+  the hakama flares in the lunge.
+- Shading moodier: near-black cloth lit from the upper-left with a 1-px rim,
+  the trigram colour kept for one big mass (the hakama).
+- Feet move every beat; the sheath is worn on the NEAR side so the draw and
+  resheathe are visible. At rest: no lean, feet under the shoulders, both legs even.
+- Idle is 8 frames; every unit also has a one-shot "select" flourish.
+- Costume notes: Pirate = durag + tattered below-the-knee pants, axe rests on
+  the shoulder at idle; Shinobi = face hidden (mask + wrap, eye slit), flourish
+  whirls the chain weight.
+
 ## The six beats of an attack (every GBA sword/axe/lance sheet uses them)
 
 1. **stance** — wide, low, weight on the back foot, weapon held low-back.
