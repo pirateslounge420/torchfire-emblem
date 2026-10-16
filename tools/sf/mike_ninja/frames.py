@@ -77,40 +77,66 @@ CHEST = [R(s) for s in [          # stamped at sprite (9, 13)
     ".kffhhhhhhaaak.",
     ".kkkkkkkkkkkkk.",
 ]]
-ARM_DOWN_NEAR = [R(s) for s in [  # stamped at sprite (2, 13): bare upper arm from the shoulder, glove at the hip
-    ".kjjck.",
-    "kjjjcck",
-    "kjjcclk",
-    "kjcccllk",
-    "kjcccllk",
-    ".kccllk.",
-    ".kcclk..",
-    ".keeek..",
-    ".keeeek.",
-    ".kdeeek.",
-    ".kdeeek.",
-    ".kkeeek.",
-    "..kkkk..",
+# Arm anatomy at this scale (head = 14 px): shoulder at row 12, elbow at the belt (row ~24), wrist at row ~33,
+# fingertips at mid-thigh (row ~40). Upper arm 6 px wide with the deltoid cap and biceps swell, forearm swelling
+# just under the elbow then tapering to a 3-px wrist; the hanging arm hangs with a slight bend at the elbow.
+# Light from the upper-left: j (light) on the outer-top planes, c (mid), l (dark) on the underside.
+ARM_DOWN_NEAR = [R(s) for s in [  # stamped at sprite (2, 12)
+    ".kkjjck.",     # 12 deltoid cap
+    "kjjjjcck",     # 13
+    "kjjjccclk",    # 14
+    "kjjcccclk",    # 15 biceps
+    "kjjcccclk",    # 16
+    ".kjccclk.",    # 17
+    ".kjccclk.",    # 18
+    ".kcccllk.",    # 19
+    ".kccclk..",    # 20 toward the elbow
+    ".kcclk...",    # 21
+    ".kkeek...",    # 22 elbow / glove cuff
+    ".keeeek..",    # 23 forearm swell (gloved)
+    ".keeeek..",    # 24
+    ".kdeeek..",    # 25
+    ".kdeeek..",    # 26
+    "..kdeek..",    # 27
+    "..kdeek..",    # 28 taper
+    "..kdek...",    # 29
+    "..kdek...",    # 30
+    "..keek...",    # 31 wrist
+    ".kdeeek..",    # 32 fist
+    ".kdeeeek.",    # 33
+    ".kdeeeek.",    # 34
+    ".kkeeeek.",    # 35
+    "..kkkkk..",    # 36
 ]]
-ARM_UP_FAR = [R(s) for s in [     # stamped at sprite (23, 6): the far arm raised over the shoulder to the hilt
-    "...kjck",
-    "..kjcck",
-    ".kjcclk",
-    ".kjcclk",
-    "kjccllk",
-    "kjcclk.",
-    "kccllk.",
-    ".kcck..",
-    ".kkkk..",
+ARM_UP_FAR = [R(s) for s in [     # stamped at sprite (23, 1): shoulder bottom-left, elbow top-right, forearm back to the hand at the hilt
+    "...kjjcck.k.",   # 1 hand gripping the hilt (hilt drawn by the beat, passes behind)
+    "..kjjjccclkk",   # 2 forearm, running right to the elbow
+    "..kkcccccllk",   # 3
+    "....kkkcclk.",   # 4 elbow point
+    ".....kjcclk.",   # 5 upper arm, down-left to the shoulder
+    "....kjjcclk.",   # 6
+    "...kjjccllk.",   # 7
+    "..kjjcccllk.",   # 8
+    ".kjjcccllk..",   # 9
+    "kjjccccllk..",   # 10 deltoid
+    "kjccccllk...",   # 11
+    ".kkkkkkk....",   # 12
 ]]
-ARM_DOWN_FAR = [R(s) for s in [   # the far arm hanging behind the far side of the chest
-    "kcck",
-    "kcclk",
-    "kcclk",
-    ".kclk",
-    ".kclk",
-    ".kllk",
-    ".kkk.",
+ARM_DOWN_FAR = [R(s) for s in [   # the far arm hanging behind the far side of the chest (partly hidden)
+    "kjcck",
+    "kjcclk",
+    "kjcclk",
+    "kccllk",
+    ".kcllk",
+    ".kcllk",
+    ".kcclk",
+    ".kcclk",
+    ".kcllk",
+    ".kcllk",
+    ".kkllk",
+    ".keeek",
+    ".keeek",
+    ".kkkk.",
 ]]
 
 
@@ -120,13 +146,13 @@ def open_torso(g, dx=0, dy=0, far="up"):
     for i, row in enumerate(CHEST):
         P(g, 13 + i, 9, row, dx, dy)
     for i, row in enumerate(ARM_DOWN_NEAR):
-        P(g, 12 + i, 3, row, dx, dy)
+        P(g, 12 + i, 2, row, dx, dy)
     if far == "up":
         for i, row in enumerate(ARM_UP_FAR):
-            P(g, 6 + i, 23, row, dx, dy)
+            P(g, 1 + i, 23, row, dx, dy)
     else:
         for i, row in enumerate(ARM_DOWN_FAR):
-            P(g, 14 + i, 24, row, dx, dy)
+            P(g, 13 + i, 25, row, dx, dy)
 
 
 def blade(g, x, y, n, step, dx=0, dy=0):
@@ -152,8 +178,8 @@ def draw_high():
     open_torso(g, far="up")
     # the back sheath now empty: the little hilt that stuck up behind the head is gone
     g.clear(X_OFF + 27, TOP + 1, X_OFF + 34, TOP + 9)
-    P(g, 5, 26, R("kllk")); P(g, 4, 27, R("kllk"))               # the hilt in the raised hand
-    blade(g, 29, 3, 12, (1, -1))                                 # blade up-right
+    P(g, 0, 26, R("kllk")); P(g, -1, 27, R("kllk"))              # the hilt in the raised hand
+    blade(g, 28, -2, 12, (1, -1))                                # blade up-right from the hilt
     return g.tidy()
 
 
@@ -179,9 +205,27 @@ def slash():
     g.shift_region(0, TOP, BOX, TOP + 29, -2, 0)             # the upper body leans toward the foe
     open_torso(g, dx=-6, far="down")
     g.clear(X_OFF + 21, TOP + 1, X_OFF + 32, TOP + 9)
-    # the far arm swung down and forward past the near side
-    P(g, 20, 1, R("kcjk"), -6); P(g, 21, -1, R("kjcck"), -6); P(g, 22, -3, R("kcclk"), -6); P(g, 23, -4, R("kllk"), -6)
-    blade(g, -6, 24, 10, (-1, 1), dx=-6)                    # blade down-left
+    # the far arm swung down and forward past the near side: a full arm from the far shoulder to the hand
+    SWING = [R(s) for s in [
+        "...............kjjck",
+        "..............kjjcclk",
+        ".............kjjccllk",
+        "...........kkjjccllk.",
+        ".........kkjjcccllk..",
+        ".......kkjjccccllk...",
+        ".....kkjjccccllkk....",
+        "...kkjjcccccllkk.....",
+        ".kkjjcccccllkk.......",
+        "kjjccccllkkk.........",
+        "kjcccllkk............",
+        "kccllkk..............",
+        "kllkk................",
+        "kkk..................",
+    ]]
+    for i, row in enumerate(SWING):
+        P(g, 12 + i, 8, row, -6)
+    P(g, 24, 6, R("kllk"), -6); P(g, 25, 5, R("kllk"), -6)   # the hilt in the hand
+    blade(g, 4, 26, 10, (-1, 1), dx=-6)                       # blade down-left
     return g.tidy()
 
 
