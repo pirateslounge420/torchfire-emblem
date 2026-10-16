@@ -1,12 +1,12 @@
 {
   "frame_size": 112,
   "frame_w": 112,
-  "frame_h": 80,
+  "frame_h": 88,
   "columns": 8,
   "faces": "left",
   "origin": [
     56,
-    70
+    78
   ],
   "animations": {
     "idle": {

@@ -28,9 +28,9 @@ from handkit import Grid, Palette, render, strip, gif, sheet  # noqa: E402
 import parts as P  # noqa: E402
 
 NAME = "samurai"
-BOX_W, BOX_H = 112, 80
-GROUND = 69
-ORIGIN = (56, 70)
+BOX_W, BOX_H = 112, 88
+GROUND = 77
+ORIGIN = (56, 78)
 STANCE_X = 36            # left edge of the stance legs in the box
 
 PAL = Palette(NAME, {
@@ -129,15 +129,15 @@ class Fig:
         self.ty = self.ly - (len(torso) - 1) + torso_dy
         self.nx = self.tx + torso[0].index("s")      # the neck pixel on the torso's top row
         self.ny = self.ty
-        self.hx, self.hy = self.nx - 5, self.ny - 19     # head: neck base at local (5,19)
-        self.tiex, self.tiey = self.hx + 15, self.hy + 17  # the hair tie
+        self.hx, self.hy = self.nx - 5, self.ny - 16     # head: neck base at local (5,16)
+        self.tiex, self.tiey = self.hx + 13, self.hy + 14  # the hair tie
 
     def saya(self, mouth=None, part=None):
         mx, my = mouth or self.mouth()
         stamp(self.g, mx - 1, my - 1, part or P.SAYA)
 
     def far_sleeve(self, dx=0, dy=0, part=None):
-        stamp(self.g, self.tx + 12 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
+        stamp(self.g, self.tx + 10 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
 
     def tail(self, part, dx=0, dy=0):
         stamp(self.g, self.tiex + dx, self.tiey + 1 + dy, part)
@@ -156,7 +156,7 @@ class Fig:
 
     def mouth(self):
         """the saya mouth: just in front of the near hip under the obi"""
-        return (self.tx + 3, self.ty + 15)
+        return (self.tx + 4, self.ty + 19)
 
     def hilt_sheathed(self, n=4):
         mx, my = self.mouth()
@@ -164,7 +164,7 @@ class Fig:
         hilt_poly(self.g, mx - 2, my - 1, mx - 2 - 2 * n, my - 1 - n)
 
 
-OBI_STANCE = [(18, 13, "oRro"), (19, 14, "oRro"), (20, 15, "orro"), (21, 16, "oro")]
+OBI_STANCE = [(16, 17, "oRro"), (17, 18, "oRro"), (18, 19, "orro"), (19, 20, "oro")]
 OBI_LUNGE = [(19, 13, "oRro"), (22, 14, "oRrro"), (26, 15, "orro")]
 
 
@@ -177,7 +177,7 @@ def stance(bob=0, sway=0):
     f.saya()
     f.arm(P.ARM_REST_SWING if sway else P.ARM_REST, dy=bob)
     f.hilt_sheathed()
-    f.g.put(f.ty + 15 + bob, f.tx + 2, "oSsso"); f.g.put(f.ty + 16 + bob, f.tx + 2, "ozzzo")   # the near hand resting on the hilt
+    f.g.put(f.ty + 18 + bob, f.tx + 2, "oSsso"); f.g.put(f.ty + 19 + bob, f.tx + 2, "ozzzo")   # the near hand resting on the hilt
     f.obi_tails(OBI_STANCE)
     return f.g.tidy()
 
