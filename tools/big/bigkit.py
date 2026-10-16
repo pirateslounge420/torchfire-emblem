@@ -87,6 +87,15 @@ class Part:
         p.dots = [(x + dx, y + dy, l) for x, y, l in self.dots]
         return p
 
+    def scaled(self, s, ox, oy, nx, ny):
+        """scale about (ox,oy) by s and move that point to (nx,ny)"""
+        t = lambda p: (nx + (p[0] - ox) * s, ny + (p[1] - oy) * s)
+        p = Part(self.name, [t(q) for q in self.pts], self.fill, self.outline)
+        p.bands = [([t(q) for q in b], l) for b, l in self.bands]
+        p.folds = [([t(q) for q in f], l, max(1, int(round(w * s)))) for f, l, w in self.folds]
+        p.dots = [(int(round(t((x, y))[0])), int(round(t((x, y))[1])), l) for x, y, l in self.dots]
+        return p
+
     def raster(self, w, h):
         """returns a dict {(x,y): letter} for this part alone, outlined"""
         mask = poly_mask(self.pts, w, h)
@@ -126,6 +135,9 @@ class Frame:
 
     def add(self, *parts):
         self.parts.extend(parts); return self
+
+    def scale(self, s, ox, oy, nx, ny):
+        self.parts = [p.scaled(s, ox, oy, nx, ny) for p in self.parts]; return self
 
     def raster(self):
         g = Grid(self.w, self.h)

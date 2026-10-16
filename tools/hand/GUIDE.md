@@ -62,10 +62,11 @@ Water **blue**, Lake **indigo**, Heaven **violet**, Wind **magenta**.
 - Eyes are plain dark dots (no glint pixel).
 - Every unit paints all 15 colours (+ transparent), with the smear fringe
   tinted in the unit's trigram colour.
-- **Scale (Oct 16)**: Mike's target is Street Fighter Alpha / CPS2 size —
-  figures ~105 px tall (Ryu is ~110) in a 160×128 box, still 15 colours and
-  hard pixels. The Samurai is being rebuilt at that scale first; the others
-  follow once the look is approved.
+- **Scale (Oct 16)**: Street Fighter Alpha / CPS2 detail at a **96×96 base
+  box** — figures ~84 px tall, ground row 89, origin (48, 90); 15 colours, hard
+  pixels. Drawn with `tools/big/bigkit.py` (hand-placed shapes + bands) in a
+  160×128 design space and scaled 0.8 onto the box. Wide moves (lunges, smears)
+  may use a wider box; the base unit is 96×96. The Samurai goes first.
 
 ## Mike's notes from the Samurai pass (Oct 15)
 

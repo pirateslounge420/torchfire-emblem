@@ -1,6 +1,7 @@
 """Samurai at CPS2 scale (~105 px) — rest stance first, built from hand-placed shapes (bigkit).
 
-Facing LEFT. Box 160x128, ground row 117, origin (80, 118).
+Facing LEFT. Drawn at ~105 px in a 160x128 design space, then scaled onto the
+96x96 BASE BOX Mike chose (Oct 16): figure ~84 px, ground row 89, origin (48, 90).
 Run: python3 tools/big/samurai/frames.py  -> samurai_big.png next to this file.
 """
 import os
@@ -11,8 +12,9 @@ sys.path.insert(0, os.path.join(HERE, ".."))
 from bigkit import Part, Frame, Palette, render, strip  # noqa: E402
 
 NAME = "samurai"
-W, H = 160, 128
-GROUND = 117
+DW, DH, DGROUND = 160, 128, 117        # design space
+W, H, GROUND = 96, 96, 89              # the base box
+SCALE = 0.8
 
 PAL = Palette(NAME, {
     "H": (248, 248, 248), "h": (184, 190, 210), "g": (112, 118, 146),
@@ -26,7 +28,7 @@ PAL = Palette(NAME, {
 
 
 def stance(bob=0):
-    f = Frame(W, H)
+    f = Frame(DW, DH)
     b = bob
     # ---- hair tail, hanging down the back (behind everything)
     tail = Part("tail", [(96, 40 + b), (101, 38 + b), (104, 48 + b), (103, 62 + b), (101, 76 + b), (98, 84 + b), (96, 78 + b), (97, 64 + b), (97, 50 + b)], "h")
@@ -97,6 +99,8 @@ def stance(bob=0):
     tie = Part("tie", [(95, 36 + b), (100, 35 + b), (101, 40 + b), (96, 41 + b)], "R")
 
     f.add(tail, far_sleeve, hak, foot_near, foot_far, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
+    f.scale(SCALE, 80, DGROUND + 1, 48, GROUND + 1)
+    f.w, f.h = W, H
     return f.raster()
 
 
