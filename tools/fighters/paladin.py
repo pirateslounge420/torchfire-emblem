@@ -230,19 +230,19 @@ FIGURE = Figure(
 HORSE_HEAD = {
     # anchor = poll (top of the head where the neck joins). Faces left-down.
     "normal": grid("""
-......hh..hh..
-.....LLlllll..
-....LLlmmllll.
-...LLllmmlllj.
-..LLlllmmlljj.
-.LLlllomllljj.
-.LllllsmmLljj.
-.lllllmmllljj.
-.jlllmmlllj...
-.jllllllljj...
-.zjlllljj.....
-.zzjjjj.......
-""", anchor=(10, 1)),
+......hh.hh..
+.....LLlllll.
+....LLlmmllll
+...LLllmmlllj
+...LLllmmlllj
+..LLloommlljj
+..Lllllmmlljj
+..lllllmmljj.
+..lllllmmlj..
+..jllllmlj...
+.zjlllllj....
+.zzjjjjj.....
+""", anchor=(9, 1)),
     "flare": grid("""
 ......hh..hh..
 .....LLlllll..
@@ -338,12 +338,12 @@ jjjjjjjjj
 """, anchor=(4, 1))
     back.append((saddle, (sx, sy), 0, 0, "back"))
     # neck + mane + head
-    n0 = L(-13, -22 + body_dy)
-    nm = L(-19 + head_dx // 2, -31 + head_dy // 2)
-    n1 = L(-24 + head_dx, -38 + head_dy)
+    n0 = L(-12, -23 + body_dy)
+    nm = L(-19 + head_dx // 2, -33 + head_dy // 2)
+    n1 = L(-22 + head_dx, -40 + head_dy)
     back.append((tapered_chain([n0, nm, n1], 11, 7, ("L", "l", "j")), (0, 0), 0, 0, "back"))
-    m0 = L(-9, -27 + body_dy)
-    m1 = L(-21 + head_dx, -42 + head_dy)
+    m0 = L(-8, -28 + body_dy)
+    m1 = L(-19 + head_dx, -44 + head_dy)
     back.append((capsule(m0, m1, 3, ("h", "h", "g")), (0, 0), 0, 0, "back"))
     back.append((HORSE_HEAD[head_var], n1, 0, 0, "back"))
     # near legs (in front of the barrel)
