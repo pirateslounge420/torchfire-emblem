@@ -85,8 +85,6 @@ def stance(bob=0):
     face = Part("face", [(72, 16 + b), (86, 14 + b), (90, 22 + b), (89, 30 + b), (84, 34 + b), (77, 34 + b), (72, 28 + b), (70, 22 + b)], "S")
     face.band([(84, 14 + b), (90, 22 + b), (89, 30 + b), (84, 34 + b), (84, 24 + b)], "s")
     face.fold([(75, 30 + b), (80, 33 + b), (84, 32 + b)], "z")                            # jaw shadow
-    face.dot(74, 24 + b, "k"); face.dot(75, 24 + b, "k")                                  # near eye (dot)
-    face.dot(81, 24 + b, "k")                                                             # far eye
     face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 21 + b)], "z")   # brows
     face.dot(71, 27 + b, "z")                                                             # nose tip
     face.fold([(74, 30 + b), (77, 30 + b)], "z")                                          # mouth
@@ -103,7 +101,12 @@ def stance(bob=0):
     f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
     f.scale(SCALE, 80, DGROUND + 1, 48, GROUND + 1)
     f.w, f.h = W, H
-    return f.raster()
+    g = f.raster()
+    # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
+    ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE))
+    for x in (43, 44, 49, 50):
+        g.g[ey][x] = "k"
+    return g
 
 
 def main():
