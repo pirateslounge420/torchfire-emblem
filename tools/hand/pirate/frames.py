@@ -38,12 +38,15 @@ PAL = Palette(NAME, {
 
 
 def body(pose="body", dx=0, dy=0):
-    return Grid.from_text(os.path.join(HERE, f"{pose}.txt"), BOX, BOX, anchor_bottom=GROUND + dy, x_off=X_OFF + dx)
+    g = Grid.from_text(os.path.join(HERE, f"{pose}.txt"), BOX, BOX, anchor_bottom=GROUND + dy, x_off=X_OFF + dx)
+    g.dx, g.dy = dx, dy          # remembered so overlays can be placed in the body file's own coordinates
+    return g
 
 
 def P(g, y, x, text):
-    """overlay in body-grid coordinates (row 0 = top of the 40-row body); '.' leaves the pixel alone"""
-    g.put(y + (GROUND - 39), x + X_OFF, text.replace(".", "?"))
+    """overlay in body-grid coordinates (row 0 = top of the 40-row body file, shifted with the
+    body's dx/dy); '.' leaves the pixel alone"""
+    g.put(y + (GROUND - 39) + g.dy, x + X_OFF + g.dx, text.replace(".", "?"))
 
 
 def block(g, y, x, rows):
@@ -55,36 +58,41 @@ def block(g, y, x, rows):
 # --- the broad axe: one bit, two heads wide. The crescent's horns run along the haft, the
 # pale-yellow edge faces away from it; the haft passes through the eye (the C patch) and
 # is drawn FIRST so the horn tips sit in front of it.
-# edge DOWN, haft horizontal along the top (eye at local cols 7-10, rows 1-3)
+# edge DOWN, haft horizontal along the top; eye = the C patch at local cols 7-10, rows 2-5,
+# with a short poll spike above it
 AXE_DOWN = [
-    "oo.....oooo.....oo",
+    ".......oMMo.......",
+    ".......oMMo.......",
+    "oo....oCCCCo....oo",
     "oYo...oCCCCo...oYo",
-    "oYMoo.oCCCCo.ooMYo",
-    "oYMMMooCCCCooMMMYo",
-    ".oYMMMMMMMMMMMMYo.",
+    "oYMo..oCCCCo..oMYo",
+    "oYMMoooCCCCoooMMYo",
+    "oYMMMMMMMMMMMMMMYo",
     ".oYWMMMMMMMMMMMYo.",
+    ".oYWWMMMMMMMMMMYo.",
     "..oYWWMMMMMMMMYo..",
     "...oYYWWMMMMYYo...",
     "....ooYYYYYYoo....",
     "......oooooo......",
 ]
-# edge UP-LEFT, haft at 45 degrees along the inner arc (eye at local (7-8, 7-8))
+# edge UP-LEFT, haft at 45 degrees along the inner arc; eye where the haft meets the C patch
+# (about local (9-10, 7-8)), poll spike off its lower-right
 AXE_DIAG = [
-    "......ooooooo..",
-    "....ooYYYMMMMoo",
-    "...oYYWWMMMMMMo",
-    "..oYWWMMMMMMMo.",
-    ".oYWMMMMMMMMo..",
-    ".oYMMMMMMMMo...",
-    "oYMMMMMMMMo....",
-    "oYMMMMMMCo.....",
-    "oYMMMMMCo......",
-    "oYMMMMCo.......",
-    "oYMMMCo........",
-    "oYMMCo.........",
-    "oYMCo..........",
-    "oYCo...........",
-    "ooo............",
+    "...........ooo..",
+    ".........ooMMMo.",
+    ".......ooYMMMMMo",
+    ".....ooYWWMMMMMo",
+    "....oYWWMMMMMMo.",
+    "...oYWMMMMMMMo..",
+    "..oYWMMMMMMMo...",
+    ".oYMMMMMMMCooo..",
+    ".oYMMMMMMCoMMo..",
+    "oYMMMMMMCo.oMMo.",
+    "oYMMMMMCo...ooo.",
+    "oYMMMMCo........",
+    "oYMMMCo.........",
+    ".oYMCo..........",
+    "..ooo...........",
 ]
 
 
@@ -103,12 +111,12 @@ def hand(g, y, x):
 def idle(bob=0):
     g = body()
     if bob:
-        g.shift_region(0, 0, BOX, GROUND - 12, 0, bob)
+        g.shift_region(0, 0, BOX, GROUND - 14, 0, bob)      # head and torso breathe; hands and axe stay put
     # far forearm (bandaged) comes down across the sash to the rear hand
     P(g, 19, 20, "ozo"); P(g, 20, 19, "oszo"); P(g, 21, 17, "oCcko"); P(g, 22, 15, "oCcko"); P(g, 23, 13, "ocCko"); P(g, 24, 12, "oCko")
     # haft held level, pointing at the foe: rows 26-27 from the rear hand to 2 px past the eye
     P(g, 25, -7, "o" * 21); P(g, 26, -7, "L" * 21); P(g, 27, -7, "l" * 21); P(g, 28, -7, "o" * 21)
-    block(g, 25, -12, AXE_DOWN)
+    block(g, 23, -11, AXE_DOWN)
     hand(g, 25, 11); hand(g, 25, 7)
     return g.tidy()
 
@@ -116,11 +124,11 @@ def idle(bob=0):
 def axe_hung():
     """beat 2: the axe hangs straight down from stacked hands, head resting at the front foot"""
     g = body(dx=1)
-    g.clear(X_OFF + 6, GROUND - 39 + 25, X_OFF + 12, GROUND - 39 + 29)     # the body's own hand
+    g.clear(X_OFF + 7, GROUND - 39 + 25, X_OFF + 12, GROUND - 39 + 29)     # the body's own hand
     P(g, 18, 20, "ozo"); P(g, 19, 18, "oszo"); P(g, 20, 16, "oCcko"); P(g, 21, 14, "ocCko")   # far forearm
     for y in range(20, 34):
         P(g, y, 9, "oLlo")
-    block(g, 23, 9, rot_ccw(AXE_DOWN))
+    block(g, 22, 7, rot_ccw(AXE_DOWN))
     hand(g, 22, 10); hand(g, 25, 9)
     return g.tidy()
 
@@ -128,19 +136,24 @@ def axe_hung():
 def raised(tremble=0):
     """beat 3: twisted away, both hands up behind the head, the axe head high behind"""
     g = body("body_back", dx=-6, dy=tremble)
-    for i in range(11):                               # haft from the butt up-right through the hands to the eye
-        P(g, 6 - i, 36 + i, "oLlo")
-    block(g, -9, 37, AXE_DIAG)
-    P(g, 1, 39, "oSSso"); P(g, 2, 37, "oSoSszo"); P(g, 3, 37, "oSsozzo"); P(g, 4, 37, "oszzoo"); P(g, 5, 37, "ozzo")
+    for i in range(13):                               # haft from the butt up-right through both hands past the eye
+        P(g, 8 - i, 35 + i, "oLlo")
+    block(g, -10, 36, AXE_DIAG)
+    for i in range(11):                               # the haft shows over the bit's back as far as the eye
+        P(g, 8 - i, 35 + i, "oLlo")
+    P(g, 2, 39, "oSSso"); P(g, 3, 39, "oSszo"); P(g, 4, 39, "osszo")      # far hand
+    P(g, 5, 36, "oSSso"); P(g, 6, 36, "oSszo"); P(g, 7, 36, "oszzo")      # near hand
     return g.tidy()
 
 
-SMEAR = [
-    (-13, 41, "YY"), (-12, 38, "YYWWY"), (-11, 35, "YYWWWWY"), (-10, 32, "YYWWWWWWY"),
-    (-9, 30, "YWWWWWWWWY"), (-8, 28, "YWWWWWWWWWY"), (-7, 26, "YWWWWWWWWWWY"), (-6, 24, "YWWWWWWWWWWWY"),
-    (-5, 23, "YWWWWWWWWWWWY"), (-4, 22, "YWWWWWWWWWWWY"), (-3, 21, "YWWWWWWWWWWWY"), (-2, 20, "YWWWWWWWWWWWY"),
-    (-1, 20, "YWWWWWWWWWWY"), (0, 19, "YWWWWWWWWWWY"), (1, 19, "YWWWWWWWWWY"), (2, 19, "YWWWWWWWWY"),
-    (3, 19, "YWWWWWWWY"), (4, 20, "YWWWWWWY"), (5, 20, "YWWWWWY"), (6, 21, "YWWWWY"), (7, 21, "YYYYY"),
+SMEAR = [   # one pale arc over the head: thick blunt front at the left, thin tail trailing to the upper right
+    (-14, 27, "YYWWWYY"), (-13, 23, "YYWWWWWWWWWWWYY"), (-12, 20, "YWWWWWWWWWWWWWWWWWWWY"),
+    (-11, 18, "YWWWWWWWWWWWWWWWWWWWWWWWY"), (-10, 16, "YWWWWWWWWWWWWWWWWWWWWWWWWWWWY"),
+    (-9, 15, "YWWWWWWWWY"), (-9, 36, "YWWWWWWWWY"), (-8, 14, "YWWWWWWWY"), (-8, 38, "YWWWWWWWY"),
+    (-7, 13, "YWWWWWWWY"), (-7, 40, "YWWWWWY"), (-6, 13, "YWWWWWWY"), (-6, 42, "YWWWWY"),
+    (-5, 12, "YWWWWWWY"), (-5, 44, "YWWY"), (-4, 12, "YWWWWWWY"), (-4, 46, "YY"),
+    (-3, 12, "YWWWWWY"), (-2, 12, "YWWWWWY"), (-1, 13, "YWWWWY"), (0, 13, "YWWWWY"),
+    (1, 14, "YWWWY"), (2, 15, "YWWY"), (3, 16, "YYY"),
 ]
 
 
@@ -148,7 +161,7 @@ def smear():
     """beat 4: the whole axe head becomes one pale wedge sweeping over the head"""
     g = body("body_back", dx=-8, dy=1)
     for y, x, t in SMEAR:
-        P(g, y, x - 8, t)
+        P(g, y, x, t)
     return g.tidy()
 
 
@@ -157,7 +170,7 @@ def impact():
     g = body("body_lunge", dx=-4)
     for i in range(16):                               # haft from the rear hand down-left, 3 px drop over its length
         P(g, 27 + i // 6, 8 - i, "o"); P(g, 28 + i // 6, 8 - i, "L"); P(g, 29 + i // 6, 8 - i, "l"); P(g, 30 + i // 6, 8 - i, "o")
-    block(g, 30, -13, AXE_DOWN)
+    block(g, 28, -12, AXE_DOWN)
     hand(g, 26, 2); hand(g, 27, 6)
     return g.tidy()
 
@@ -167,7 +180,7 @@ def lower():
     g = body("body_lunge", dx=-1)
     for i in range(14):
         P(g, 27 - i // 3, 7 - i, "o"); P(g, 28 - i // 3, 7 - i, "L"); P(g, 29 - i // 3, 7 - i, "l"); P(g, 30 - i // 3, 7 - i, "o")
-    block(g, 22, -14, AXE_DOWN)
+    block(g, 21, -12, AXE_DOWN)
     hand(g, 26, 2); hand(g, 27, 6)
     return g.tidy()
 

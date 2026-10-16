@@ -194,7 +194,8 @@ def strip(images, path, zoom=5, labels=None, bg=BG):
 
 
 def gif(images, path, durations_ms, zoom=4, bg=BG):
-    frames = [_bg(im, zoom, bg).convert("P", palette=Image.ADAPTIVE, colors=48) for im in images]
+    # composite on the background first and drop alpha: quantizing RGBA directly scrambles the colours
+    frames = [_bg(im, zoom, bg).convert("RGB").quantize(colors=64, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE) for im in images]
     frames[0].save(path, save_all=True, append_images=frames[1:], duration=list(durations_ms), loop=0)
 
 
