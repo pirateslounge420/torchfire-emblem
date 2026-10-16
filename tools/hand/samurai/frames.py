@@ -28,10 +28,10 @@ from handkit import Grid, Palette, render, strip, gif, sheet  # noqa: E402
 import parts as P  # noqa: E402
 
 NAME = "samurai"
-BOX_W, BOX_H = 96, 64
-GROUND = 53
-ORIGIN = (48, 54)
-STANCE_X = 32            # left edge of the stance legs in the box
+BOX_W, BOX_H = 112, 80
+GROUND = 69
+ORIGIN = (56, 70)
+STANCE_X = 36            # left edge of the stance legs in the box
 
 PAL = Palette(NAME, {
     "H": (248, 248, 248), "h": (184, 190, 210), "g": (112, 118, 146),
@@ -129,15 +129,15 @@ class Fig:
         self.ty = self.ly - (len(torso) - 1) + torso_dy
         self.nx = self.tx + torso[0].index("s")      # the neck pixel on the torso's top row
         self.ny = self.ty
-        self.hx, self.hy = self.nx - 4, self.ny - 15     # head: neck base at local (4,15)
-        self.tiex, self.tiey = self.hx + 9, self.hy + 13  # the hair tie
+        self.hx, self.hy = self.nx - 5, self.ny - 19     # head: neck base at local (5,19)
+        self.tiex, self.tiey = self.hx + 15, self.hy + 17  # the hair tie
 
     def saya(self, mouth=None, part=None):
         mx, my = mouth or self.mouth()
         stamp(self.g, mx - 1, my - 1, part or P.SAYA)
 
     def far_sleeve(self, dx=0, dy=0, part=None):
-        stamp(self.g, self.tx + 9 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
+        stamp(self.g, self.tx + 12 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
 
     def tail(self, part, dx=0, dy=0):
         stamp(self.g, self.tiex + dx, self.tiey + 1 + dy, part)
@@ -156,7 +156,7 @@ class Fig:
 
     def mouth(self):
         """the saya mouth: just in front of the near hip under the obi"""
-        return (self.tx + 2, self.ty + 12)
+        return (self.tx + 3, self.ty + 15)
 
     def hilt_sheathed(self, n=4):
         mx, my = self.mouth()
@@ -164,20 +164,20 @@ class Fig:
         hilt_poly(self.g, mx - 2, my - 1, mx - 2 - 2 * n, my - 1 - n)
 
 
-OBI_STANCE = [(14, 11, "oRro"), (15, 12, "oRro"), (16, 13, "orro")]
-OBI_LUNGE = [(15, 11, "oRro"), (18, 12, "oRrro"), (22, 13, "orro")]
+OBI_STANCE = [(18, 13, "oRro"), (19, 14, "oRro"), (20, 15, "orro"), (21, 16, "oro")]
+OBI_LUNGE = [(19, 13, "oRro"), (22, 14, "oRrro"), (26, 15, "orro")]
 
 
 # --- beats --------------------------------------------------------------------
 def stance(bob=0, sway=0):
     f = Fig(P.LEGS_STANCE, STANCE_X)
-    f.saya()
     f.far_sleeve()
-    f.tail(P.TAIL_HANG, dx=sway)
+    f.tail(P.TAIL_SWAY if sway else P.TAIL_HANG, dy=bob)
     f.body(hdy=bob)
-    f.arm(P.ARM_REST, dy=bob)
+    f.saya()
+    f.arm(P.ARM_REST_SWING if sway else P.ARM_REST, dy=bob)
     f.hilt_sheathed()
-    f.g.put(f.ty + 12 + bob, f.tx + 1, "oSso"); f.g.put(f.ty + 13 + bob, f.tx + 1, "ozzo")   # the near hand resting on the hilt
+    f.g.put(f.ty + 15 + bob, f.tx + 2, "oSsso"); f.g.put(f.ty + 16 + bob, f.tx + 2, "ozzzo")   # the near hand resting on the hilt
     f.obi_tails(OBI_STANCE)
     return f.g.tidy()
 
@@ -185,10 +185,10 @@ def stance(bob=0, sway=0):
 def grip():
     """knees sink, the front foot slides back, both hands on the hilt"""
     f = Fig(P.LEGS_COIL, STANCE_X + 2, lean=0.08)
-    f.saya()
     f.far_sleeve(dx=-2, dy=1)
     f.tail(P.TAIL_HANG, dx=1)
     f.body()
+    f.saya()
     f.arm(P.ARM_GRIP)
     f.hilt_sheathed()
     mx, my = f.mouth()
@@ -201,10 +201,10 @@ def grip():
 def draw(tremble=0):
     """the blade partway out: hilt pulled up-left, 9 px of steel showing"""
     f = Fig(P.LEGS_COIL, STANCE_X + 2, lean=0.12)
-    f.saya()
     f.far_sleeve(dx=-2, dy=1)
     f.tail(P.TAIL_SWING_BACK)
     f.body(hdy=tremble)
+    f.saya()
     f.arm(P.ARM_DRAW, dx=-3, dy=1 + tremble)
     mx, my = f.mouth()
     f.g.put(my - 1, mx - 1, "gg"); f.g.put(my, mx - 1, "g")                     # the koiguchi
@@ -229,10 +229,10 @@ DRAW_SMEAR = [  # the horizontal draw-cut: one pale wedge from the hip sweeping 
 
 def cut_smear():
     f = Fig(P.LEGS_LUNGE, STANCE_X - 6, lean=0.4)
-    f.saya((f.tx + 4, f.ty + 12))
     f.far_sleeve(dx=-1, dy=2)
     f.tail(P.TAIL_STREAM, dx=1, dy=-2)
     f.body()
+    f.saya((f.tx + 4, f.ty + 12))
     f.arm(P.ARM_OUT, dx=-4, dy=1)
     for j, (x, t) in enumerate(DRAW_SMEAR):
         f.g.put(f.ty + j, f.tx + x, t)
@@ -242,10 +242,10 @@ def cut_smear():
 
 def cut_impact(settle=0):
     f = Fig(P.LEGS_LUNGE, STANCE_X - 6 - settle, lean=0.4)
-    f.saya((f.tx + 4, f.ty + 12))
     f.far_sleeve(dx=-1, dy=2)
     f.tail(P.TAIL_STREAM, dx=1, dy=-1)
     f.body()
+    f.saya((f.tx + 4, f.ty + 12))
     f.arm(P.ARM_OUT, dx=-4, dy=1)
     hx, hy = f.tx - 5, f.ty + 2
     f.g.put(hy - 1, hx + 1, "gg"); f.g.put(hy, hx + 1, "gg")           # the tsuba just past the hand
@@ -257,12 +257,12 @@ def cut_impact(settle=0):
 def raise_():
     """both hands overhead-behind (jodan): the back foot steps up, the body stands tall"""
     f = Fig(P.LEGS_STANCE, STANCE_X - 4)
-    f.saya()
     f.far_sleeve(dx=1, dy=-2)
     f.tail(P.TAIL_HANG, dx=-2)
     f.body()
-    f.arm(P.ARM_RAISE, dy=-13)
-    hx, hy = f.tx + 12, f.ty - 13          # the hands
+    f.saya()
+    f.arm(P.ARM_RAISE, dy=-16)
+    hx, hy = f.tx + 14, f.ty - 16          # the hands
     f.g.put(hy + 1, hx + 3, "gg"); f.g.put(hy + 2, hx + 3, "gg")        # tsuba behind the hands
     blade_poly(f.g, hx + 5, hy + 1, hx + 20, hy - 7)
     f.obi_tails(OBI_STANCE)
@@ -279,11 +279,11 @@ DOWN_SMEAR = [  # the vertical two-handed cut: a wedge from over the head down t
 
 def down_smear():
     f = Fig(P.LEGS_DOWNCUT, STANCE_X - 8, lean=0.5)
-    f.saya((f.tx + 4, f.ty + 12))
     f.far_sleeve(dx=-2, dy=1)
     f.tail(P.TAIL_STREAM, dx=1, dy=-3)
     f.body()
-    f.arm(P.ARM_DOWN, dx=-14)
+    f.saya((f.tx + 4, f.ty + 12))
+    f.arm(P.ARM_DOWN, dx=-17)
     for j, (x, t) in enumerate(DOWN_SMEAR):
         f.g.put(f.ty - 10 + j, f.tx + x, t)
     f.obi_tails(OBI_LUNGE)
@@ -292,12 +292,12 @@ def down_smear():
 
 def down_impact():
     f = Fig(P.LEGS_DOWNCUT, STANCE_X - 8, lean=0.5)
-    f.saya((f.tx + 4, f.ty + 12))
     f.far_sleeve(dx=-2, dy=1)
     f.body()
+    f.saya((f.tx + 4, f.ty + 12))
     f.tail(P.TAIL_WHIP_FWD, dx=-8, dy=-14)     # over the head: the tail whips forward past the crown
-    f.arm(P.ARM_DOWN, dx=-14)
-    hx, hy = f.tx - 13, f.ty + 11           # the hands
+    f.arm(P.ARM_DOWN, dx=-17)
+    hx, hy = f.tx - 16, f.ty + 13           # the hands
     f.g.put(hy, hx - 1, "gg"); f.g.put(hy + 1, hx - 2, "gg")
     blade_poly(f.g, hx - 2, hy + 2, hx - 9, hy + 16)
     f.obi_tails(OBI_LUNGE)
@@ -307,12 +307,12 @@ def down_impact():
 def wipe(stage=0):
     """chiburi as the anime does it: the blade held level at the chest, the off hand runs a cloth down it"""
     f = Fig(P.LEGS_STANCE, STANCE_X)
-    f.saya()
     f.far_sleeve()
     f.tail(P.TAIL_SETTLE if stage == 0 else P.TAIL_HANG)
     f.body()
+    f.saya()
     f.arm(P.ARM_WIPE, dx=-3, dy=2)
-    hx, hy = f.tx - 2, f.ty + 4             # the hilt hand
+    hx, hy = f.tx - 2, f.ty + 5             # the hilt hand
     f.g.put(hy - 1, hx - 1, "gg"); f.g.put(hy, hx - 1, "gg")
     blade_poly(f.g, hx - 2, hy, hx - 22, hy)
     # the far hand with the cloth: at the guard first, then out at the tip
@@ -328,13 +328,13 @@ def wipe(stage=0):
 def noto(stage=0):
     """the blade back into the saya: its spine on the far hand at the mouth, the hilt hand high"""
     f = Fig(P.LEGS_STANCE, STANCE_X)
-    f.saya()
     f.far_sleeve()
     f.tail(P.TAIL_HANG)
     f.body()
+    f.saya()
     mx, my = f.mouth()
     f.g.put(my - 1, mx - 1, "gg"); f.g.put(my, mx - 1, "g")
-    f.g.put(my + 1, mx - 1, "oSso"); f.g.put(my + 2, mx - 1, "ozzo")       # the far hand cupping the mouth
+    f.g.put(my + 1, mx - 1, "oSsso"); f.g.put(my + 2, mx - 1, "ozzzo")      # the far hand cupping the mouth
     if stage == 0:
         f.arm(P.ARM_NOTO, dx=-4, dy=-1)
         hx, hy = f.tx - 4, f.ty + 1
@@ -353,10 +353,10 @@ def bow(depth=1):
     """rei: the torso folds forward from the hips, head down, hands sliding down the thighs"""
     if depth == 1:
         f = Fig(P.LEGS_BOW, STANCE_X + 2, lean=0.45)
-        f.saya()
         f.far_sleeve(dx=-2, dy=1)
         f.tail(P.TAIL_FALL_FWD, dx=-4, dy=1)
         f.body(head=P.HEAD_DOWN, hdx=-2, hdy=2)
+        f.saya()
         f.arm(P.ARM_BOW, dx=-1, dy=2)
         f.hilt_sheathed()
         f.obi_tails(OBI_STANCE)
@@ -365,24 +365,24 @@ def bow(depth=1):
     g = Grid(BOX_W, BOX_H)
     legs = P.LEGS_BOW
     lx, ly = STANCE_X + 2, GROUND - (len(legs) - 1)
-    tx, ty = lx + 4 - 11, ly - 9
-    stamp(g, tx + 11, ty + 8, P.SAYA)
+    tx, ty = lx + 5 - 14, ly - 11
     stamp(g, lx, ly, legs)
     stamp(g, tx, ty, P.TORSO_BOW)
-    hx, hy = tx + 4 - 4, ty + 1 - 15 + 8        # the head hangs forward-down from the shoulder
-    stamp(g, hx + 8, hy + 2, P.TAIL_FALL_FWD)
+    stamp(g, tx + 14, ty + 10, P.SAYA)
+    hx, hy = tx + 6 - 5, ty + 1 - 19 + 10        # the head hangs forward-down from the shoulder
+    stamp(g, hx + 10, hy + 3, P.TAIL_FALL_FWD)
     stamp(g, hx, hy, P.HEAD_DOWN)
     stamp(g, tx + 2, ty + 2, P.ARM_BOW)         # the near arm hangs straight down in front of the thigh
-    g.put(ty + 9, tx + 12, "gg"); g.put(ty + 10, tx + 12, "gg")       # the tsuba at the hip; the hilt is behind the hanging arm
+    g.put(ty + 11, tx + 15, "gg"); g.put(ty + 12, tx + 15, "gg")       # the tsuba at the hip; the hilt is behind the hanging arm
     for (x, y, t) in OBI_STANCE:
-        g.put(ty + y - 3, tx + x + 4, t)
+        g.put(ty + y - 4, tx + x + 4, t)
     return g.tidy()
 
 
 # --- animation sets -------------------------------------------------------------
 def animations():
     return {
-        "idle": ([stance(0, 0), stance(1, 0), stance(1, 1), stance(0, 0)], 5, True),
+        "idle": ([stance(0, 0), stance(0, 0), stance(1, 0), stance(1, 1), stance(2, 1), stance(1, 1), stance(1, 0), stance(0, 0)], 6, True),
         "lean": ([grip(), draw(), draw()], 10, False),
         "hold": ([draw(), draw(-1)], 5, True),
         "lunge": ([cut_smear(), cut_impact(), raise_(), down_smear(), down_impact(), down_impact()], 20, False),

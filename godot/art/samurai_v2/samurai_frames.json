@@ -1,46 +1,46 @@
 {
-  "frame_size": 96,
-  "frame_w": 96,
-  "frame_h": 64,
+  "frame_size": 112,
+  "frame_w": 112,
+  "frame_h": 80,
   "columns": 8,
   "faces": "left",
   "origin": [
-    48,
-    54
+    56,
+    70
   ],
   "animations": {
     "idle": {
       "start": 0,
-      "count": 4,
+      "count": 8,
       "loop": true,
-      "fps": 5
+      "fps": 6
     },
     "lean": {
-      "start": 4,
+      "start": 8,
       "count": 3,
       "loop": false,
       "fps": 10
     },
     "hold": {
-      "start": 7,
+      "start": 11,
       "count": 2,
       "loop": true,
       "fps": 5
     },
     "lunge": {
-      "start": 9,
+      "start": 13,
       "count": 6,
       "loop": false,
       "fps": 20
     },
     "recover": {
-      "start": 15,
+      "start": 19,
       "count": 5,
       "loop": false,
       "fps": 9
     },
     "flourish": {
-      "start": 20,
+      "start": 24,
       "count": 10,
       "loop": false,
       "fps": 6
