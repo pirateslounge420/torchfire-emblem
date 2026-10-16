@@ -354,16 +354,16 @@ def animations():
           near_arm=(150, -150), far_arm=(80, 120), tail="up",
           weapon=dict(hand="near", angle=-160, layer="top", variant="blur"), braid="fly",
           effects=[slash("sh_near", 30, -100, -200, width=7), (dash_lines(3, 14), "pelvis", 18, -6)]),
-        P(dx=-8, hover=22, wings="down", tilt=-8, head_dx=-4, head_dy=4, torso="side", lean=(-4, 1),
+        P(dx=-3, hover=22, wings="down", tilt=-8, head_dx=-4, head_dy=4, torso="side", lean=(-4, 1),
           near_arm=(170, 190), far_arm=(80, 120), tail="up", legs="reach",
           weapon=dict(hand="near", angle=165, layer="top"), braid="fly",
           effects=[slash("sh_near", 30, -150, -195, width=7), (STAR, "wr_near", -22, 6)]),
-        P(dx=-8, hover=21, wings="mid", tilt=-4, head_dx=-3, head_dy=2, torso="side", lean=(-3, 2),
+        P(dx=-3, hover=21, wings="mid", tilt=-4, head_dx=-3, head_dy=2, torso="side", lean=(-3, 2),
           near_arm=(165, 200), far_arm=(80, 120), tail="s", legs="reach",
           weapon=dict(hand="near", angle=150, layer="top"), braid="fly"),
     ]
     recover = [
-        P(dx=-9, hover=23, wings="up", tilt=0, torso="side", lean=(-2, 1), near_arm=(150, 150),
+        P(dx=-6, hover=23, wings="up", tilt=0, torso="side", lean=(-2, 1), near_arm=(150, 150),
           weapon=dict(hand="near", angle=150, layer="top"), braid="fly"),
         P(dx=-5, hover=25, wings="mid", torso="front", lean=(-1, 0), near_arm=(120, 70),
           weapon=dict(hand="near", angle=-30, layer="top")),
@@ -399,7 +399,7 @@ def animations():
         P(dx=3, head="hurt", lean=(3, 1), head_off=(1, 0), wings="up", tilt=10, head_dy=-4,
           near_arm=(60, -20), far_arm=(30, 60), far_hand="open",
           weapon=dict(hand="near", angle=-50, layer="top"), braid="fly"),
-        P(dx=-2, head="hurt", lean=(-5, 3), head_off=(-1, 1), wings="down", tilt=-22, hover=18, head_dy=6, head_dx=-3,
+        P(dx=1, head="hurt", lean=(-5, 3), head_off=(-1, 1), wings="down", tilt=-22, hover=18, head_dy=6, head_dx=-3,
           tail="up", legs="tuck", near_arm=(170, 150), far_arm=(150, 120), far_hand="open", near_leg=(140, 100),
           weapon=dict(hand="near", angle=160, layer="top"), braid="fly", shadow=(22, 3)),
         P(dx=-1, head="normal", lean=(-2, 1), wings="up", tilt=-6, hover=22, head_dy=2,
@@ -424,24 +424,24 @@ def animations():
         P(dx=-10, wings="mid", hover=26, lean=(-1, 0), legs="hang"),
     ]
     dodge_back = [
-        P(dx=6, wings="up", hover=27, tilt=8, lean=(2, 0), head_dy=-3, head_dx=2, tail="down", braid="fly",
+        P(dx=4, wings="up", hover=27, tilt=8, lean=(2, 0), head_dy=-3, head_dx=2, tail="down", braid="fly",
           effects=[(dash_lines(2, 8), "pelvis", -32, 6)]),
-        P(dx=10, wings="mid", hover=26, lean=(1, 0)),
+        P(dx=5, wings="mid", hover=26, lean=(1, 0)),
     ]
     # Critical: climb, dive, cleave, pull up.
     crit_lean = [
         P(dx=2, wings="down", hover=28, tilt=8, torso="back", lean=(2, 0), near_arm=(60, -40),
           weapon=dict(hand="near", angle=-50, layer="top"), braid="fly", tail="down"),
-        P(dx=4, wings="up", hover=36, tilt=14, head_dy=-5, torso="back", lean=(3, -2), near_arm=(30, -70),
+        P(dx=4, wings="up", hover=33, tilt=14, head_dy=-5, torso="back", lean=(3, -2), near_arm=(30, -70),
           weapon=dict(hand="near", angle=-80, layer="top"), braid="fly", tail="down", shadow=(14, 2)),
-        P(dx=5, wings="up", hover=44, tilt=18, head_dy=-7, torso="back", lean=(4, -3), near_arm=(10, -90),
-          weapon=dict(hand="near", angle=-100, layer="top", variant="glint"), braid="fly", tail="down", shadow=(12, 2)),
+        P(dx=5, wings="up", hover=36, tilt=18, head_dy=-7, torso="back", lean=(4, -3), near_arm=(20, -50),
+          weapon=dict(hand="near", angle=-50, layer="top", variant="glint"), braid="fly", tail="down", shadow=(12, 2)),
     ]
     crit_hold = [
         crit_lean[2],
-        P(dx=5, wings="mid", hover=45, tilt=18, head_dy=-8, torso="back", lean=(4, -4), near_arm=(10, -92),
-          weapon=dict(hand="near", angle=-102, layer="top"), braid="fly", tail="down", shadow=(12, 2),
-          effects=[(STAR, "wr_near", -4, -22)]),
+        P(dx=5, wings="mid", hover=36, tilt=18, head_dy=-8, torso="back", lean=(4, -4), near_arm=(20, -50),
+          weapon=dict(hand="near", angle=-50, layer="top"), braid="fly", tail="down", shadow=(12, 2),
+          effects=[(STAR, "wr_near", 10, -18)]),
     ]
     crit_lunge = [
         # dive
@@ -454,20 +454,20 @@ def animations():
           weapon=dict(hand="near", angle=-165, layer="top", variant="blur"), braid="fly", shadow=(18, 2),
           effects=[slash("sh_near", 32, -90, -200, width=8), (dash_lines(3, 18), "pelvis", 16, -10)]),
         # the cleave at the bottom of the dive
-        P(dx=-8, wings="down", hover=18, tilt=-10, head_dx=-4, head_dy=4, torso="side", lean=(-4, 2), tail="up",
+        P(dx=-3, wings="down", hover=18, tilt=-10, head_dx=-4, head_dy=4, torso="side", lean=(-4, 2), tail="up",
           near_arm=(172, 195), far_arm=(80, 120), legs="reach",
           weapon=dict(hand="near", angle=160, layer="top"), braid="fly", shadow=(24, 3),
           effects=[slash("sh_near", 32, -160, -200, width=8), (STAR, "wr_near", -22, 8)]),
-        P(dx=-9, wings="down", hover=18, tilt=-4, head_dx=-3, head_dy=2, torso="side", lean=(-3, 2), tail="s",
+        P(dx=-4, wings="down", hover=18, tilt=-4, head_dx=-3, head_dy=2, torso="side", lean=(-3, 2), tail="s",
           near_arm=(168, 205), far_arm=(80, 120), legs="reach",
           weapon=dict(hand="near", angle=150, layer="top"), braid="fly", shadow=(24, 3)),
         # pull up
-        P(dx=-9, wings="up", hover=24, tilt=6, head_dy=-2, torso="side", lean=(-2, 1), tail="down",
+        P(dx=-4, wings="up", hover=24, tilt=6, head_dy=-2, torso="side", lean=(-2, 1), tail="down",
           near_arm=(160, 190), far_arm=(80, 120), legs="hang",
           weapon=dict(hand="near", angle=170, layer="top"), braid="fly", shadow=(18, 2)),
     ]
     crit_recover = [
-        P(dx=-9, hover=25, wings="mid", torso="side", lean=(-2, 1), near_arm=(150, 150),
+        P(dx=-7, hover=25, wings="mid", torso="side", lean=(-2, 1), near_arm=(150, 150),
           weapon=dict(hand="near", angle=150, layer="top"), braid="fly"),
         P(dx=-5, hover=26, wings="down", torso="front", lean=(-1, 0), near_arm=(120, 70),
           weapon=dict(hand="near", angle=-30, layer="top")),

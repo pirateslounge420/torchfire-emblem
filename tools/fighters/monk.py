@@ -26,46 +26,49 @@ PALETTE = Palette(NAME, {
 
 # --- parts -----------------------------------------------------------------
 # Shaved head, 3/4 view facing left. Anchor = neck (bottom centre).
+# Crown highlight, a thin yellow headband on row 3, a 2-px dark brow over the
+# eye (o + w glint on row 6), an ear pair on the far side, jaw and chin in shadow.
 HEAD = grid("""
-...SSss...
-..SSsssss.
-.SSSssssss
-.SSsssssss
+...SSSs...
+..SSSssss.
+.SSSsssssz
+.CCcccccck
 .SSssssssz
-.Sjjjssssz
-.SSowSsszz
-.SSsSsssz.
+.SjjSssszz
+.SSowSssSz
+.SSsSssszz
 ..ssssszz.
-..zsssz...
+..zssszz..
 ...zzz....
 """, anchor=(5, 11))
 
 HEAD_HURT = grid("""
-...SSss...
-..SSsssss.
-.SSSssssss
-.SSsssssss
+...SSSs...
+..SSSssss.
+.SSSsssssz
+.CCcccccck
 .SSssssssz
-.Sjjjssssz
-.SSooSsszz
-.SSszsssz.
+.SjjSssszz
+.SSooSssSz
+.SSszssszz
 ..sszsszz.
-..zsssz...
+..zssszz..
 ...zzz....
 """, anchor=(5, 11))
 
-# Head bowed forward (crouches, the roll): crown toward the foe, face low.
+# Head bowed forward (crouches, the roll): crown back and up, chin tucked toward the foe.
 HEAD_DOWN = grid("""
-...SSss...
-..SSsssss.
-.SSSssssss
-SSSsssssss
-SSsssssssz
-Sjjjsssssz
-SowSssszz.
-.SsSsszz..
-..ssszz...
-...zzz....
+....SSSs..
+...SSSsss.
+..SSSsssss
+.CCccccccz
+.SSsssssss
+SSjjSssszz
+SSowSssSz.
+SSsSssszz.
+.sssszzz..
+.zsssz....
+..zzz.....
 """, anchor=(5, 11))
 
 # Torso, anchored at the neck (top centre). Wrap robe, V-neck, rope belt.

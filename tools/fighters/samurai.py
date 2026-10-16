@@ -274,12 +274,12 @@ def animations():
           weapon=dict(hand="far", angle=-160, layer="top", variant="blur"),
           effects=[slash("sh_far", 24, -60, -200, width=6)]),
         # impact: full extension
-        P(dx=-9, torso="side", lean=(-3, 1), far_arm=(175, 175), near_arm=(170, 110),
+        P(dx=-6, torso="side", lean=(-3, 1), far_arm=(175, 175), near_arm=(170, 110),
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", tail="flare", pony="back",
           weapon=dict(hand="far", angle=172, layer="top"),
           effects=[slash("sh_far", 26, -110, -185, width=7)]),
         # follow-through: blade dips low
-        P(dx=-9, torso="side", lean=(-3, 1), far_arm=(178, 190), near_arm=(170, 110),
+        P(dx=-6, torso="side", lean=(-3, 1), far_arm=(178, 190), near_arm=(170, 110),
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", tail="flare", pony="back",
           weapon=dict(hand="far", angle=160, layer="top")),
     ]
@@ -371,21 +371,21 @@ def animations():
 
     # --- critical: a low dash into a leaping overhead cut ----------------------
     crit_lean = [
-        P(dx=2, torso="back", lean=(1, 0), far_arm=(30, 10), near_arm=(130, 80),
+        P(dx=-1, torso="back", lean=(1, 0), far_arm=(90, -10), near_arm=(130, 80),
           near_leg=(115, 98), far_leg=(58, 86), pony="back",
           weapon=dict(hand="far", angle=10, layer="top")),
-        P(dx=4, torso="back", lean=(2, 1), far_arm=(20, 0), near_arm=(140, 90),
+        P(dx=-1, torso="back", lean=(2, 1), far_arm=(95, -15), near_arm=(140, 90),
           near_leg=(125, 100), far_leg=(50, 80), pony="back", tail="flare",
           weapon=dict(hand="far", angle=0, layer="top")),
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(10, -5), near_arm=(150, 100),
+        P(dx=-1, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(100, -20), near_arm=(150, 100),
           near_leg=(135, 102), far_leg=(45, 75), pony="back", tail="flare",
-          weapon=dict(hand="far", angle=-8, layer="top", variant="glint")),
+          weapon=dict(hand="far", angle=-15, layer="top", variant="glint")),
     ]
     crit_hold = [
         crit_lean[2],
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(10, -5), near_arm=(150, 100),
+        P(dx=-1, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(100, -20), near_arm=(150, 100),
           near_leg=(135, 102), far_leg=(45, 75), pony="back", tail="flare",
-          weapon=dict(hand="far", angle=-8, layer="top"),
+          weapon=dict(hand="far", angle=-15, layer="top"),
           effects=[(STAR, "wr_far", 9, -3)]),
     ]
     crit_lunge = [
@@ -395,7 +395,7 @@ def animations():
           weapon=dict(hand="far", angle=-5, layer="top"),
           effects=[(dash_lines(0, 0, 3, 12), "pelvis", 8, -4)]),
         # leap, blade overhead
-        P(dx=-8, planted=False, root=(RX - 8, 29), lean=(-2, -1), shadow=(6, 1),
+        P(dx=-8, planted=False, root=(RX - 8, 31), lean=(-2, -1), shadow=(6, 1),
           far_arm=(-30, -90), near_arm=(140, 60), near_leg=(75, 118), far_leg=(50, 100),
           near_boot="tip", far_boot="tip", tail="flare", pony="up",
           weapon=dict(hand="far", angle=-35, layer="top")),
@@ -406,12 +406,12 @@ def animations():
           weapon=dict(hand="far", angle=-175, layer="top", variant="blur"),
           effects=[slash("sh_far", 26, -70, -200, width=7)]),
         # impact on landing
-        P(dx=-11, torso="side", lean=(-3, 1), far_arm=(178, 185), near_arm=(165, 100),
+        P(dx=-6, torso="side", lean=(-3, 1), far_arm=(178, 185), near_arm=(165, 100),
           near_leg=(150, 100), far_leg=(40, 70), far_boot="back", tail="flare", pony="back",
           weapon=dict(hand="far", angle=170, layer="top"),
           effects=[slash("sh_far", 27, -120, -190, width=8), (STAR, "wr_far", -16, 2)]),
         # follow-through
-        P(dx=-11, torso="side", lean=(-3, 2), far_arm=(180, 200), near_arm=(165, 100),
+        P(dx=-6, torso="side", lean=(-3, 2), far_arm=(180, 200), near_arm=(165, 100),
           near_leg=(152, 100), far_leg=(38, 68), far_boot="back", tail="flare", pony="back",
           weapon=dict(hand="far", angle=155, layer="top")),
     ]
