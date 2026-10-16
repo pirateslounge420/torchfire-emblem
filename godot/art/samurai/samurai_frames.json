@@ -1,0 +1,77 @@
+{
+  "frame_size": 64,
+  "animations": {
+    "idle": {
+      "start": 0,
+      "count": 2,
+      "loop": true,
+      "fps": 8
+    },
+    "lean": {
+      "start": 2,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "hold": {
+      "start": 3,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "lunge": {
+      "start": 4,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "recover": {
+      "start": 5,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "block": {
+      "start": 6,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "parry": {
+      "start": 7,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "hit": {
+      "start": 8,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "dodge_up": {
+      "start": 9,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "dodge_down": {
+      "start": 10,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "dodge_forward": {
+      "start": 11,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    },
+    "dodge_back": {
+      "start": 12,
+      "count": 1,
+      "loop": false,
+      "fps": 8
+    }
+  }
+}
