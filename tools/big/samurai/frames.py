@@ -19,7 +19,8 @@ SCALE = 1.06                            # figure ~111 px
 PAL = Palette(NAME, {
     "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
     "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),
-    "C": (44, 40, 62), "c": (222, 72, 162), "k": (156, 34, 118),         # C = dark lacquer (saya); the gi: magenta lit / mid (Kenshin)
+    "C": (40, 40, 40), "c": (222, 72, 162), "k": (156, 34, 118),         # C = saya lacquer (shares the outline black); the gi: magenta lit / mid
+    "P": (124, 72, 212),                                                  # Kenshin's violet eyes
     "I": (238, 238, 246), "i": (184, 190, 210), "n": (148, 148, 176),    # the hakama: white lit / mid (= steel light) / shadow
     "R": (200, 56, 64), "r": (120, 24, 40),          # obi; r doubles as the hair shadow
     "A": (255, 150, 70), "a": (214, 88, 36),          # Kenshin-orange hair: light, mid
@@ -116,8 +117,8 @@ def stance(bob=0):
     # with a light glint top-left and a dark pupil bottom-right
     for x in ex:
         g.g[ey - 1][x] = "o"; g.g[ey - 1][x + 1] = "o"; g.g[ey - 1][x + 2] = "o"
-        g.g[ey][x] = "h"; g.g[ey][x + 1] = "k"; g.g[ey][x + 2] = "k"
-        g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "k"; g.g[ey + 1][x + 2] = "o"
+        g.g[ey][x] = "h"; g.g[ey][x + 1] = "P"; g.g[ey][x + 2] = "P"
+        g.g[ey + 1][x] = "P"; g.g[ey + 1][x + 1] = "P"; g.g[ey + 1][x + 2] = "o"
     return g
 
 
