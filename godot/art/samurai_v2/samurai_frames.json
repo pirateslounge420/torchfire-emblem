@@ -1,11 +1,11 @@
 {
-  "frame_size": 64,
-  "frame_w": 64,
+  "frame_size": 96,
+  "frame_w": 96,
   "frame_h": 64,
-  "columns": 16,
+  "columns": 8,
   "faces": "left",
   "origin": [
-    36,
+    48,
     54
   ],
   "animations": {
@@ -29,15 +29,21 @@
     },
     "lunge": {
       "start": 9,
-      "count": 3,
+      "count": 6,
       "loop": false,
       "fps": 20
     },
     "recover": {
-      "start": 12,
-      "count": 3,
+      "start": 15,
+      "count": 5,
       "loop": false,
       "fps": 9
+    },
+    "flourish": {
+      "start": 20,
+      "count": 10,
+      "loop": false,
+      "fps": 6
     }
   }
 }

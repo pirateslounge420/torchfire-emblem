@@ -199,18 +199,19 @@ def gif(images, path, durations_ms, zoom=4, bg=BG):
 
 
 def sheet(anims, out_dir, name, box, origin, columns=16):
-    """Pack {anim_name: (frames, fps, loop)} into the Godot sheet + JSON."""
+    """Pack {anim_name: (frames, fps, loop)} into the Godot sheet + JSON. box = int or (w, h)."""
     os.makedirs(out_dir, exist_ok=True)
+    bw, bh = (box, box) if isinstance(box, int) else box
     total = sum(len(f) for f, _, _ in anims.values())
     rows = (total + columns - 1) // columns
-    sh = Image.new("RGBA", (columns * box, rows * box), (0, 0, 0, 0))
-    meta = {"frame_size": box, "frame_w": box, "frame_h": box, "columns": columns, "faces": "left",
+    sh = Image.new("RGBA", (columns * bw, rows * bh), (0, 0, 0, 0))
+    meta = {"frame_size": bw, "frame_w": bw, "frame_h": bh, "columns": columns, "faces": "left",
             "origin": list(origin), "animations": {}}
     i = 0
     for an, (frames, fps, loop) in anims.items():
         meta["animations"][an] = {"start": i, "count": len(frames), "loop": loop, "fps": fps}
         for fr in frames:
-            sh.paste(fr, ((i % columns) * box, (i // columns) * box))
+            sh.paste(fr, ((i % columns) * bw, (i // columns) * bh))
             i += 1
     sh.save(os.path.join(out_dir, f"{name}_sheet.png"))
     with open(os.path.join(out_dir, f"{name}_frames.json"), "w") as f:
