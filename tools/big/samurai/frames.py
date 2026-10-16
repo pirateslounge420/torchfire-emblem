@@ -59,8 +59,8 @@ def stance(bob=0):
     torso.fold([(84, 36 + b), (80, 46 + b), (77, 58 + b), (76, 66 + b)], "H")           # the lapel edge
     torso.fold([(78, 38 + b), (83, 48 + b), (84, 58 + b)], "c")                         # the far lapel, dim
     # ---- neck + chest skin in the V
-    neck = Part("neck", [(79, 30 + b), (86, 30 + b), (86, 37 + b), (84, 42 + b), (80, 40 + b), (79, 36 + b)], "s")
-    neck.band([(79, 30 + b), (82, 30 + b), (81, 38 + b), (79, 36 + b)], "S")
+    neck = Part("neck", [(76, 30 + b), (88, 30 + b), (88, 37 + b), (85, 42 + b), (79, 41 + b), (76, 36 + b)], "s")
+    neck.band([(76, 30 + b), (81, 30 + b), (80, 39 + b), (76, 36 + b)], "S")
     # ---- obi
     obi = Part("obi", [(69, 59 + b), (93, 59 + b), (93, 66 + b), (69, 66 + b)], "r")
     obi.band([(69, 59 + b), (93, 59 + b), (93, 62 + b), (69, 62 + b)], "R")
@@ -80,13 +80,16 @@ def stance(bob=0):
     sleeve.fold([(66, 37 + b), (68, 36 + b), (72, 36 + b)], "g")
     sleeve.fold([(70, 52 + b), (67, 64 + b), (63, 72 + b)], "k")
     # ---- near hand resting on the hilt
-    hand = Part("hand", [(58, 62 + b), (66, 60 + b), (69, 64 + b), (67, 70 + b), (60, 70 + b), (57, 66 + b)], "s")
-    hand.band([(58, 62 + b), (64, 61 + b), (63, 65 + b), (59, 65 + b)], "S")
-    hand.fold([(60, 67 + b), (66, 67 + b)], "z")
+    hand = Part("hand", [(56, 61 + b), (66, 59 + b), (70, 63 + b), (69, 70 + b), (62, 73 + b), (57, 70 + b), (55, 65 + b)], "s")
+    hand.band([(57, 61 + b), (65, 60 + b), (65, 64 + b), (57, 64 + b)], "S")             # the back of the hand, lit
+    for i, (x0, y0) in enumerate([(57, 65), (60, 66), (63, 67), (66, 68)]):              # four fingers curling over the hilt
+        hand.fold([(x0, y0 + b), (x0 + 1, y0 + 4 + b)], "z")
+    hand.fold([(57, 70 + b), (68, 72 + b)], "z")                                          # the fingertips' edge
+    hand.fold([(66, 60 + b), (69, 63 + b)], "z")                                          # the thumb
     # ---- head: face, then hair over it
-    face = Part("face", [(72, 15 + b), (87, 15 + b), (90, 22 + b), (89, 29 + b), (85, 34 + b), (78, 34 + b), (73, 30 + b), (70, 23 + b)], "S")
-    face.band([(85, 15 + b), (90, 22 + b), (89, 29 + b), (85, 34 + b), (84, 24 + b)], "s")
-    face.fold([(75, 31 + b), (80, 33 + b), (85, 32 + b)], "z")                            # jaw shadow
+    face = Part("face", [(73, 15 + b), (87, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (79, 35 + b), (73, 31 + b), (70, 25 + b), (70, 20 + b)], "S")
+    face.band([(85, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (84, 24 + b)], "s")
+    face.fold([(75, 31 + b), (80, 34 + b), (86, 32 + b)], "z")                            # jaw shadow
     face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 21 + b)], "z")   # brows
     face.dot(71, 27 + b, "z")                                                             # nose tip
     face.fold([(74, 30 + b), (77, 30 + b)], "z")                                          # mouth
