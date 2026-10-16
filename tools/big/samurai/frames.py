@@ -19,11 +19,11 @@ SCALE = 1.06                            # figure ~111 px
 PAL = Palette(NAME, {
     "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
     "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),
-    "C": (40, 40, 40), "c": (222, 72, 162), "k": (156, 34, 118),         # C = saya lacquer (shares the outline black); the gi: magenta lit / mid
+    "C": (40, 40, 40), "c": (226, 70, 136), "k": (164, 34, 104),         # C = saya lacquer (shares the outline black); the gi: magenta lit / mid
     "P": (124, 72, 212),                                                  # Kenshin's violet eyes
     "I": (238, 238, 246), "i": (184, 190, 210), "n": (148, 148, 176),    # the hakama: white lit / mid (= steel light) / shadow
     "R": (200, 56, 64), "r": (120, 24, 40),          # obi; r doubles as the hair shadow
-    "A": (255, 150, 70), "a": (214, 88, 36),          # Kenshin-orange hair: light, mid
+    "A": (255, 128, 64), "a": (222, 64, 30),          # Kenshin scarlet hair (anime): light, mid
     "L": (136, 86, 66), "l": (136, 86, 66),           # leather (hilt wrap, soles) shares the skin-dark brown
     "m": (184, 190, 210),
 })
@@ -95,9 +95,10 @@ def stance(bob=0):
     face.fold([(73, 20 + b), (77, 19 + b)], "z"); face.fold([(81, 19 + b), (85, 20 + b)], "z")   # brows
     face.fold([(73, 23 + b), (70, 27 + b), (73, 28 + b)], "z")                                # the nose: bridge down to a tip, back under
     face.fold([(77, 30 + b), (81, 30 + b)], "z")                                               # mouth
-    hair = Part("hair", [(68, 14 + b), (74, 8 + b), (82, 6 + b), (92, 8 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b),
-                         (90, 19 + b), (88, 21 + b), (86, 16 + b), (83, 21 + b), (80, 16 + b), (77, 21 + b), (74, 17 + b), (71, 22 + b), (69, 20 + b)], "a")
-    hair.band([(72, 12 + b), (78, 8 + b), (88, 7 + b), (92, 10 + b), (84, 11 + b), (76, 14 + b)], "A")
+    hair = Part("hair", [(67, 14 + b), (72, 7 + b), (78, 4 + b), (84, 5 + b), (90, 4 + b), (96, 9 + b), (99, 16 + b), (100, 26 + b), (97, 35 + b), (93, 38 + b), (92, 26 + b),
+                         (91, 18 + b), (89, 22 + b), (87, 15 + b), (85, 21 + b), (83, 15 + b), (81, 22 + b), (79, 15 + b), (77, 21 + b), (75, 15 + b), (73, 21 + b), (71, 16 + b), (70, 22 + b), (68, 19 + b)], "a")
+    hair.band([(71, 12 + b), (77, 6 + b), (88, 6 + b), (93, 9 + b), (84, 11 + b), (75, 14 + b)], "A")
+    hair.fold([(79, 15 + b), (79, 20 + b)], "A"); hair.fold([(87, 15 + b), (87, 20 + b)], "A")
     hair.band([(93, 10 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b), (92, 16 + b)], "r")
     hair.fold([(85, 8 + b), (91, 13 + b), (94, 24 + b)], "r")
     hair.fold([(78, 10 + b), (76, 16 + b)], "A"); hair.fold([(82, 9 + b), (81, 16 + b)], "A")
