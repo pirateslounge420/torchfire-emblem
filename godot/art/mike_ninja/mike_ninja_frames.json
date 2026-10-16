@@ -1,0 +1,49 @@
+{
+  "frame_size": 80,
+  "frame_w": 80,
+  "frame_h": 80,
+  "columns": 8,
+  "faces": "left",
+  "origin": [
+    40,
+    76
+  ],
+  "animations": {
+    "idle": {
+      "start": 0,
+      "count": 8,
+      "loop": true,
+      "fps": 6
+    },
+    "select": {
+      "start": 8,
+      "count": 8,
+      "loop": false,
+      "fps": 8
+    },
+    "lean": {
+      "start": 16,
+      "count": 3,
+      "loop": false,
+      "fps": 10
+    },
+    "hold": {
+      "start": 19,
+      "count": 2,
+      "loop": true,
+      "fps": 5
+    },
+    "lunge": {
+      "start": 21,
+      "count": 3,
+      "loop": false,
+      "fps": 20
+    },
+    "recover": {
+      "start": 24,
+      "count": 3,
+      "loop": false,
+      "fps": 9
+    }
+  }
+}
