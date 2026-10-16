@@ -8,7 +8,7 @@ chops; the critical is a full windmill spin into the chop.
 Drawn original in the GBA FE idiom; faces LEFT.
 """
 import math
-from pixelkit import Figure, Palette, Part, grid, capsule, blade, arc, rot90_part, flip_part
+from pixelkit import Figure, Palette, Part, grid, capsule, blade, arc, rot90_part
 from pixelkit.palette import SKIN_TAN, OUTLINE, TRIGRAM
 from pixelkit.figure import HANDS
 
@@ -63,31 +63,36 @@ HEAD_HURT = grid("""
 ...zzzz...
 """, anchor=(5, 12))
 
-# Bandana tail; anchor = where it leaves the knot at the back of the head.
+# Bandana tail, drawn behind the head. Each variant is (part, dx, dy) from the
+# neck; the knot sits at the head's back edge (neck + (4, -9)) and the tail is
+# kept a pixel clear of the head so the head's outline reads as the knot.
 TAIL = {
-    "rest": grid("""
-cc..
-.cck
-..ck
-..ck
-...k
-""", anchor=(0, 0)),
-    "back": grid("""
-ccc..
+    "rest": (grid("""
+cc...
+.cck.
 ..cck
+...ck
 ....k
-""", anchor=(0, 0)),
-    "up": grid("""
-...k
-..ck
-.cc.
-cc..
-""", anchor=(0, 3)),
-    "fwd": grid("""
-.cc
-cck
-c..
-""", anchor=(2, 0)),
+""", anchor=(0, 0)), 5, -9),
+    "back": (grid("""
+ccccc.
+....ck
+.....k
+""", anchor=(0, 0)), 5, -9),
+    "up": (grid("""
+....k
+...ck
+..cc.
+cc...
+""", anchor=(0, 3)), 5, -9),
+    # whips forward over the crown (hit / knocked back)
+    "fwd": (grid("""
+ccccc
+....c
+....c
+....k
+....k
+""", anchor=(4, 5)), 4, -9),
 }
 
 # Torso, anchored at the neck (top centre). 12 wide, 13 tall: rows 0-8 chest
@@ -288,8 +293,7 @@ FIGURE = Figure(
     build="heavy", arm_w=5, leg_w=6,
     parts={"heads": {"normal": HEAD, "hurt": HEAD_HURT},
            "torsos": {"front": TORSO_FRONT, "side": TORSO_SIDE, "back": TORSO_BACK},
-           "extras": {**{"tail_" + k: v for k, v in TAIL.items()},
-                      "star": STAR, "spark": SPARK, "dust": DUST}},
+           "extras": {"star": STAR, "spark": SPARK, "dust": DUST}},
     sleeves=("S", "s", "z"),
     pants=("A", "a", "q"),
     weapon=axe,
@@ -317,7 +321,8 @@ def P(dx=0, tail="rest", hand_front=True, **kw):
     )
     base.update(kw)
     extras = list(base.pop("extras", []))
-    extras.append(("tail_" + tail, "neck", 4, -9, "back"))
+    tpart, tx, ty = TAIL[tail]
+    extras.append((tpart, "neck", tx, ty, "back"))
     if hand_front:
         extras.append((HANDS["grip"], "wr_far", 0, 0, "front"))
     # bracers on both forearms
