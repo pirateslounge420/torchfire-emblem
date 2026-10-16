@@ -84,9 +84,9 @@ def stance(bob=0):
     hand.band([(58, 62 + b), (64, 61 + b), (63, 65 + b), (59, 65 + b)], "S")
     hand.fold([(60, 67 + b), (66, 67 + b)], "z")
     # ---- head: face, then hair over it
-    face = Part("face", [(72, 16 + b), (86, 14 + b), (90, 22 + b), (89, 30 + b), (84, 34 + b), (77, 34 + b), (72, 28 + b), (70, 22 + b)], "S")
-    face.band([(84, 14 + b), (90, 22 + b), (89, 30 + b), (84, 34 + b), (84, 24 + b)], "s")
-    face.fold([(75, 30 + b), (80, 33 + b), (84, 32 + b)], "z")                            # jaw shadow
+    face = Part("face", [(72, 15 + b), (87, 15 + b), (90, 22 + b), (89, 29 + b), (85, 34 + b), (78, 34 + b), (73, 30 + b), (70, 23 + b)], "S")
+    face.band([(85, 15 + b), (90, 22 + b), (89, 29 + b), (85, 34 + b), (84, 24 + b)], "s")
+    face.fold([(75, 31 + b), (80, 33 + b), (85, 32 + b)], "z")                            # jaw shadow
     face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 21 + b)], "z")   # brows
     face.dot(71, 27 + b, "z")                                                             # nose tip
     face.fold([(74, 30 + b), (77, 30 + b)], "z")                                          # mouth
