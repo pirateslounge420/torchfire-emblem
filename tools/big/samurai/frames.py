@@ -17,12 +17,13 @@ W, H, GROUND = 96, 96, 89              # the base box
 SCALE = 0.8
 
 PAL = Palette(NAME, {
-    "H": (248, 248, 248), "h": (184, 190, 210), "g": (112, 118, 146),
+    "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
     "S": (248, 200, 160), "s": (200, 140, 104), "z": (136, 86, 66),
     "C": (112, 118, 146), "c": (60, 62, 88), "k": (30, 30, 46),
     "I": (150, 140, 255), "i": (88, 72, 200), "n": (46, 36, 120),
-    "R": (200, 56, 64), "r": (120, 24, 40),
-    "L": (72, 46, 28), "l": (72, 46, 28),
+    "R": (200, 56, 64), "r": (120, 24, 40),          # obi; r doubles as the hair shadow
+    "A": (255, 150, 70), "a": (214, 88, 36),          # Kenshin-orange hair: light, mid
+    "L": (136, 86, 66), "l": (136, 86, 66),           # leather (hilt wrap, soles) shares the skin-dark brown
     "m": (184, 190, 210),
 })
 
@@ -31,9 +32,9 @@ def stance(bob=0):
     f = Frame(DW, DH)
     b = bob
     # ---- hair tail, hanging down the back (behind everything)
-    tail = Part("tail", [(96, 40 + b), (101, 38 + b), (104, 48 + b), (103, 62 + b), (101, 76 + b), (98, 84 + b), (96, 78 + b), (97, 64 + b), (97, 50 + b)], "h")
-    tail.band([(99, 40 + b), (104, 48 + b), (103, 76 + b), (100, 84 + b), (100, 60 + b)], "g")
-    tail.fold([(100, 44 + b), (101, 70 + b)], "H")
+    tail = Part("tail", [(96, 40 + b), (101, 38 + b), (104, 48 + b), (103, 62 + b), (101, 76 + b), (98, 84 + b), (96, 78 + b), (97, 64 + b), (97, 50 + b)], "a")
+    tail.band([(99, 40 + b), (104, 48 + b), (103, 76 + b), (100, 84 + b), (100, 60 + b)], "r")
+    tail.fold([(100, 44 + b), (101, 70 + b)], "A")
     # ---- far sleeve (behind the torso)
     far_sleeve = Part("far_sleeve", [(90, 38 + b), (100, 38 + b), (103, 56 + b), (100, 70 + b), (92, 70 + b), (88, 56 + b)], "k")
     # ---- hakama: one wide skirt, two legs under it
@@ -89,13 +90,13 @@ def stance(bob=0):
     face.dot(71, 27 + b, "z")                                                             # nose tip
     face.fold([(74, 30 + b), (77, 30 + b)], "z")                                          # mouth
     hair = Part("hair", [(70, 12 + b), (78, 8 + b), (88, 8 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (90, 22 + b),
-                         (86, 16 + b), (82, 20 + b), (79, 15 + b), (76, 21 + b), (73, 17 + b), (70, 22 + b), (68, 18 + b)], "h")
-    hair.band([(72, 12 + b), (78, 8 + b), (88, 8 + b), (90, 12 + b), (80, 12 + b), (74, 16 + b)], "H")
-    hair.band([(92, 12 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (91, 20 + b)], "g")
-    hair.fold([(84, 9 + b), (90, 14 + b), (93, 24 + b)], "g")
-    hair.fold([(76, 10 + b), (74, 16 + b)], "H")
-    sidelock = Part("sidelock", [(88, 20 + b), (92, 20 + b), (93, 36 + b), (90, 42 + b), (88, 36 + b)], "h")
-    sidelock.band([(90, 20 + b), (92, 20 + b), (93, 36 + b), (91, 40 + b)], "g")
+                         (86, 16 + b), (82, 20 + b), (79, 15 + b), (76, 21 + b), (73, 17 + b), (70, 22 + b), (68, 18 + b)], "a")
+    hair.band([(72, 12 + b), (78, 8 + b), (88, 8 + b), (90, 12 + b), (80, 12 + b), (74, 16 + b)], "A")
+    hair.band([(92, 12 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (91, 20 + b)], "r")
+    hair.fold([(84, 9 + b), (90, 14 + b), (93, 24 + b)], "r")
+    hair.fold([(76, 10 + b), (74, 16 + b)], "A")
+    sidelock = Part("sidelock", [(88, 20 + b), (92, 20 + b), (93, 36 + b), (90, 42 + b), (88, 36 + b)], "a")
+    sidelock.band([(90, 20 + b), (92, 20 + b), (93, 36 + b), (91, 40 + b)], "r")
     tie = Part("tie", [(95, 36 + b), (100, 35 + b), (101, 40 + b), (96, 41 + b)], "R")
 
     f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
