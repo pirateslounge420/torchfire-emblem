@@ -46,12 +46,12 @@ def stance(bob=0):
     hak.fold([(85, 66), (88, 84)], "n")
     hak.fold([(90, 70), (94, 92), (96, 112)], "k")
     # ---- feet: small tabi on sandals, peeking out under the hem (hem overlaps their tops)
-    foot_near = Part("foot_near", [(60, 110), (71, 110), (73, 114), (71, 118), (58, 118), (56, 114)], "h")
-    foot_near.band([(56, 115), (73, 115), (71, 118), (58, 118)], "L")            # the sandal sole
-    foot_near.fold([(63, 111), (63, 115)], "g")                                   # the tabi split
-    foot_far = Part("foot_far", [(88, 110), (99, 110), (102, 114), (100, 118), (87, 118), (85, 114)], "h")
-    foot_far.band([(85, 115), (102, 115), (100, 118), (87, 118)], "L")
-    foot_far.band([(88, 110), (99, 110), (102, 114), (96, 114), (92, 111)], "g")
+    foot_near = Part("foot_near", [(62, 111), (70, 111), (72, 114), (70, 118), (60, 118), (59, 114)], "h")
+    foot_near.band([(59, 115), (72, 115), (70, 118), (60, 118)], "L")            # the sandal sole
+    foot_near.fold([(64, 112), (64, 115)], "g")                                   # the tabi split
+    foot_far = Part("foot_far", [(89, 111), (97, 111), (100, 114), (98, 118), (88, 118), (86, 114)], "h")
+    foot_far.band([(86, 115), (100, 115), (98, 118), (88, 118)], "L")
+    foot_far.band([(89, 111), (97, 111), (100, 114), (95, 114), (92, 112)], "g")
     # ---- torso: the gi, narrow, lit from the upper left
     torso = Part("torso", [(69, 36 + b), (95, 36 + b), (95, 50 + b), (93, 66 + b), (70, 66 + b), (68, 50 + b)], "k")
     torso.band([(69, 36 + b), (80, 36 + b), (77, 50 + b), (74, 66 + b), (70, 66 + b), (68, 50 + b)], "c")
