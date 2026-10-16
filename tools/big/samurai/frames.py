@@ -80,19 +80,19 @@ def stance(bob=0):
     sleeve.fold([(66, 37 + b), (68, 36 + b), (72, 36 + b)], "g")
     sleeve.fold([(70, 52 + b), (67, 64 + b), (63, 72 + b)], "k")
     # ---- near hand resting on the hilt
-    hand = Part("hand", [(56, 61 + b), (66, 59 + b), (70, 63 + b), (69, 70 + b), (62, 73 + b), (57, 70 + b), (55, 65 + b)], "s")
-    hand.band([(57, 61 + b), (65, 60 + b), (65, 64 + b), (57, 64 + b)], "S")             # the back of the hand, lit
-    for i, (x0, y0) in enumerate([(57, 65), (60, 66), (63, 67), (66, 68)]):              # four fingers curling over the hilt
-        hand.fold([(x0, y0 + b), (x0 + 1, y0 + 4 + b)], "z")
-    hand.fold([(57, 70 + b), (68, 72 + b)], "z")                                          # the fingertips' edge
-    hand.fold([(66, 60 + b), (69, 63 + b)], "z")                                          # the thumb
+    hand = Part("hand", [(58, 62 + b), (65, 60 + b), (68, 63 + b), (67, 68 + b), (62, 70 + b), (58, 68 + b), (57, 65 + b)], "s")
+    hand.band([(59, 62 + b), (64, 61 + b), (64, 64 + b), (59, 64 + b)], "S")             # the back of the hand, lit
+    for i, (x0, y0) in enumerate([(58, 65), (60, 66), (62, 67), (64, 67)]):              # fingers curling over the hilt
+        hand.fold([(x0, y0 + b), (x0, y0 + 3 + b)], "z")
+    hand.fold([(58, 68 + b), (66, 69 + b)], "z")                                          # the fingertips' edge
+    hand.fold([(65, 60 + b), (68, 63 + b)], "z")                                          # the thumb
     # ---- head: face, then hair over it
-    face = Part("face", [(73, 15 + b), (87, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (79, 35 + b), (73, 31 + b), (70, 25 + b), (70, 20 + b)], "S")
-    face.band([(85, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (84, 24 + b)], "s")
-    face.fold([(75, 31 + b), (80, 34 + b), (86, 32 + b)], "z")                            # jaw shadow
-    face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 21 + b)], "z")   # brows
-    face.dot(71, 27 + b, "z")                                                             # nose tip
-    face.fold([(74, 30 + b), (77, 30 + b)], "z")                                          # mouth
+    face = Part("face", [(74, 15 + b), (86, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (80, 36 + b), (74, 34 + b), (70, 28 + b), (70, 21 + b)], "S")
+    face.band([(86, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (86, 24 + b)], "s")   # a narrow shadow on the far cheek only
+    face.fold([(74, 33 + b), (80, 35 + b), (86, 33 + b)], "z")                                 # jaw, level
+    face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 22 + b)], "z")   # brows
+    face.dot(71, 26 + b, "z")                                                                  # nose tip at the profile edge
+    face.fold([(76, 31 + b), (80, 31 + b)], "z")                                               # mouth, centred
     hair = Part("hair", [(70, 12 + b), (78, 8 + b), (88, 8 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (90, 22 + b),
                          (86, 16 + b), (82, 20 + b), (79, 15 + b), (76, 21 + b), (73, 17 + b), (70, 22 + b), (68, 18 + b)], "a")
     hair.band([(72, 12 + b), (78, 8 + b), (88, 8 + b), (90, 12 + b), (80, 12 + b), (74, 16 + b)], "A")
