@@ -16,6 +16,9 @@ extends Node2D
 var shake_frames := 0
 var shake_strength := 0.0
 
+## Number keys 1-8 swap the player's fighter, Shift+1-8 the challenger's.
+const ROSTER := ["samurai", "shinobi", "berserker", "bastion", "monk", "jester", "paladin", "valkyrie"]
+
 const PHASE_NAMES := {
 	CombatManager.Phase.LEAN: "LEAN", CombatManager.Phase.HOLD: "HOLD",
 	CombatManager.Phase.LUNGE: "!!!", CombatManager.Phase.RESOLVE: "",
@@ -67,6 +70,14 @@ func _on_resolved(result: String, damage: int, target: Fighter) -> void:
 
 func _on_over(winner: Fighter) -> void:
 	result_label.text = winner.fighter_name + " WINS  (R to restart)"
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		var k: int = event.keycode
+		if k >= KEY_1 and k <= KEY_8:
+			var who := p2 if event.shift_pressed else p1
+			who.set_art(ROSTER[k - KEY_1])
 
 
 func _physics_process(_d: float) -> void:

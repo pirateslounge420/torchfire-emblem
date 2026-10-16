@@ -18,9 +18,10 @@ Open this folder in **Godot 4.3+** (Import → pick `project.godot`) and press P
 - **K** — parry (tightest window; counter-hits for the attack's own damage).
 - **W / S / A / D** — dodge up / down / back / forward. Must match the attack's direction.
 - **R** — restart after a match ends.
+- **1–8** — swap your fighter's art (Samurai, Shinobi, Berserker, Bastion, Monk, Jester, Paladin, Valkyrie). **Shift+1–8** swaps the challenger's.
 
 ## Prototype scope (on purpose)
 
 - One attack type. It's tagged with a dodge direction (shown as a hint during the hold) so all four dodges are testable, but every swing is otherwise identical.
 - AI attacker only, fixed cadence. Cadence variability is deferred per the design doc.
-- Placeholder art drawn in code. Real GBA-style frames replace it by assigning a `SpriteFrames` to each Fighter — pose names are listed at the top of `Fighter.gd`.
+- Battle sprites live in `art/<fighter>/` as a sheet + JSON written by `tools/draw_fighter.py` (see `tools/STYLE.md`). On-foot fighters use a 64×64 box, mounted ones 96×96; `Fighter.gd` reads the box size and ground origin from the JSON. Pose names are listed at the top of `Fighter.gd`; the `crit_*` animations are drawn but not yet driven by the combat loop.

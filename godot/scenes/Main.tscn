@@ -17,7 +17,7 @@ offset_bottom = 320.0
 color = Color(0.18, 0.16, 0.22, 1)
 
 [node name="Player" parent="." instance=ExtResource("3")]
-position = Vector2(150, 200)
+position = Vector2(150, 222)
 fighter_name = "YOU"
 archetype = "default"
 art = "samurai"
@@ -25,7 +25,7 @@ facing_right = true
 body_color = Color(0.29, 0.42, 0.97, 1)
 
 [node name="Enemy" parent="." instance=ExtResource("3")]
-position = Vector2(330, 200)
+position = Vector2(330, 222)
 fighter_name = "CHALLENGER"
 archetype = "default"
 art = "samurai"

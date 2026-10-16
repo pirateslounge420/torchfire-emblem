@@ -61,7 +61,9 @@ def main():
         anims.append(Animation(an, frames, fps, loop))
     n = check_palette(mod.PALETTE, letters)
     out_dir = os.path.join(ART, mod.NAME)
-    sheet, meta = pack_sheet(anims, out_dir, mod.NAME, frame_w=mod.BOX, frame_h=mod.BOX, columns=16)
+    origin = [getattr(mod, "RX", mod.BOX // 2), getattr(mod, "GROUND", 54)]
+    sheet, meta = pack_sheet(anims, out_dir, mod.NAME, frame_w=mod.BOX, frame_h=mod.BOX, columns=16,
+                             meta_extra={"origin": origin})
     preview_gif(anims, os.path.join(out_dir, f"{mod.NAME}_preview.gif"), scale=3)
     preview_png(anims, os.path.join(HERE, f"_contact_{mod.NAME}.png"), scale=3)
     total = sum(len(a.frames) for a in anims)

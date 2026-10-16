@@ -28,15 +28,42 @@ signal hp_changed(new_hp: int)
 ## Leave empty to use code-drawn placeholders.
 @export var art := ""
 
+var art_faces_left := false
+var art_origin := Vector2(32, 54)   # ground point under the figure, in sheet pixels
+var art_box := Vector2(64, 64)
+
 
 func _ready() -> void:
 	if frames == null and art != "":
 		frames = _load_sheet(art)
 	if frames == null:
 		frames = _build_placeholder_frames()
+		sprite.centered = true
+		sprite.offset = Vector2.ZERO
 	sprite.sprite_frames = frames
-	sprite.flip_h = not facing_right
+	_apply_facing()
 	set_pose("idle")
+
+
+## Swap this fighter's art at runtime (used by the number keys in Main.gd).
+func set_art(name: String) -> void:
+	var sf := _load_sheet(name)
+	if sf == null:
+		return
+	art = name
+	frames = sf
+	sprite.sprite_frames = frames
+	_apply_facing()
+	set_pose(pose)
+
+
+func _apply_facing() -> void:
+	# Hand-drawn sheets face LEFT (the GBA convention); placeholders face right.
+	sprite.flip_h = facing_right if art_faces_left else not facing_right
+	if not sprite.centered:
+		# Keep the ground origin on the node whichever way the sheet is flipped.
+		var ox := art_origin.x if not sprite.flip_h else art_box.x - art_origin.x
+		sprite.offset = Vector2(-ox, -art_origin.y)
 
 
 func set_pose(p: String) -> void:
@@ -54,7 +81,10 @@ func profile() -> Dictionary:
 	return FrameData.ARCHETYPES.get(archetype, FrameData.ARCHETYPES["default"])
 
 
-## Builds SpriteFrames from a horizontal strip + JSON written by tools/draw_*.py.
+## Builds SpriteFrames from a sheet + JSON written by tools/draw_fighter.py.
+## The sheet is a grid `columns` wide; frame i sits at (i % columns, i / columns).
+## "origin" is the ground point under the figure, so the node's position is
+## where the feet (or the steed's shadow) touch the floor for every box size.
 func _load_sheet(name: String) -> SpriteFrames:
 	var base := "res://art/%s/%s" % [name, name]
 	var tex: Texture2D = load(base + "_sheet.png")
@@ -63,7 +93,14 @@ func _load_sheet(name: String) -> SpriteFrames:
 		push_warning("Fighter: no art found for '%s', using placeholders" % name)
 		return null
 	var meta: Dictionary = JSON.parse_string(f.get_as_text())
-	var size: int = meta["frame_size"]
+	var fw: int = int(meta.get("frame_w", meta["frame_size"]))
+	var fh: int = int(meta.get("frame_h", meta["frame_size"]))
+	var columns: int = int(meta.get("columns", 9999))
+	art_faces_left = meta.get("faces", "right") == "left"
+	var origin: Array = meta.get("origin", [fw * 0.5, fh - 10])
+	art_origin = Vector2(float(origin[0]), float(origin[1]))
+	art_box = Vector2(fw, fh)
+	sprite.centered = false
 	var sf := SpriteFrames.new()
 	sf.remove_animation("default")
 	for anim in meta["animations"]:
@@ -72,9 +109,11 @@ func _load_sheet(name: String) -> SpriteFrames:
 		sf.set_animation_loop(anim, a["loop"])
 		sf.set_animation_speed(anim, a["fps"])
 		for i in range(a["count"]):
+			var idx: int = int(a["start"]) + i
+			var row: int = int(floor(float(idx) / float(columns)))
 			var at := AtlasTexture.new()
 			at.atlas = tex
-			at.region = Rect2((a["start"] + i) * size, 0, size, size)
+			at.region = Rect2((idx % columns) * fw, row * fh, fw, fh)
 			sf.add_frame(anim, at)
 	return sf
 
