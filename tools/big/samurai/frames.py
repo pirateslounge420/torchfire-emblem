@@ -59,8 +59,8 @@ def stance(bob=0):
     torso.fold([(84, 36 + b), (80, 46 + b), (77, 58 + b), (76, 66 + b)], "H")           # the lapel edge
     torso.fold([(78, 38 + b), (83, 48 + b), (84, 58 + b)], "c")                         # the far lapel, dim
     # ---- neck + chest skin in the V
-    neck = Part("neck", [(76, 30 + b), (88, 30 + b), (88, 37 + b), (85, 42 + b), (79, 41 + b), (76, 36 + b)], "s")
-    neck.band([(76, 30 + b), (81, 30 + b), (80, 39 + b), (76, 36 + b)], "S")
+    neck = Part("neck", [(77, 30 + b), (87, 30 + b), (87, 37 + b), (85, 42 + b), (79, 41 + b), (77, 36 + b)], "s")
+    neck.band([(77, 30 + b), (81, 30 + b), (80, 39 + b), (77, 36 + b)], "S")
     # ---- obi
     obi = Part("obi", [(69, 59 + b), (93, 59 + b), (93, 66 + b), (69, 66 + b)], "r")
     obi.band([(69, 59 + b), (93, 59 + b), (93, 62 + b), (69, 62 + b)], "R")
@@ -87,12 +87,12 @@ def stance(bob=0):
     hand.fold([(58, 68 + b), (66, 69 + b)], "z")                                          # the fingertips' edge
     hand.fold([(65, 60 + b), (68, 63 + b)], "z")                                          # the thumb
     # ---- head: face, then hair over it
-    face = Part("face", [(74, 15 + b), (86, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (80, 36 + b), (74, 34 + b), (70, 28 + b), (70, 21 + b)], "S")
-    face.band([(86, 15 + b), (90, 21 + b), (90, 28 + b), (86, 34 + b), (86, 24 + b)], "s")   # a narrow shadow on the far cheek only
-    face.fold([(74, 33 + b), (80, 35 + b), (86, 33 + b)], "z")                                 # jaw, level
-    face.fold([(73, 22 + b), (76, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 22 + b)], "z")   # brows
-    face.dot(71, 26 + b, "z")                                                                  # nose tip at the profile edge
-    face.fold([(76, 31 + b), (80, 31 + b)], "z")                                               # mouth, centred
+    face = Part("face", [(75, 15 + b), (86, 15 + b), (89, 20 + b), (89, 27 + b), (85, 34 + b), (80, 37 + b), (76, 34 + b), (72, 27 + b), (72, 20 + b)], "S")
+    face.band([(86, 15 + b), (89, 20 + b), (89, 27 + b), (85, 34 + b), (85, 24 + b)], "s")   # a narrow shadow on the far cheek only
+    face.fold([(76, 33 + b), (80, 36 + b), (85, 33 + b)], "z")                                 # jaw, tapering to the chin
+    face.fold([(74, 22 + b), (77, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 22 + b)], "z")   # brows
+    face.dot(73, 26 + b, "z")                                                                  # nose tip at the profile edge
+    face.fold([(77, 31 + b), (80, 31 + b)], "z")                                               # mouth, centred
     hair = Part("hair", [(70, 12 + b), (78, 8 + b), (88, 8 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (90, 22 + b),
                          (86, 16 + b), (82, 20 + b), (79, 15 + b), (76, 21 + b), (73, 17 + b), (70, 22 + b), (68, 18 + b)], "a")
     hair.band([(72, 12 + b), (78, 8 + b), (88, 8 + b), (90, 12 + b), (80, 12 + b), (74, 16 + b)], "A")
@@ -109,7 +109,7 @@ def stance(bob=0):
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
     ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE))
-    for x in (43, 44, 49, 50):
+    for x in (44, 45, 49, 50):
         g.g[ey][x] = "o"
     return g
 
