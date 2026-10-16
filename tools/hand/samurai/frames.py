@@ -379,6 +379,60 @@ def bow(depth=1):
     return g.tidy()
 
 
+
+def click_loose():
+    """select 1: the thumb pushes the tsuba — an inch of steel shows at the mouth with a glint"""
+    f = Fig(P.LEGS_STANCE, STANCE_X)
+    f.far_sleeve()
+    f.tail(P.TAIL_HANG)
+    f.body()
+    f.saya()
+    f.arm(P.ARM_GRIP)
+    mx, my = f.mouth()
+    f.g.put(my - 1, mx - 2, "gg"); f.g.put(my, mx - 2, "gg")
+    blade_poly(f.g, mx - 3, my - 1, mx - 4, my - 2)
+    hilt_poly(f.g, mx - 4, my - 2, mx - 12, my - 6)
+    f.g.put(my - 3, mx - 7, "oSsso"); f.g.put(my - 2, mx - 8, "oSsszo"); f.g.put(my - 1, mx - 7, "ozzzo")
+    f.g.put(my - 3, mx - 3, "H"); f.g.put(my - 4, mx - 4, "H"); f.g.put(my - 2, mx - 4, "H")        # the glint
+    f.obi_tails(OBI_STANCE)
+    return f.g.tidy()
+
+
+def flash():
+    """select 3: the blade fully out, held up-left and still, light running down the edge"""
+    f = Fig(P.LEGS_STANCE, STANCE_X)
+    f.far_sleeve()
+    f.tail(P.TAIL_SWING_BACK)
+    f.body()
+    f.saya()
+    f.arm(P.ARM_NOTO, dx=-4, dy=-1)
+    hx, hy = f.tx - 4, f.ty + 1
+    hilt_poly(f.g, hx + 1, hy + 2, hx - 3, hy + 6)
+    f.g.put(hy + 1, hx + 2, "gg"); f.g.put(hy + 2, hx + 2, "gg")
+    blade_poly(f.g, hx + 3, hy + 1, hx + 20, hy - 16)
+    f.g.put(hy - 18, hx + 21, "H"); f.g.put(hy - 17, hx + 20, "HHH"); f.g.put(hy - 16, hx + 21, "H")   # tip sparkle
+    f.obi_tails(OBI_STANCE)
+    return f.g.tidy()
+
+
+def flick():
+    """select 4: one fast horizontal flick — a smear, feet planted"""
+    f = Fig(P.LEGS_STANCE, STANCE_X)
+    f.far_sleeve()
+    f.tail(P.TAIL_SWING_BACK)
+    f.body()
+    f.saya()
+    f.arm(P.ARM_OUT, dx=-4, dy=2)
+    for j, (x, t) in enumerate(DRAW_SMEAR):
+        f.g.put(f.ty - 2 + j, f.tx + x, t)
+    f.obi_tails(OBI_STANCE)
+    return f.g.tidy()
+
+
+def select_frames():
+    return [stance(), click_loose(), click_loose(), draw(), flash(), flash(), flick(), wipe(1), wipe(1), noto(0), noto(1), stance()]
+
+
 # --- animation sets -------------------------------------------------------------
 def animations():
     return {
@@ -387,6 +441,7 @@ def animations():
         "hold": ([draw(), draw(-1)], 5, True),
         "lunge": ([cut_smear(), cut_impact(), raise_(), down_smear(), down_impact(), down_impact()], 20, False),
         "recover": ([wipe(0), wipe(1), noto(0), noto(1), stance()], 9, False),
+        "select": (select_frames(), 10, False),
         "flourish": ([wipe(0), wipe(1), noto(0), noto(1), stance(), bow(1), bow(2), bow(2), bow(1), stance()], 6, False),
     }
 

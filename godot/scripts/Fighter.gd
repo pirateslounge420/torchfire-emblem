@@ -8,7 +8,8 @@ extends Node2D
 ## editor and the placeholder builder is skipped. Pose names must match POSES.
 
 const POSES := ["idle", "lean", "hold", "lunge", "recover", "block", "hit",
-				"dodge_up", "dodge_down", "dodge_forward", "dodge_back", "parry", "stagger"]
+				"dodge_up", "dodge_down", "dodge_forward", "dodge_back", "parry", "stagger",
+				"select"]   # select = the one-shot weapon flourish when the player picks this fighter
 
 @export var fighter_name := "Fighter"
 @export var archetype := "default"
@@ -54,7 +55,23 @@ func set_art(name: String) -> void:
 	frames = sf
 	sprite.sprite_frames = frames
 	_apply_facing()
-	set_pose(pose)
+	flourish()
+
+
+## Play the pick-me flourish once (if the sheet has one), then settle back into idle.
+func flourish() -> void:
+	if frames.has_animation("select"):
+		pose = "select"
+		sprite.play("select")
+		if not sprite.animation_finished.is_connected(_on_flourish_done):
+			sprite.animation_finished.connect(_on_flourish_done)
+	else:
+		set_pose("idle")
+
+
+func _on_flourish_done() -> void:
+	if pose == "select":
+		set_pose("idle")
 
 
 func _apply_facing() -> void:

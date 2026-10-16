@@ -39,8 +39,14 @@
       "loop": false,
       "fps": 9
     },
-    "flourish": {
+    "select": {
       "start": 24,
+      "count": 12,
+      "loop": false,
+      "fps": 10
+    },
+    "flourish": {
+      "start": 36,
       "count": 10,
       "loop": false,
       "fps": 6
