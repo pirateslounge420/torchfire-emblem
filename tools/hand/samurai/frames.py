@@ -137,7 +137,7 @@ class Fig:
         stamp(self.g, mx - 1, my - 1, part or P.SAYA)
 
     def far_sleeve(self, dx=0, dy=0, part=None):
-        stamp(self.g, self.tx + 10 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
+        stamp(self.g, self.tx + 9 + dx, self.ty + 1 + dy, part or P.FAR_SLEEVE)
 
     def tail(self, part, dx=0, dy=0):
         stamp(self.g, self.tiex + dx, self.tiey + 1 + dy, part)
@@ -156,7 +156,7 @@ class Fig:
 
     def mouth(self):
         """the saya mouth: just in front of the near hip under the obi"""
-        return (self.tx + 4, self.ty + 19)
+        return (self.tx + 5, self.ty + 19)
 
     def hilt_sheathed(self, n=4):
         mx, my = self.mouth()
@@ -164,7 +164,7 @@ class Fig:
         hilt_poly(self.g, mx - 2, my - 1, mx - 2 - 2 * n, my - 1 - n)
 
 
-OBI_STANCE = [(16, 17, "oRro"), (17, 18, "oRro"), (18, 19, "orro"), (19, 20, "oro")]
+OBI_STANCE = [(14, 17, "oRro"), (15, 18, "oRro"), (16, 19, "orro"), (17, 20, "oro")]
 OBI_LUNGE = [(19, 13, "oRro"), (22, 14, "oRrro"), (26, 15, "orro")]
 
 

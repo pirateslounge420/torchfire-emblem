@@ -110,20 +110,198 @@ def sash_tail(g, y, x, whip=0, dx=0):
         P(g, y + 3, x + 5, "oooo", dx)
 
 
+def hood_tail_drift(g, dx=0):
+    """repaint the hood tail (body rows 6-11, x 26-35) lifted by the breeze: straighter and a pixel longer"""
+    P(g, 6, 26, ".oooooo....", dx)
+    P(g, 7, 26, "ookkkkko...", dx)
+    P(g, 8, 26, "kkkkkknkko.", dx)
+    P(g, 9, 26, "onnnnkkkkko", dx)
+    P(g, 10, 26, ".ooooooooo.", dx)
+    P(g, 11, 26, "...........", dx)
+
+
+def chain_to(g, a, b, dx=0, put=None):
+    """chain links along the straight line from body point a to body point b (both exclusive)"""
+    (y0, x0), (y1, x1) = a, b
+    n = max(abs(y1 - y0), abs(x1 - x0))
+    pts = [(y0 + round((y1 - y0) * i / n), x0 + round((x1 - x0) * i / n)) for i in range(1, n)]
+    chain(g, pts, dx, put)
+
+
 # --- frames -------------------------------------------------------------------
-def idle(bob=0, swing=0):
-    """beat 1: low crouch, chain coiled in the near fist, weight dangling, sickle held back"""
+def idle(bob=0, swing=0, drift=False, sash=0):
+    """at rest: low ready crouch, chain coiled in the near fist, the weight dangling and swinging a pixel
+    or two, sickle held back. bob = 1-px breathe, drift = hood tail lifted, sash = sash_tail whip"""
     g = body()
+    if drift:
+        hood_tail_drift(g)
     if bob:
         g.shift_region(0, 0, BOX, GROUND - 12, 0, bob)
+        P(g, 28, 5, "ooooo")               # the hand's bottom outline, lost under the shifted rows
     sickle_back(g)
-    sash_tail(g, 22, 25, 0)
+    sash_tail(g, 22, 25, sash)
     # chain looped twice across the fist, one link out of the bottom, the weight dangling below
     P(g, 25 + bob, 6, "hgh"); P(g, 26 + bob, 6, "ghg")
     P(g, 27 + bob, 4, "ho")
     chain(g, [(28 + bob, 3 + swing)])
     weight(g, 30 + bob, 2 + swing)
     return g.tidy()
+
+
+def idle_loop():
+    """8 frames at 6 fps: the weight swings forward, pauses, swings back, pauses (a pendulum rests at its
+    ends); the breathe and the two tails drift on their own offsets so nothing moves in lockstep"""
+    swing = [0, -1, -1, -1, 0, 1, 1, 1]
+    bob = [0, 0, 1, 1, 1, 1, 0, 0]
+    drift = [0, 0, 0, 1, 1, 1, 1, 0]
+    sash = [0, 0, 0, 0, 3, 3, 3, 0]
+    return [idle(bob[i], swing[i], bool(drift[i]), sash[i]) for i in range(8)]
+
+
+# --- select flourish ------------------------------------------------------------
+import math  # noqa: E402
+
+HAND = (17, 2)       # centre of the open palm in body_spin.txt (row, col)
+R = 8                # ring radius: a chain's length
+
+
+def polar(theta, r=R):
+    """body point at angle theta (degrees, 0 = straight up, clockwise on screen) around the palm"""
+    cy, cx = HAND
+    return (round(cy - r * math.cos(math.radians(theta))), round(cx + r * math.sin(math.radians(theta))))
+
+
+def ring_pixels(r):
+    pts = []
+    for t in range(0, 360, 3):
+        p = polar(t, r)
+        if p not in pts:
+            pts.append(p)
+    return pts
+
+
+def composite_effect(g, fx):
+    """lay an effect grid (body coords, same size as the box) onto the frame: pixels below the palm's row
+    go in FRONT of the arm, pixels above it go BEHIND (the chain passes round the arm)"""
+    for yy in range(fx.h):
+        for xx in range(fx.w):
+            ch = fx.g[yy][xx]
+            if ch == ".":
+                continue
+            y, x = yy - (GROUND - 39), xx - X_OFF
+            (P if y > HAND[0] else U)(g, y, x, ch)
+
+
+def ring_smear(theta):
+    """the ring smear as an effect grid: a white core with a red-tinted fringe, thickest just behind the
+    weight and thinning to a single fringe line opposite it, the weight itself an iron blur with
+    afterimage dots a beat behind"""
+    fx = Grid(BOX, BOX)
+    for t in range(0, 360, 2):
+        back = (theta - t) % 360
+        radii = (6, 7, 8) if back < 110 else (7, 8) if back < 230 else (8,)
+        for r in radii:
+            y, x = polar(t, r)
+            P(fx, y, x, "H" if r == 7 else "e")
+    y, x = polar(theta)
+    P(fx, y, x, "gg"); P(fx, y + 1, x, "gh"); P(fx, y - 1, x + 1, "g")
+    ty, tx = polar(theta - 15)
+    P(fx, ty, tx, "h")
+    for back in (150, 250):
+        y, x = polar(theta - back, R + 1)
+        P(fx, y, x, "g")
+    return fx
+
+
+def spin_body(sash=1, drift=True):
+    g = body("body_spin")
+    if drift:
+        hood_tail_drift(g)
+    sickle_back(g)
+    sash_tail(g, 22, 25, sash)
+    return g
+
+
+def swing_start():
+    """select 1: arm thrust out, the weight dropped off the palm and swinging back under the hand"""
+    g = spin_body(0, False)
+    wy, wx = polar(160)
+    chain_to(g, (19, 2), (wy - 2, wx), )
+    weight(g, wy - 1, wx - 1)
+    return g.tidy()
+
+
+def swing_forward():
+    """select 2: the pendulum swings forward and up, the chain straightening"""
+    g = spin_body(0, False)
+    wy, wx = polar(235)
+    chain_to(g, (18, 1), (wy - 1, wx + 1))
+    weight(g, wy - 1, wx - 1)
+    return g.tidy()
+
+
+def swing_up():
+    """select 3: faster — the weight rising past the shoulder, the first red smear behind it"""
+    g = spin_body(0, True)
+    wy, wx = polar(290)
+    chain_to(g, (17, 1), (wy + 1, wx + 1))
+    for t in (255, 265, 275):
+        y, x = polar(t)
+        U(g, y, x, "e")
+    weight(g, wy - 1, wx - 1)
+    return g.tidy()
+
+
+def flurry(theta, fade=False):
+    """select 4-6: a full ring smear round the palm, the weight a blur at theta with afterimage dots.
+    fade: the ring breaking up into dots, the weight already pulled halfway in"""
+    g = spin_body(1, True)
+    if not fade:
+        for i, (y, x) in enumerate(ring_pixels(R)):
+            ring_put(g, y, x, "H" if (i // 3) % 2 == 0 else "e")
+        for (y, x) in ring_pixels(R - 1):
+            if ((y * 3 + x) % 4) == 0:
+                ring_put(g, y, x, "e")
+        weight_blur(g, theta)
+        for back in (135, 200):               # afterimage dots of the weight a beat ago
+            y, x = polar(theta - back, R + 1)
+            ring_put(g, y, x, "g")
+    else:
+        for i, (y, x) in enumerate(ring_pixels(R)):
+            if i % 3 == 0:
+                ring_put(g, y, x, "e")
+        for back in (0, 60, 130):
+            y, x = polar(theta - back, R)
+            ring_put(g, y, x, "g")
+        wy, wx = polar(theta + 40, 5)         # the weight yanked halfway in, chain shortening
+        chain_to(g, HAND, (wy, wx))
+        weight(g, wy - 1, wx - 1)
+    return g.tidy()
+
+
+def snap():
+    """select 7: the weight slapped back into the palm with a glint, the slack chain dropping in a loop"""
+    g = spin_body(2, True)
+    cy, cx = HAND
+    chain(g, [(cy + 3, cx + 1), (cy + 4, cx + 2), (cy + 5, cx + 2), (cy + 6, cx + 1), (cy + 6, cx), (cy + 5, cx - 1), (cy + 4, cx - 1)])
+    weight(g, cy - 1, cx - 1)
+    for ddy, ddx in ((-3, 0), (3, 0), (0, -3), (0, 3)):
+        P(g, cy + ddy, cx + ddx, "H")
+    for ddy, ddx in ((-4, 0), (4, 0), (0, -4), (0, 4), (-2, -2), (-2, 2), (2, -2), (2, 2)):
+        P(g, cy + ddy, cx + ddx, "e")
+    return g.tidy()
+
+
+def settle():
+    """select 8: back down into the ready crouch, the last of the glint fading off the fist"""
+    g = idle(0, 1, True, 1)
+    P(g, 22, 4, "H"); P(g, 27, 2, "e"); P(g, 24, 10, "e")
+    return g.tidy()
+
+
+def select_anim():
+    return [swing_start(), swing_forward(), swing_up(), flurry(0), flurry(135), flurry(270), flurry(330, fade=True),
+            snap(), settle(), idle(0, 0)]
 
 
 def swing_back():
@@ -218,7 +396,8 @@ def yank():
 
 def animations():
     return {
-        "idle": ([idle(0, 0), idle(1, 1), idle(1, 0), idle(0, -1)], 5, True),
+        "idle": (idle_loop(), 6, True),
+        "select": (select_anim(), 10, False),
         "lean": ([swing_back(), whirl(), whirl()], 10, False),
         "hold": ([whirl(), whirl(-1)], 5, True),
         "lunge": ([smear(), impact(), impact()], 20, False),
@@ -230,10 +409,13 @@ def main():
     anims = animations()
     n = PAL.check([g for frames, _, _ in anims.values() for g in frames])
     imgs = {k: ([render(g, PAL) for g in frames], fps, loop) for k, (frames, fps, loop) in anims.items()}
-    beats = [imgs["idle"][0][0], imgs["lean"][0][0], imgs["lean"][0][1], imgs["lunge"][0][0], imgs["lunge"][0][1], imgs["recover"][0][0]]
+    sel = imgs["select"][0]
+    beats = [imgs["idle"][0][0]] + sel[:8] + [imgs["lean"][0][0], imgs["lean"][0][1], imgs["lunge"][0][0], imgs["lunge"][0][1], imgs["recover"][0][0]]
     strip(beats, os.path.join(HERE, f"{NAME}_attack.png"), zoom=5,
-          labels=["stance", "weight back", "whirl overhead", "streak", "impact", "yank"])
-    gif(beats + [imgs["idle"][0][0]], os.path.join(HERE, f"{NAME}_attack.gif"), [500, 120, 220, 70, 320, 160, 500])
+          labels=["idle", "sel: drop", "swing", "swing up", "flurry", "flurry", "flurry", "fade", "snap",
+                  "weight back", "whirl overhead", "streak", "impact", "yank"])
+    gif(imgs["idle"][0] + sel + beats[9:] + [imgs["idle"][0][0]], os.path.join(HERE, f"{NAME}_attack.gif"),
+        [160] * 8 + [100] * 10 + [120, 220, 70, 320, 160, 500])
     out_dir = os.path.join(HERE, "..", "..", "..", "godot", "art", f"{NAME}_v2")
     sheet(imgs, out_dir, NAME, BOX, ORIGIN)
     print(f"{NAME}: {sum(len(f) for f, _, _ in imgs.values())} frames, {n} colours -> {os.path.abspath(out_dir)}")

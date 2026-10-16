@@ -11,30 +11,36 @@
   "animations": {
     "idle": {
       "start": 0,
-      "count": 4,
+      "count": 8,
       "loop": true,
-      "fps": 5
+      "fps": 6
+    },
+    "select": {
+      "start": 8,
+      "count": 11,
+      "loop": false,
+      "fps": 10
     },
     "lean": {
-      "start": 4,
+      "start": 19,
       "count": 3,
       "loop": false,
       "fps": 10
     },
     "hold": {
-      "start": 7,
+      "start": 22,
       "count": 2,
       "loop": true,
       "fps": 5
     },
     "lunge": {
-      "start": 9,
+      "start": 24,
       "count": 3,
       "loop": false,
       "fps": 20
     },
     "recover": {
-      "start": 12,
+      "start": 27,
       "count": 3,
       "loop": false,
       "fps": 9

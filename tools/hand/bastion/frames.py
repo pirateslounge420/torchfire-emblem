@@ -226,9 +226,204 @@ def haul():
     return g.tidy()
 
 
+# --- idle: an 8-frame at-rest loop -------------------------------------------------------------
+# The tabard tail hanging behind the far leg, rows 30-35, cols 29-35 of the body grid.
+# '?' = the leg underneath, '.' clears a pixel. Three hand-drawn states of the cloth.
+TAIL_REST = """
+?Cco...
+?Ccco..
+??Cco..
+??cco..
+???co..
+???oo..
+"""
+TAIL_OUT = """
+?Cco...
+?Ccco..
+??Ccco.
+??ccco.
+???cco.
+???ooo.
+"""
+TAIL_TUCK = """
+?Cco...
+?Cco...
+??Cco..
+??co...
+???o...
+???....
+"""
+
+
+def breathe(g, up):
+    """lift both pauldrons `up` px (1 = inhale). Body-grid regions converted to box coords;
+    the chest plate, helm and arms stay put so only the shoulders move."""
+    if not up:
+        return
+    bx, by = X_OFF, GROUND - (BODY_H - 1)
+    g.shift_region(bx + 6, by + 11, bx + 16, by + 27, 0, -up)     # near pauldron
+    g.shift_region(bx + 28, by + 10, bx + 39, by + 26, 0, -up)    # far pauldron
+
+
+def idle(up=0, visor="VVV", tail=TAIL_REST):
+    """at rest: planted wide, mace head on the ground in front, both gauntlets stacked on the haft"""
+    g = body()
+    breathe(g, up)
+    P(g, 6, 15, visor)                                       # the glow pulses: V -> G (plate edge) -> V
+    B(g, 30, 29, tail)
+    haft(g, -2, 36, 15, 24, grip=range(23, 31))
+    mace_head(g, 37, -6)
+    P(g, 23, 15, "oKo"); P(g, 24, 15, "oKKo")                # pommel knob
+    B(g, 21, 12, FAR_ARM_STANCE)
+    B(g, 20, 4, NEAR_ARM_STANCE)
+    return g.tidy()
+
+
+# --- select: a one-shot flourish when the player picks him ----------------------------------------
+# Both gauntlets grip the MIDDLE of the haft out in front at chest height (near hand below, far hand
+# above); the near arm hangs from the pauldron to the elbow and the forearm rises to the gauntlet.
+NEAR_ARM_FRONT = """
+?oooooo???
+oGGkKKo???
+oGkKKKo???
+opqqqKo???
+oGkKKKoKo?
+oGkKKKoKKo
+oGkKKKoKKo
+?oKKKKokKo
+?oKKKKKkKo
+??oooooooo
+"""
+
+GLINT = [(0, -2, "H"), (1, -2, "H"), (2, -4, "hHHHh"), (3, -2, "H"), (4, -2, "H")]
+
+
+def front_grip(g):
+    B(g, 15, 3, FAR_GAUNTLET)
+    B(g, 20, 2, NEAR_ARM_FRONT)
+
+
+def spin_level():
+    """select beat 2: mace hauled up level at chest height, head forward, hands at the mid-haft"""
+    g = body()
+    haft(g, 14, 19, -4, 19)
+    P(g, 18, 15, "oo"); P(g, 19, 15, "Ko"); P(g, 20, 15, "Ko"); P(g, 21, 15, "oo")   # pommel knob at the chest
+    mace_head(g, 16, -11)
+    front_grip(g)
+    return g.tidy()
+
+
+def spin_fwdup():
+    """select beat 3: the head swings up and forward (45 degrees)"""
+    g = body()
+    haft(g, 13, 27, -2, 12)
+    P(g, 28, 13, "oKo"); P(g, 29, 14, "oKo")                                       # pommel knob
+    mace_head(g, 5, -9)
+    front_grip(g)
+    return g.tidy()
+
+
+def ring_pixels():
+    """the spin smear: one thick crescent of the mace head's path over the helm, pointed at both ends.
+    Centre is the grip (6,20); the core 'H' rides radius 16-17 with an 'h' fringe either side."""
+    import math
+    cx, cy = 6.0, 20.0
+    px = {}
+    steps = 240
+    for i in range(steps + 1):
+        t = i / steps
+        ang = math.pi + 0.35 - t * (math.pi + 0.35 - 0.15)   # from forward-low, over the top, to the back
+        thick = 1.0 + 3.2 * math.sin(math.pi * t) ** 0.9     # thin tips, thick crown
+        for r in (15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 18.5, 19.0):
+            dr = abs(r - 17.0)
+            if dr > thick / 2:
+                continue
+            x = round(cx + r * math.cos(ang)); y = round(cy - r * math.sin(ang))
+            ch = "H" if dr <= thick / 2 - 1.0 and thick > 2.2 else "h"
+            if px.get((y, x)) != "H":
+                px[(y, x)] = ch
+    return px
+
+
+RING = ring_pixels()
+
+
+def spin_ring():
+    """select beat 4: the whole mace is one orange-fringed ring smear whirling over the helm"""
+    g = body()
+    front_grip(g)
+    for (y, x), ch in RING.items():
+        P(g, y, x, ch)
+    for y, x, t in [(14, -14, "h"), (2, 24, "h"), (0, 16, "h")]:                     # loose flecks
+        P(g, y, x, t)
+    return g.tidy()
+
+
+def spin_up(glint=True):
+    """select beat 5: caught pointing straight up (3:1 lean forward so the head clears the horn)"""
+    g = body()
+    haft(g, 9, 30, 3, 10)
+    P(g, 31, 9, "oKo"); P(g, 32, 9, "oKo")                                         # pommel knob
+    mace_head(g, 3, -1)
+    front_grip(g)
+    if glint:
+        for y, x, t in GLINT:
+            P(g, y, x, t)
+    return g.tidy()
+
+
+STREAK = [(9, 1, "hh"), (11, -1, "hHh"), (13, -3, "hHHh"), (15, -5, "hHHh"), (17, -6, "hHHHh"), (19, -7, "hHHHh"),
+          (21, -8, "hHHHh"), (23, -9, "hHHh"), (25, -9, "hHHh"), (27, -10, "hHh"), (29, -10, "hh")]
+
+
+def slam_streak():
+    """select beat 6: the mace comes down hard, the head's path a pale streak down the front;
+    the hands have slid back to the pommel end for the slam"""
+    g = body()
+    for y, x, t in STREAK:
+        P(g, y, x, t)
+    haft(g, 14, 22, -3, 33, grip=range(22, 27))
+    mace_head(g, 30, -9)
+    P(g, 21, 14, "oKo"); P(g, 22, 15, "oKo")                                       # pommel knob
+    B(g, 21, 8, FAR_GAUNTLET)
+    P(g, 21, 13, "KKo"); P(g, 22, 13, "kKo"); P(g, 23, 13, "ooo")                   # far forearm stub
+    B(g, 21, 3, NEAR_ARM_LIFT)
+    return g.tidy()
+
+
+SLAM_DUST = [(36, -10, "d"), (38, -11, "dd"), (40, -13, "d"), (42, -11, "d"), (37, 2, "d"), (39, 3, "dd"), (41, 5, "d"),
+             (35, -4, "H"), (36, -1, "h"), (36, 1, "H"), (34, 3, "h")]
+SLAM_DUST2 = [(33, -12, "d"), (35, -8, "d"), (36, -13, "dd"), (39, -14, "d"), (32, -5, "d"), (34, 6, "d"), (33, 3, "d"),
+              (37, 6, "dd"), (40, 8, "d"), (41, -10, "d")]
+SETTLE_DUST = [(30, -13, "d"), (31, -7, "d"), (30, 7, "d"), (32, 9, "d")]
+
+
+def slam_impact(drop=1, dust=SLAM_DUST):
+    """select beat 7: the head buried back in its resting spot; the whole body drops `drop` px
+    (the screen-shake jolt) while the head stays in the ground, so the haft steepens a hair"""
+    g = body(dy=drop)
+    haft(g, -2, 36, 15, 24 + drop, grip=range(23 + drop, 31 + drop))
+    mace_head(g, 37, -6)
+    P(g, 23, 15, "oKo", dy=drop); P(g, 24, 15, "oKKo", dy=drop)
+    B(g, 21, 12, FAR_ARM_STANCE, dy=drop)
+    B(g, 20, 4, NEAR_ARM_STANCE, dy=drop)
+    for y, x, t in dust:
+        P(g, y, x, t)
+    return g.tidy()
+
+
 def animations():
+    idle_frames = [
+        idle(0, "VVV", TAIL_REST), idle(0, "VVV", TAIL_REST), idle(0, "VVV", TAIL_OUT), idle(1, "VVV", TAIL_OUT),
+        idle(1, "GVG", TAIL_REST), idle(1, "GGG", TAIL_TUCK), idle(0, "GVG", TAIL_TUCK), idle(0, "VVV", TAIL_REST),
+    ]
+    select_frames = [
+        haul(), spin_level(), spin_fwdup(), spin_ring(), spin_up(True), spin_up(False),
+        slam_streak(), slam_impact(1, SLAM_DUST), slam_impact(0, SLAM_DUST2), slam_impact(0, SETTLE_DUST), idle_frames[0],
+    ]
     return {
-        "idle": ([stance(0), stance(1), stance(1), stance(0)], 5, True),
+        "idle": (idle_frames, 6, True),
+        "select": (select_frames, 10, False),
         "lean": ([mace_back(), raised(), raised()], 10, False),
         "hold": ([raised(), raised(-1)], 5, True),
         "lunge": ([smear(), impact(), impact()], 20, False),
@@ -240,10 +435,14 @@ def main():
     anims = animations()
     n = PAL.check([g for frames, _, _ in anims.values() for g in frames])
     imgs = {k: ([render(g, PAL) for g in frames], fps, loop) for k, (frames, fps, loop) in anims.items()}
-    beats = [imgs["idle"][0][0], imgs["lean"][0][0], imgs["lean"][0][1], imgs["lunge"][0][0], imgs["lunge"][0][1], imgs["recover"][0][0]]
+    sel = imgs["select"][0]
+    beats = [imgs["idle"][0][0], sel[1], sel[2], sel[3], sel[4], sel[6], sel[7], sel[9],
+             imgs["lean"][0][0], imgs["lean"][0][1], imgs["lunge"][0][0], imgs["lunge"][0][1], imgs["recover"][0][0]]
     strip(beats, os.path.join(HERE, f"{NAME}_attack.png"), zoom=5,
-          labels=["stance", "mace back-low", "raised, two hands", "smear", "ground smash", "haul up"])
-    gif(beats + [imgs["idle"][0][0]], os.path.join(HERE, f"{NAME}_attack.gif"), [500, 160, 260, 70, 360, 200, 500])
+          labels=["idle", "sel: level", "sel: swing up", "sel: ring", "sel: caught", "sel: slam", "sel: impact", "sel: settle",
+                  "mace back-low", "raised, two hands", "smear", "ground smash", "haul up"])
+    gif(imgs["idle"][0] + sel + beats[8:] + [imgs["idle"][0][0]], os.path.join(HERE, f"{NAME}_attack.gif"),
+        [160] * 8 + [100] * 11 + [160, 260, 70, 360, 200, 500])
     out_dir = os.path.join(HERE, "..", "..", "..", "godot", "art", f"{NAME}_v2")
     sheet(imgs, out_dir, NAME, BOX, ORIGIN)
     print(f"{NAME}: {sum(len(f) for f, _, _ in imgs.values())} frames, {n} colours -> {os.path.abspath(out_dir)}")
