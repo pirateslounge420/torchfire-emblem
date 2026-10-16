@@ -22,8 +22,24 @@ TOP = GROUND - 66          # the sprite's row 0 in the box
 
 PAL = Palette(NAME, {l: tuple(int(v) for v in rest.split()) for l, rest in
                      (ln.strip().split(" ", 1) for ln in open(os.path.join(HERE, "palette.txt")) if ln.strip())})
-# letters: N near-black (the sprite's own outline), E/G dark cloth, A/H/F/M blues, B/D steel, I/K blue-grey,
-#          C/J/L skin (mid / light / dark). 'o' = our outline where the photo's red fringe was.
+
+
+def _nearest(rgb):
+    return min(((l, c) for l, c in PAL.map.items() if l != "o"), key=lambda lc: sum((a - b) ** 2 for a, b in zip(lc[1], rgb)))[0]
+
+
+# overlays are written in ROLE letters and translated to whatever letters the extractor assigned this time
+ROLE = {
+    "c": _nearest((195, 129, 66)), "j": _nearest((232, 189, 123)), "l": _nearest((112, 56, 21)),      # skin mid / light / dark
+    "f": _nearest((43, 77, 190)), "h": _nearest((27, 58, 150)), "a": _nearest((17, 36, 91)),         # blue light / mid / dark
+    "b": _nearest((186, 202, 210)), "d": _nearest((105, 124, 138)), "k": _nearest((8, 8, 14)),       # steel light / mid, black
+    "e": _nearest((32, 30, 45)), "g": _nearest((120, 141, 182)),                                     # dark cloth, blue-grey
+}
+TR = str.maketrans({k: v for k, v in ROLE.items()})
+
+
+def R(text):
+    return text.translate(TR)
 
 ARM_ROWS = (14, 28)        # the crossed-arms band in sprite rows
 
@@ -47,39 +63,39 @@ def breathe(k):
 
 # ------------------------------------------------------------------ the open-arms torso
 # the crossed arms are replaced by the suit's chest and two straight arms (overlays in sprite rows 14-28)
-CHEST = [
-    "...NNNNNNNNNN....",
-    "..NFFHHMMHHFFN...",
-    "..NFFHHMMHHFFAN..",
-    ".NAFFHHMHHFFAAN..",
-    ".NAFFHHMHHFFAAN..",
-    ".NAAFFHHHFFAAAN..",
-    ".NAAFFHHHFFAAAN..",
-    ".NAAAFFHFFAAAEN..",
-    ".NAAAAFFFAAAEEN..",
-    ".NAAAAAFAAAEEEN..",
-    "..NAAAAAAAEEEN...",
-    "..NNNNNNNNNNNN...",
-]
-ARM_DOWN_NEAR = [          # the near arm hanging, fist by the hip
-    "NCJN",
-    "NCJCN",
-    "NCCJCN",
-    ".NCJCN",
-    ".NCJCN",
-    ".NCCLN",
-    ".NJJCN",
-    ".NCCLN",
-    "..NNN.",
-]
-ARM_UP_FAR = [             # the far arm reaching up over the shoulder to the hilt
-    ".NJCN",
-    "NJCCN",
-    "NCCLN",
-    "NCLN.",
-    "NCLN.",
-    ".NN..",
-]
+CHEST = [R(s) for s in [
+    "...kkkkkkkkkk....",
+    "..kffhhffhhffk...",
+    "..kffhhffhhffak..",
+    ".kaffhhfhhffaak..",
+    ".kaffhhfhhffaak..",
+    ".kaaffhhhffaaak..",
+    ".kaaffhhhffaaak..",
+    ".kaaaffhffaaaek..",
+    ".kaaaafffaaaeek..",
+    ".kaaaaafaaaeeek..",
+    "..kaaaaaaaeeek...",
+    "..kkkkkkkkkkkk...",
+]]
+ARM_DOWN_NEAR = [R(s) for s in [          # the near arm hanging, fist by the hip
+    "kcjk",
+    "kcjck",
+    "kccjck",
+    ".kcjck",
+    ".kcjck",
+    ".kcclk",
+    ".kjjck",
+    ".kcclk",
+    "..kkk.",
+]]
+ARM_UP_FAR = [R(s) for s in [             # the far arm reaching up over the shoulder to the hilt
+    ".kjck",
+    "kjcck",
+    "kcclk",
+    "kclk.",
+    "kclk.",
+    ".kk..",
+]]
 
 
 def open_torso(g, dx=0, dy=0):
@@ -91,13 +107,14 @@ def open_torso(g, dx=0, dy=0):
         P(g, 17 + i, 5, row, dx, dy)
 
 
-def blade(g, x, y, n, step, dx=0, dy=0, edge="B", mid="D"):
+def blade(g, x, y, n, step, dx=0, dy=0):
+    edge, mid, k = ROLE["b"], ROLE["d"], ROLE["k"]
     for i in range(n):
         px, py = x + step[0] * i, y + step[1] * i
         if step[1] == 0:
-            P(g, py - 1, px, "N", dx, dy); P(g, py, px, edge, dx, dy); P(g, py + 1, px, mid, dx, dy); P(g, py + 2, px, "N", dx, dy)
+            P(g, py - 1, px, k, dx, dy); P(g, py, px, edge, dx, dy); P(g, py + 1, px, mid, dx, dy); P(g, py + 2, px, k, dx, dy)
         else:
-            P(g, py, px, "N" + edge + mid + "N", dx, dy)
+            P(g, py, px, k + edge + mid + k, dx, dy)
 
 
 def reach():
@@ -117,16 +134,16 @@ def draw_high():
     g.clear(X_OFF + 24, TOP + 1, X_OFF + 34, TOP + 10)
     for i, row in enumerate(ARM_UP_FAR):
         P(g, 6 + i, 20, row)
-    P(g, 5, 20, "NLLN"); P(g, 4, 21, "NLLN")               # the hilt in the hand
+    P(g, 5, 20, R("kllk")); P(g, 4, 21, R("kllk"))               # the hilt in the hand
     blade(g, 24, 3, 12, (1, -1))                            # blade up-right
     return g.tidy()
 
 
-SMEAR = [  # a wedge sweeping from over the head down to the front
-    (-6, 20, "KBBBK"), (-4, 14, "KBBBBBBBBK"), (-2, 9, "KBBBBBBBBBBBBK"), (0, 5, "KBBBBBBBBBBBBBBBK"), (2, 2, "KBBBBBBBBBBBBBBBBK"),
-    (4, 0, "KKBBBBBBBBBBBBBBBKK"), (6, -2, "KKKBBBBBBBBBBBBKKK"), (8, -4, "KKKKBBBBBBBBBKKKK"), (10, -6, "KKKKKBBBBBKKKKK"), (12, -8, "KKKKKKKKKKKK"),
-    (14, -9, "KKKKKKKK"), (16, -10, "KKKK"),
-]
+SMEAR = [(y, x, R(t)) for y, x, t in [  # a wedge sweeping from over the head down to the front
+    (-6, 20, "gbbbg"), (-4, 14, "gbbbbbbbbg"), (-2, 9, "gbbbbbbbbbbbbg"), (0, 5, "gbbbbbbbbbbbbbbbg"), (2, 2, "gbbbbbbbbbbbbbbbbg"),
+    (4, 0, "ggbbbbbbbbbbbbbbbgg"), (6, -2, "gggbbbbbbbbbbbbggg"), (8, -4, "ggggbbbbbbbbbgggg"), (10, -6, "gggggbbbbbggggg"), (12, -8, "gggggggggggg"),
+    (14, -9, "gggggggg"), (16, -10, "gggg"),
+]]
 
 
 def smear():
@@ -145,7 +162,7 @@ def slash():
     open_torso(g, dx=-6)
     g.clear(X_OFF + 20, TOP + 1, X_OFF + 30, TOP + 10)
     # the far arm swung down and forward past the near side
-    P(g, 20, 1, "NCJN", -6); P(g, 21, -1, "NJCCN", -6); P(g, 22, -3, "NCCLN", -6); P(g, 23, -4, "NLLN", -6)
+    P(g, 20, 1, R("kcjk"), -6); P(g, 21, -1, R("kjcck"), -6); P(g, 22, -3, R("kcclk"), -6); P(g, 23, -4, R("kllk"), -6)
     blade(g, -6, 24, 10, (-1, 1), dx=-6)                    # blade down-left
     return g.tidy()
 
@@ -154,7 +171,7 @@ def recover():
     g = body(dx=-2)
     open_torso(g, dx=-2)
     g.clear(X_OFF + 22, TOP + 1, X_OFF + 32, TOP + 10)
-    P(g, 24, 2, "NCJN", -2); P(g, 25, 1, "NCCN", -2); P(g, 26, 1, "NLLN", -2)
+    P(g, 24, 2, R("kcjk"), -2); P(g, 25, 1, R("kcck"), -2); P(g, 26, 1, R("kllk"), -2)
     blade(g, 0, 27, 9, (-1, 1), dx=-2)
     return g.tidy()
 
@@ -162,10 +179,10 @@ def recover():
 def select_frames():
     a = body(); b = reach()
     c = body(); open_torso(c)
-    for i, row in enumerate(["NJCN", "NCCN", "NLLN"]):
+    for i, row in enumerate([R("kjck"), R("kcck"), R("kllk")]):
         P(c, 22 + i, 22, row)
     # eye flash: the visor slit glints
-    d = c.copy(); P(d, 7, 12, "BB"); P(d, 7, 16, "BB")
+    d = c.copy(); P(d, 7, 12, R("bb")); P(d, 7, 16, R("bb"))
     return [a, b, c, d, d, c, b, a]
 
 
