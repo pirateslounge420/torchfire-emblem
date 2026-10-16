@@ -491,8 +491,8 @@ def animations():
           effects=[(SPARK, "wr_far", -6, 2)]),
     ]
     hit = [
-        P(dx=1, head="hurt", lean=(0, 0), head_off=(1, 0), far=(-1, 2)),
-        P(dx=1, head="hurt", lean=(0, 1), head_off=(1, 1), far=(-1, 3)),
+        P(dx=1, head="hurt", lean=(0, 0), head_off=(1, 0), far=(0, 1)),
+        P(dx=1, head="hurt", lean=(0, 1), head_off=(1, 1), far=(0, 1)),
     ]
     # Stagger (mace): too armoured to kneel. Rocks back on the heels, arms
     # out, the mace dropping to vertical; then a wide squat, hands on the
@@ -500,10 +500,10 @@ def animations():
     stagger = [
         P(dx=5, head="hurt", lean=(3, 0), head_off=(1, 0),
           near_leg=(104, 84), far_leg=(74, 100), far_boot="back",
-          far=(-4, -2), far_bend=-1, weapon=W(97, "solo"),
+          far=(-4, -6), far_bend=-1, weapon=W(97, "solo"),
           near_arm=(182, 150), near_hand="open"),
-        P(dx=4, head="hurt", lean=(-1, 2), head_off=(0, 1), far=(-3, -6), weapon=W(118), **squat),
-        P(dx=3, head="normal", lean=(0, 1), far=(-3, -1), weapon=W(128),
+        P(dx=4, head="hurt", lean=(-1, 2), head_off=(0, 1), far=(-3, -8), weapon=W(118), **squat),
+        P(dx=3, head="normal", lean=(0, 1), far=(-3, -3), weapon=W(128),
           near_leg=(128, 100), far_leg=(52, 84)),
     ]
 
