@@ -45,11 +45,13 @@ def stance(bob=0):
     hak.fold([(78, 66), (76, 90), (74, 112)], "n")
     hak.fold([(85, 66), (88, 84)], "n")
     hak.fold([(90, 70), (94, 92), (96, 112)], "k")
-    # ---- feet (tabi + sandals), small
-    foot_near = Part("foot_near", [(56, 112), (76, 112), (78, 116), (74, 118), (54, 118), (52, 115)], "L")
-    foot_near.band([(56, 112), (76, 112), (76, 114), (56, 114)], "z")
-    foot_far = Part("foot_far", [(84, 112), (104, 112), (106, 115), (103, 118), (84, 118), (83, 115)], "L")
-    foot_far.band([(84, 112), (104, 112), (104, 114), (84, 114)], "z")
+    # ---- feet: small tabi on sandals, peeking out under the hem (hem overlaps their tops)
+    foot_near = Part("foot_near", [(60, 110), (71, 110), (73, 114), (71, 118), (58, 118), (56, 114)], "h")
+    foot_near.band([(56, 115), (73, 115), (71, 118), (58, 118)], "L")            # the sandal sole
+    foot_near.fold([(63, 111), (63, 115)], "g")                                   # the tabi split
+    foot_far = Part("foot_far", [(88, 110), (99, 110), (102, 114), (100, 118), (87, 118), (85, 114)], "h")
+    foot_far.band([(85, 115), (102, 115), (100, 118), (87, 118)], "L")
+    foot_far.band([(88, 110), (99, 110), (102, 114), (96, 114), (92, 111)], "g")
     # ---- torso: the gi, narrow, lit from the upper left
     torso = Part("torso", [(69, 36 + b), (95, 36 + b), (95, 50 + b), (93, 66 + b), (70, 66 + b), (68, 50 + b)], "k")
     torso.band([(69, 36 + b), (80, 36 + b), (77, 50 + b), (74, 66 + b), (70, 66 + b), (68, 50 + b)], "c")
@@ -98,7 +100,7 @@ def stance(bob=0):
     sidelock.band([(90, 20 + b), (92, 20 + b), (93, 36 + b), (91, 40 + b)], "g")
     tie = Part("tie", [(95, 36 + b), (100, 35 + b), (101, 40 + b), (96, 41 + b)], "R")
 
-    f.add(tail, far_sleeve, hak, foot_near, foot_far, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
+    f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
     f.scale(SCALE, 80, DGROUND + 1, 48, GROUND + 1)
     f.w, f.h = W, H
     return f.raster()
