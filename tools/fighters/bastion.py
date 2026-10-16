@@ -125,12 +125,17 @@ mCcckkn
 .nnnnn.
 """, anchor=(3, 2))
 
-# Gambeson showing at an elbow / knee.
+# Gambeson showing at a knee (wide) and an elbow (small diamond).
 JOINT = grid("""
 .Aaa.
 Aaaqq
 .aqq.
 """, anchor=(2, 1))
+ELBOW = grid("""
+.a.
+Aaq
+.q.
+""", anchor=(1, 1))
 
 # Gauntlets (anchor = wrist) and sabatons (anchor = ankle, top centre).
 GAUNT = grid("""
@@ -203,11 +208,11 @@ def dash_lines(x, y, n=3, length=8):
 def dust(stage=0):
     """Dust kicked up by the mace head: stage 0 = the burst, 1 = rising, 2 = fading."""
     sets = [
-        [(-6, -4, "e"), (-4, -7, "E"), (-2, -9, "e"), (1, -9, "e"), (3, -7, "E"), (6, -4, "e"),
-         (-8, -1, "e"), (8, -2, "e"), (-9, 2, "e"), (9, 1, "e"), (0, -6, "e")],
-        [(-9, -7, "e"), (-6, -11, "e"), (-2, -13, "E"), (3, -12, "e"), (7, -9, "e"), (10, -5, "e"),
-         (-11, -2, "e"), (12, 0, "e"), (-4, -9, "e"), (5, -6, "e")],
-        [(-10, -11, "e"), (-5, -15, "e"), (2, -16, "e"), (8, -13, "e"), (12, -8, "e"), (-13, -5, "e")],
+        [(-5, -4, "e"), (-4, -7, "E"), (-2, -9, "e"), (1, -9, "e"), (3, -7, "E"), (6, -4, "e"),
+         (-6, -1, "e"), (8, -2, "e"), (-6, 2, "e"), (9, 1, "e"), (0, -6, "e")],
+        [(-6, -7, "e"), (-5, -11, "e"), (-2, -13, "E"), (3, -12, "e"), (7, -9, "e"), (10, -5, "e"),
+         (-6, -2, "e"), (12, 0, "e"), (-4, -9, "e"), (5, -6, "e")],
+        [(-6, -11, "e"), (-4, -15, "e"), (2, -16, "e"), (8, -13, "e"), (12, -8, "e"), (-6, -5, "e")],
     ]
     return Part({(x, y): c for x, y, c in sets[stage]}, (0, 0))
 
@@ -333,7 +338,7 @@ FIGURE = Figure(
     parts={"heads": {"normal": HELM, "hurt": HELM_HURT},
            "torsos": {"front": TORSO_FRONT, "side": TORSO_SIDE, "back": TORSO_BACK},
            "hands": HANDS, "boots": BOOTS,
-           "extras": {"fauld": FAULD, "pauldron": PAULDRON, "joint": JOINT,
+           "extras": {"fauld": FAULD, "pauldron": PAULDRON, "joint": JOINT, "elbow": ELBOW,
                       "star": STAR, "spark": SPARK, "bump": BUMP}},
     sleeves=("M", "m", "n"),      # plated arms
     pants=("C", "c", "k"),        # orange greaves
@@ -343,12 +348,12 @@ FIGURE = Figure(
 RX = 36   # resting root x; the opponent is to the left
 
 BASE_EXTRAS = [
-    ("joint", "el_far", 0, 0, "far_arm"),
+    ("elbow", "el_far", 0, 0, "far_arm"),
     ("joint", "kn_far", 0, 0, "far_leg"),
     ("pauldron", "sh_far", 0, 0, "torso"),
     ("joint", "kn_near", 0, 0, "near_leg"),
     ("fauld", "pelvis", 0, 0, "front"),
-    ("joint", "el_near", 0, 0, "near_arm"),
+    ("elbow", "el_near", 0, 0, "near_arm"),
     ("pauldron", "sh_near", 0, 0, "near_arm"),
 ]
 
@@ -468,12 +473,12 @@ def animations():
           effects=[at_head(STAR, 150), at_head(dust(0), 150)]),
         # follow-through: head still down, body settling
         P(dx=-5, torso="side", lean=(-4, 4), head_off=(-1, 1), far=(-9, -1), weapon=W(148), **squat,
-          effects=[at_head(dust(1), 148)]),
+          effects=[at_head(dust(1), 148, 1, 0)]),
     ]
     recover = [
         P(dx=-4, torso="side", lean=(-2, 1), far=(-6, -3), weapon=W(158),
           near_leg=(132, 100), far_leg=(48, 82)),
-        P(dx=-2, lean=(-1, 0), far=(-3, -2), weapon=W(128)),
+        P(dx=-2, lean=(-1, 0), far=(-3, -3), weapon=W(128)),
         P(dx=-1),
     ]
 
@@ -498,12 +503,12 @@ def animations():
     # out, the mace dropping to vertical; then a wide squat, hands on the
     # pommel, catching himself on the planted mace.
     stagger = [
-        P(dx=5, head="hurt", lean=(3, 0), head_off=(1, 0),
-          near_leg=(104, 84), far_leg=(74, 100), far_boot="back",
+        P(dx=5, head="hurt", lean=(4, 0), head_off=(2, 0),
+          near_leg=(100, 80), far_leg=(76, 104), far_boot="back",
           far=(-4, -6), far_bend=-1, weapon=W(97, "solo"),
           near_arm=(182, 150), near_hand="open"),
-        P(dx=4, head="hurt", lean=(-1, 2), head_off=(0, 1), far=(-3, -8), weapon=W(118), **squat),
-        P(dx=3, head="normal", lean=(0, 1), far=(-3, -3), weapon=W(128),
+        P(dx=4, head="hurt", lean=(-1, 2), head_off=(1, 1), far=(-3, -8), weapon=W(118), **squat),
+        P(dx=3, head="normal", lean=(0, 1), far=(-3, -4), weapon=W(128),
           near_leg=(128, 100), far_leg=(52, 84)),
     ]
 
@@ -555,19 +560,19 @@ def animations():
         # impact: STAR + shockwave along the ground
         P(dx=-4, torso="side", lean=(-4, 3), far=(-7, 0), weapon=W(150), **squat,
           extra=[at_head(BUMP, 150, 0, 3)[:4] + ("back",)],
-          effects=[at_head(STAR, 150), at_head(dust(0), 150), at_head(shockwave(10, 3), 150, 1, 3)]),
+          effects=[at_head(STAR, 150), at_head(dust(0), 150), at_head(shockwave(9, 3), 150, 2, 3)]),
         # dust settling 1
-        P(dx=-4, torso="side", lean=(-4, 4), head_off=(-1, 1), far=(-8, 1), weapon=W(148), **squat,
-          extra=[at_head(BUMP, 148, 0, 3)[:4] + ("back",)],
-          effects=[at_head(dust(1), 148), at_head(shockwave(12, 4, dotted=True), 148, 3, 3)]),
+        P(dx=-4, torso="side", lean=(-4, 4), head_off=(-1, 1), far=(-8, -1), weapon=W(148), **squat,
+          extra=[at_head(BUMP, 148, 0, 4)[:4] + ("back",)],
+          effects=[at_head(dust(1), 148), at_head(shockwave(10, 4, dotted=True), 148, 4, 4)]),
         # dust settling 2
-        P(dx=-4, torso="side", lean=(-4, 3), far=(-8, 0), weapon=W(148), **squat,
+        P(dx=-4, torso="side", lean=(-4, 3), far=(-8, -1), weapon=W(148), **squat,
           effects=[at_head(dust(2), 148)]),
     ]
     crit_recover = [
         P(dx=-4, torso="side", lean=(-2, 1), far=(-6, -3), weapon=W(158),
           near_leg=(132, 100), far_leg=(48, 82)),
-        P(dx=-2, lean=(-1, 0), far=(-3, -2), weapon=W(128)),
+        P(dx=-2, lean=(-1, 0), far=(-3, -3), weapon=W(128)),
         P(dx=-1),
     ]
 

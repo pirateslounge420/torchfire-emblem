@@ -7,7 +7,7 @@ flying kicks. Drawn original in the GBA FE idiom; faces LEFT.
 """
 import math
 from pixelkit import Figure, Palette, grid, capsule, blade, arc, rot90_part
-from pixelkit.palette import SKIN_TAN, OUTLINE, TRIGRAM
+from pixelkit.palette import SKIN_TAN, TRIGRAM
 from pixelkit.figure import HANDS
 
 NAME = "monk"
@@ -131,11 +131,11 @@ TORSO_TUCK = grid("""
 SKIRT = {
     "rest": grid("""
 .Cccccckkkk
-..Ccccckkkk
-...cccckkkk
-....ccckkk.
-.....cckkk.
-......ckk..
+.Cccccckkkk
+..ccccckkkk
+..cccc.kkkk
+..ccc...kkk
+..cc.....kk
 """, anchor=(5, 0)),
     "flare": grid("""
 .Cccccckkkkk.
@@ -398,7 +398,7 @@ def animations():
           near_leg=(135, 100), far_leg=(50, 80), skirt="flare",
           effects=[(dash_lines(0, 0, 2, 8), "pelvis", 8, -6)]),
         # impact: full thrust, spark at the tip
-        P(dx=-9, torso="side", lean=(-3, 1), far=(-10, 0.5), angle=180, along=6,
+        P(dx=-9, torso="side", lean=(-3, 1), far=(-9, 0.5), angle=180, along=6,
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", skirt="flare",
           effects=[at_tip(SPARK, 180, dx=-1)]),
         # pulls back a touch
@@ -451,7 +451,7 @@ def animations():
     # --- dodges ----------------------------------------------------------------
     dodge_up = [
         P(dx=0, lean=(-1, 2), near_leg=(132, 105), far_leg=(48, 75), far=(-3, 10), angle=-135),
-        P(dx=-1, planted=False, root=(RX - 1, 22), lean=(-1, 0), shadow=(6, 1),
+        P(dx=-1, planted=False, root=(RX - 1, 24), lean=(-1, 0), shadow=(6, 1),
           near_leg=(190, 115), far_leg=(165, 100), near_boot="tip", far_boot="tip",
           far=(-4, 6), angle=-150, along=7, skirt="flare"),
     ]
@@ -514,7 +514,7 @@ def animations():
         P(dx=-10, lean=(-2, 1), far=(-8, 5), angle=-80, along=3, variant="spin",
           near_leg=(145, 100), far_leg=(45, 78), skirt="flare"),
         # spin strike impact
-        P(dx=-11, torso="side", lean=(-3, 1), far=(-7, 0), angle=180, along=6,
+        P(dx=-11, torso="side", lean=(-3, 1), far=(-6, 0), angle=180, along=6,
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", skirt="flare",
           effects=[slash("sh_far", 24, -95, -162, width=7), at_tip(STAR, 180)]),
         # follow-through

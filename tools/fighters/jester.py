@@ -7,8 +7,8 @@ dark hose, soft curled shoes and a short half-cape. The smallest fighter
 faces LEFT.
 """
 import math
-from pixelkit import Figure, Palette, grid, capsule, blade, arc, flip_part, rot90_part, Canvas
-from pixelkit.palette import SKIN, OUTLINE, TRIGRAM
+from pixelkit import Figure, Palette, grid, capsule, blade, arc, flip_part, rot90_part
+from pixelkit.palette import SKIN, TRIGRAM
 
 NAME = "jester"
 BOX = 64
@@ -308,12 +308,12 @@ def P(dx=0, cape="rest", **kw):
     reversed (point down) in the far hand by the hip."""
     cx, cy = CAPE_AT[cape]
     base = dict(
-        root=(RX + dx, 40), torso="front", head="normal", lean=(-1, 1), torso_h=10,
+        root=(RX + dx, 40), torso="front", head="normal", lean=(-1, 1), torso_h=9,
         near_upper_len=5, near_fore_len=5, far_upper_len=5, far_fore_len=5,
         near_thigh_len=6, near_shin_len=6, far_thigh_len=6, far_shin_len=6,
         far_sleeve=("A", "a", "c"),
         near_arm=(140, 110), far_arm=(60, 100), near_hand="open",
-        near_leg=(142, 104), far_leg=(38, 79),
+        near_leg=(145, 106), far_leg=(35, 78),
         near_boot="side", far_boot="front",
         extras=[("cape_" + cape, "neck", cx, cy, "back")],
         weapon=dict(hand="far", angle=110, layer="top"),
@@ -333,9 +333,9 @@ def animations():
 
     idle = [
         P(weapon=W(110)),
-        P(near_leg=(136, 100), far_leg=(44, 82), weapon=W(200)),
-        P(lean=(-1, 0), near_leg=(128, 96), far_leg=(52, 85), weapon=W(290)),
-        P(near_leg=(136, 100), far_leg=(44, 82), weapon=W(20)),
+        P(near_leg=(138, 102), far_leg=(42, 80), weapon=W(200)),
+        P(lean=(-1, 0), near_leg=(130, 97), far_leg=(50, 84), weapon=W(290)),
+        P(near_leg=(138, 102), far_leg=(42, 80), weapon=W(20)),
     ]
 
     # --- regular attack: coil back and down, then dart in with two stabs ---
@@ -373,7 +373,7 @@ def animations():
           near_boot="tip", far_boot="tip", cape="up", weapon=W(-60)),
         # landing crouch
         P(dx=-3, lean=(0, 2), near_leg=(150, 105), far_leg=(30, 75), near_arm=(130, 100),
-          far_arm=(50, 90), cape="fwd", weapon=W(100)),
+          far_arm=(50, 90), cape="fwd", weapon=W(130)),
         P(dx=-1),
     ]
 
@@ -406,13 +406,13 @@ def animations():
         P(dx=6, head="hurt", lean=(3, 1), head_off=(1, 0), near_arm=(-110, -150), far_arm=(-30, -90),
           near_leg=(160, 100), far_leg=(70, 95), cape="fwd", weapon=W(-60)),
         P(dx=7, head="tumble", planted=False, root=(RX + 7, 50), shadow=(11, 2), lean=(4, 3), head_off=(2, 0),
-          near_arm=(110, 30), far_arm=(40, 60), near_hand="open",
+          near_arm=(110, 20), far_arm=(10, 30), near_hand="open",
           near_leg=(-160, -80), far_leg=(-150, -60), near_boot="side", far_boot="side",
           near_boot_off=(0, -2), far_boot_off=(0, -2), cape="fwd", weapon=W(-75)),
         P(dx=5, head="normal", planted=False, root=(RX + 5, 46), shadow=(10, 2), lean=(1, 2),
-          near_arm=(130, 110), far_arm=(40, 80), near_hand="open",
-          near_leg=(170, 55), near_shin_len=5, far_leg=(75, -5), far_boot="back", far_boot_off=(0, -1),
-          cape="rest", weapon=W(120)),
+          near_arm=(130, 110), far_arm=(30, 60), near_hand="open",
+          near_leg=(170, 55), near_shin_len=4, far_leg=(75, -5), far_boot="back", far_boot_off=(0, -1),
+          cape="rest", weapon=W(20)),
     ]
 
     # --- dodges ----------------------------------------------------------------
@@ -431,13 +431,14 @@ def animations():
     ]
     dodge_forward = [
         # tucked ball rolling toward the foe: back arched up, head tucked under
-        P(dx=-6, planted=False, root=(RX - 6, 45), shadow=(8, 1), torso="cart", lean=(-10, 7),
+        P(dx=-6, planted=False, root=(RX - 6, 43), shadow=(8, 1), torso="cart", lean=(-10, 7),
           head="roll", head_off=(3, 4), near_arm=(60, 120), far_arm=(70, 110), near_hand="open",
+          near_fore_len=3, far_fore_len=3,
           near_leg=(120, 200), far_leg=(100, 190), near_boot="tip", far_boot="tip",
-          extras=[], weapon=W(20),
+          extras=[], weapon=None,
           effects=[(dash_lines(0, 0, 2, 7), "pelvis", 6, -10)]),
         P(dx=-10, lean=(-2, 3), near_leg=(150, 105), far_leg=(30, 75), near_arm=(140, 100),
-          far_arm=(50, 95), cape="flare", weapon=W(100)),
+          far_arm=(50, 95), cape="flare", weapon=W(125)),
     ]
     dodge_back = [
         # high backward hop
@@ -468,16 +469,16 @@ def animations():
     ]
     crit_lunge = [
         # cartwheel entry: diving, hands to the ground, legs trailing
-        P(dx=-6, planted=False, root=(RX - 6, 40), shadow=(8, 1), torso="cart", lean=(-10, 10),
+        P(dx=-6, planted=False, root=(RX - 6, 39), shadow=(8, 1), torso="cart", lean=(-10, 10),
           head="roll", head_off=(0, 0), near_arm=(110, 95), far_arm=(100, 90), near_hand="open", far_hand="open",
           near_leg=(-20, -30), far_leg=(0, -20), near_boot="back", far_boot="back",
           extras=[], weapon=W(0),
           effects=[(dash_lines(0, 0, 3, 10), "pelvis", 10, -8)]),
         # inverted: handstand, legs split in the air
-        P(dx=-9, planted=False, root=(RX - 9, 30), shadow=(8, 1), torso="inv", lean=(0, 20),
+        P(dx=-9, planted=False, root=(RX - 9, 29), shadow=(8, 1), torso="inv", lean=(0, 20),
           head="inv", near_arm=(95, 90), far_arm=(85, 90), near_hand="open", far_hand="open",
           near_leg=(-120, -100), far_leg=(-50, -70), near_boot="up", far_boot="up",
-          extras=[], weapon=W(200)),
+          extras=[], weapon=W(180)),
         # triple stab
         P(dx=-10, torso="side", lean=(-3, 1), far_arm=(170, 200), near_arm=(40, 110),
           near_leg=(155, 95), far_leg=(30, 70), far_boot="back", cape="flare",
