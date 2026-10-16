@@ -111,10 +111,12 @@ def stance(bob=0):
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
     ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE)) - 2
-    # anime eyes, 2x2, no lash line: a light glint top-left, violet iris, dark pupil bottom-right
-    for x in (44, 50):
-        g.g[ey][x] = "h"; g.g[ey][x + 1] = "k"
-        g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "o"
+    # bigger anime eyes, 3x3 like the pixeljoint reference: a thin dark upper edge, a tall violet iris
+    # with a light glint top-left and a dark pupil bottom-right
+    for x in (43, 49):
+        g.g[ey - 1][x] = "o"; g.g[ey - 1][x + 1] = "o"; g.g[ey - 1][x + 2] = "o"
+        g.g[ey][x] = "h"; g.g[ey][x + 1] = "k"; g.g[ey][x + 2] = "k"
+        g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "k"; g.g[ey + 1][x + 2] = "o"
     return g
 
 
