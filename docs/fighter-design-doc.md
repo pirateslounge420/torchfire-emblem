@@ -38,7 +38,7 @@ Each trigram brings one archetype and one weapon to every fighter it appears in.
 | ☳ Zhèn (Thunder) | Pirate | Axe | Cyan | — | Wolf / jackal | Berserker |
 | ☵ Kǎn (Water) | Trickster | Dagger | Indigo | — | Crane / heron | Jester |
 | ☶ Gèn (Mountain) | General (heavy armor) | Long mace (mace/hammer family: slow, two-handed, built for reach) | Orange | — | Tortoise / turtle | Bastion |
-| ☷ Kūn (Earth) | Cleric | Staff | Yellow | — | Boar / warthog | Cleric |
+| ☷ Kūn (Earth) | Monk | Staff | Yellow | — | Boar / warthog | Monk |
 | ☴ Xùn (Wind) | Flyer | Glaive | Seafoam (light green) | Flying | Wyvern / drake | Valkyrie |
 | ☲ Lí (Fire) | Shinobi | Kusarigama | Red | — | Lion / tiger | Shinobi |
 | ☱ Duì (Lake) | Samurai | Sword | Silver | — | Mountain goat / sheep | Samurai |
