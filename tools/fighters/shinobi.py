@@ -14,15 +14,16 @@ from pixelkit.figure import HANDS
 NAME = "shinobi"
 BOX = 64
 
-# 14 opaque colours. Shared slots: w=E (near-white), M=e (slash edge), n=q
-# (steel shadow = charcoal shadow), L=s, j=z (leather shares skin), g=o.
+# 15 opaque colours. Shared slots: w=E (near-white), n=q (steel shadow =
+# charcoal shadow), L=s, j=z (leather shares skin), g=o. The steel highlight
+# M stays separate from the slash edge `e` so the chain never reads as a blur.
 _white = (244, 246, 252)
 _charcoal = {"A": (122, 122, 140), "a": (74, 74, 92), "q": (40, 40, 56)}
 PALETTE = Palette(NAME, {
     **SKIN,
     **TRIGRAM["fire"],
     **_charcoal,
-    "M": (168, 224, 255), "m": (150, 160, 190), "n": _charcoal["q"],
+    "M": (214, 222, 236), "m": (148, 156, 184), "n": _charcoal["q"],
     "L": SKIN["s"], "l": (142, 94, 58), "j": SKIN["z"],
     "w": _white, "E": _white,
     "H": _charcoal["A"], "h": _charcoal["a"], "g": OUTLINE,
@@ -142,12 +143,15 @@ def dash_lines(x, y, n=3, length=8):
     return p
 
 
+CHAIN = ("m", "m", "n")   # a 2-px chain is grey over dark; the weight carries the highlight
+
+
 def chain(pts, weight=True, width=2):
     """Chain links along `pts` (relative to the hand that holds it, which is
     (0, 0)); the weight sits on the last point."""
     p = Part({}, (0, 0))
     for a, b in zip(pts[:-1], pts[1:]):
-        p = p.union(capsule(a, b, width, ("M", "m", "n")))
+        p = p.union(capsule(a, b, width, CHAIN))
     if weight:
         wx, wy = pts[-1]
         p = p.union(WEIGHT.shifted(round(wx) - 1, round(wy) - 1))
@@ -167,13 +171,19 @@ def whirl(r, ang):
     return chain([(0, 0), (r * math.cos(a), r * math.sin(a))])
 
 
-def throw_blur(length, y=0):
-    """The weight shooting out to the left as a streak: a thin chain under a
-    tapered E/e line, the weight at the leading end."""
-    p = chain([(0, 0), (-length + 4, y)], weight=False)
-    p = p.union(blade((-length - 1, y), (-length + 9, y), width=3, letters=("E", "e", "e"), taper=0.6, edge=None))
-    p = p.union(WEIGHT.shifted(-length - 1, y - 1))
-    return p
+def throw(x_abs, dy=-1, blur=False, spark=False):
+    """A chain whipped straight out to the left so the weight lands on canvas
+    column `x_abs` whatever the hand is doing. Returns a callable for P()."""
+    def build(J):
+        hx = round(J["wr_near"][0])
+        ex = x_abs - hx
+        if blur:
+            # the weight mid-flight: chain under a tapered streak, weight leading
+            p = chain([(0, 0), (ex + 5, dy)], weight=False)
+            p = p.union(blade((ex - 1, dy), (ex + 11, dy), width=3, letters=("E", "e", "e"), taper=0.6, edge=None))
+            return p.union(WEIGHT.shifted(ex - 1, dy - 1))
+        return chain([(0, 0), (ex, dy)])
+    return build
 
 
 def sickle(angle, variant="normal"):
@@ -218,10 +228,9 @@ FIGURE = Figure(
 RX = 36   # resting root x; the opponent is to the left
 
 
-def _wraps(pose):
+def _wraps(pose, J):
     """Leather forearm wraps: a capsule from the elbow to the wrist drawn over
     each sleeve, with the hand re-drawn on top so it stays skin."""
-    J = FIGURE.joints(pose)
     out = []
     for side in ("near", "far"):
         if pose.get(f"{side}_arm", (90, 90)) is None:
@@ -255,16 +264,19 @@ def P(dx=0, chain_part=DEFAULT, chain_at="wr_near", chain_layer="top", **kw):
         near_leg=(118, 98), far_leg=(62, 88),
         near_boot="side", far_boot="front",
         near_hand="grip", far_hand="grip",
-        weapon=dict(hand="far", angle=60, layer="top"),
+        weapon=dict(hand="far", angle=35, layer="top"),
         shadow=(9, 2),
         extras=[],
     )
     base.update(kw)
+    J = FIGURE.joints(base)          # unplanted; relative offsets are what matter
     if chain_part is DEFAULT:
         chain_part = hang((-3, 8), sag=1)
+    if callable(chain_part):
+        chain_part = chain_part(J)
     if chain_part is not None:
         base["extras"] = list(base["extras"]) + [(chain_part, chain_at, 0, 0, chain_layer)]
-    base["extras"] = list(base["extras"]) + _wraps(base)
+    base["extras"] = list(base["extras"]) + _wraps(base, J)
     return base
 
 
@@ -278,103 +290,111 @@ def ring(joint, r, a0, a1, width=2, dx=0, dy=0):
     return (arc((0, 0), r - width, r, a0, a1, letters=("e", "e"), taper=False), joint, dx, dy)
 
 
+def with_fx_at(pose, part, x_abs, joint="wr_near", dy=0):
+    """Append an effect at canvas column x_abs, on the row of `joint` + dy,
+    using the planted root so it lands where the frame is really drawn."""
+    p = dict(pose)
+    if p.get("planted", True):
+        p["root"] = FIGURE.planted_root(p)
+    J = FIGURE.joints(p)
+    y = int(round(J[joint][1])) + dy
+    pose["effects"] = list(pose.get("effects", [])) + [(part, x_abs, y)]
+    return pose
+
+
 def animations():
     idle = [
         P(chain_part=hang((-4, 8), sag=1)),
         P(lean=(-1, 1), near_arm=(120, 112), far_arm=(75, 97), chain_part=hang((-3, 8), sag=1),
-          weapon=dict(hand="far", angle=62, layer="top")),
+          weapon=dict(hand="far", angle=37, layer="top")),
         P(lean=(-1, 1), head_off=(0, 1), near_arm=(120, 114), far_arm=(76, 99), chain_part=hang((-2, 8), sag=1),
-          weapon=dict(hand="far", angle=64, layer="top")),
+          weapon=dict(hand="far", angle=39, layer="top")),
         P(lean=(-1, 1), near_arm=(120, 112), far_arm=(75, 97), chain_part=hang((-3, 8), sag=1),
-          weapon=dict(hand="far", angle=62, layer="top")),
+          weapon=dict(hand="far", angle=37, layer="top")),
     ]
 
-    # --- regular attack: crouch, whirl the weight, whip it out, yank, sickle up ---
+    # --- regular attack: crouch and whirl the weight, whip it out, yank it home ---
+    cocked = dict(hand="far", angle=-85, layer="top", variant="normal_rev")   # sickle raised behind, hook back
     lean = [
-        P(dx=1, torso="front", lean=(0, 0), near_arm=(150, 60), far_arm=(20, -50),
+        P(dx=1, torso="front", lean=(0, 0), near_arm=(150, 120), far_arm=(15, -60),
           near_leg=(120, 100), far_leg=(60, 86),
-          weapon=dict(hand="far", angle=-70, layer="top"),
-          chain_part=whirl(5, 120),
-          effects=[ring("wr_near", 6, 40, 120)]),
-        P(dx=3, torso="back", lean=(1, 1), near_arm=(160, 20), far_arm=(5, -75),
+          weapon=dict(hand="far", angle=-75, layer="top", variant="normal_rev"),
+          chain_part=whirl(4, 110),
+          effects=[ring("wr_near", 5, 20, 110)]),
+        P(dx=3, torso="back", lean=(1, 1), near_arm=(185, 150), far_arm=(5, -75),
           near_leg=(118, 100), far_leg=(55, 84),
-          weapon=dict(hand="far", angle=-80, layer="top"),
-          chain_part=whirl(6, 200),
-          effects=[ring("wr_near", 7, 80, 200)]),
-        P(dx=4, torso="back", lean=(2, 2), near_arm=(165, 0), far_arm=(-10, -95),
+          weapon=cocked,
+          chain_part=whirl(5, 190),
+          effects=[ring("wr_near", 6, 70, 190)]),
+        P(dx=4, torso="back", lean=(2, 2), near_arm=(200, 160), far_arm=(5, -75),
           near_leg=(116, 102), far_leg=(50, 80),
-          weapon=dict(hand="far", angle=-85, layer="top"),
-          chain_part=whirl(6, 280),
-          effects=[ring("wr_near", 7, 150, 280)]),
+          weapon=cocked,
+          chain_part=whirl(6, 270),
+          effects=[ring("wr_near", 7, 140, 270)]),
     ]
     hold = [
         lean[2],
-        P(dx=4, torso="back", lean=(2, 1), near_arm=(165, 0), far_arm=(-12, -97),
+        P(dx=4, torso="back", lean=(2, 1), near_arm=(200, 160), far_arm=(5, -77),
           near_leg=(116, 102), far_leg=(50, 80),
-          weapon=dict(hand="far", angle=-87, layer="top"),
+          weapon=dict(hand="far", angle=-87, layer="top", variant="normal_rev"),
           chain_part=whirl(6, 320),
           effects=[ring("wr_near", 7, 190, 320)]),
     ]
     lunge = [
         # the weight shoots out toward the foe
-        P(dx=-3, torso="side", lean=(-2, 0), near_arm=(165, 150), far_arm=(0, -90),
+        P(dx=-2, torso="side", lean=(-2, 0), near_arm=(140, 105), far_arm=(0, -90),
           near_leg=(138, 100), far_leg=(50, 80), far_boot="back",
-          weapon=dict(hand="far", angle=-85, layer="top"),
-          chain_part=throw_blur(16, -1)),
+          weapon=cocked,
+          chain_part=throw(8, dy=-1, blur=True)),
         # impact: chain taut, weight at full extension
-        P(dx=-6, torso="side", lean=(-3, 1), near_arm=(160, 165), far_arm=(10, -80),
-          near_leg=(150, 98), far_leg=(40, 70), far_boot="back",
-          weapon=dict(hand="far", angle=-80, layer="top"),
-          chain_part=chain([(0, 0), (-18, -1)]),
-          effects=[(SPARK, "wr_near", -21, -1)]),
-        # yank back: the weight flies home, sickle raised
-        P(dx=-6, torso="side", lean=(-2, 0), near_arm=(120, 40), far_arm=(-40, -120),
+        with_fx_at(
+            P(dx=-5, torso="side", lean=(-3, 1), near_arm=(130, 100), far_arm=(10, -80),
+              near_leg=(150, 98), far_leg=(40, 70), far_boot="back",
+              weapon=dict(hand="far", angle=-80, layer="top", variant="normal_rev"),
+              chain_part=throw(7, dy=-2)),
+            SPARK, 6, dy=-2),
+        # yank back: the weight flies home, sickle raised to strike
+        P(dx=-5, torso="side", lean=(-2, 0), near_arm=(20, 170), far_arm=(-40, -120),
           near_leg=(148, 98), far_leg=(42, 72), far_boot="back",
           weapon=dict(hand="far", angle=-120, layer="top"),
-          chain_part=chain([(0, 0), (-7, 4), (-13, 3)]),
-          effects=[ring("wr_near", 14, 150, 200, width=2)]),
+          chain_part=chain([(0, 0), (-8, 4), (-15, 2)]),
+          effects=[ring("wr_near", 16, 160, 200, width=2)]),
     ]
     recover = [
-        P(dx=-5, torso="side", lean=(-2, 1), near_arm=(130, 70), far_arm=(0, -60),
+        P(dx=-4, torso="side", lean=(-2, 1), near_arm=(60, 170), far_arm=(-20, -90),
           near_leg=(142, 98), far_leg=(45, 75), far_boot="back",
-          weapon=dict(hand="far", angle=-60, layer="top"),
-          chain_part=hang((-5, 5), sag=2)),
-        P(dx=-3, torso="front", lean=(-1, 0), near_arm=(125, 100), far_arm=(50, 60),
+          weapon=dict(hand="far", angle=-90, layer="top"),
+          chain_part=chain([(0, 0), (-5, 3), (-8, 7)])),
+        P(dx=-2, torso="front", lean=(-1, 0), near_arm=(125, 100), far_arm=(50, 70),
           near_leg=(125, 98), far_leg=(55, 85),
-          weapon=dict(hand="far", angle=20, layer="top"),
+          weapon=dict(hand="far", angle=10, layer="top"),
           chain_part=hang((-3, 7), sag=1)),
         P(dx=-1),
     ]
 
-    # --- defence: sickle up in front, chain pulled taut across it ---------------
-    def guard(dx, lean_, legs=None, crouch=0):
-        pose = P(dx=dx, lean=lean_, torso="front", far_arm=(165, -110), near_arm=(135, -60),
+    # --- defence: sickle up in front, chain pulled taut up to it -----------------
+    def guard(dx, lean_, **kw):
+        pose = P(dx=dx, lean=lean_, torso="front", far_arm=(165, -110), near_arm=(150, 100),
                  weapon=dict(hand="far", angle=-95, layer="top"),
-                 **(legs or {}))
+                 chain_part=chain([(0, 0), (2, -14)], weight=False).union(WEIGHT.shifted(-4, -1)),
+                 **kw)
         return pose
 
     block = [
-        P(dx=1, lean=(0, 0), torso="front", far_arm=(165, -110), near_arm=(140, -40),
-          weapon=dict(hand="far", angle=-95, layer="top"),
-          chain_part=chain([(0, 0), (6, -8), (7, -2)])),
-        P(dx=2, lean=(1, 1), torso="front", far_arm=(165, -110), near_arm=(140, -40),
-          near_leg=(122, 100), far_leg=(58, 84),
-          weapon=dict(hand="far", angle=-95, layer="top"),
-          chain_part=chain([(0, 0), (6, -8), (7, -2)])),
+        guard(1, (0, 0)),
+        guard(2, (1, 1), near_leg=(122, 100), far_leg=(58, 84)),
     ]
     parry = [
-        P(dx=1, lean=(0, 0), torso="front", far_arm=(165, -110), near_arm=(140, -40),
-          weapon=dict(hand="far", angle=-95, layer="top"),
-          chain_part=chain([(0, 0), (6, -8), (7, -2)])),
+        guard(1, (0, 0)),
         # the chain whips outward and catches the blow
-        P(dx=-1, torso="side", lean=(-2, 0), far_arm=(160, -120), near_arm=(170, -110),
+        P(dx=-1, torso="side", lean=(-2, 0), far_arm=(160, -120), near_arm=(175, 120),
           weapon=dict(hand="far", angle=-100, layer="top"),
           chain_part=whirl(8, 200),
-          effects=[ring("wr_near", 10, 120, 210, width=3)]),
-        P(dx=-2, torso="side", lean=(-2, 0), far_arm=(160, -120), near_arm=(175, -120),
+          effects=[ring("wr_near", 10, 100, 210, width=3)]),
+        P(dx=-2, torso="side", lean=(-2, 0), far_arm=(160, -120), near_arm=(180, 110),
           weapon=dict(hand="far", angle=-100, layer="top"),
-          chain_part=whirl(8, 220),
-          effects=[(SPARK, "wr_near", -7, -7)]),
+          chain_part=whirl(9, 215),
+          effects=[(SPARK, "wr_near", -9, -6)]),
     ]
     hit = [
         P(dx=3, head="hurt", lean=(2, 1), head_off=(1, 0), torso="front",
@@ -390,33 +410,32 @@ def animations():
     ]
     # Stagger (kusarigama): tangled in his own chain — stumbles back, drops to
     # a crouch on one hand, the chain trailing on the ground.
-    tangle = chain([(-7, 7), (3, 10), (-6, 13), (2, 16)], weight=False)
+    tangle = chain([(-6, 6), (3, 9), (-7, 12), (1, 14)], weight=False)
     stagger = [
         P(dx=6, head="hurt", lean=(3, 1), head_off=(1, 0), torso="front",
-          near_arm=(140, 30), far_arm=(30, -30), near_hand="open",
+          near_arm=(140, 30), far_arm=(50, -30), near_hand="open",
           near_leg=(130, 108), far_leg=(45, 60), far_boot="back",
-          weapon=dict(hand="far", angle=-20, layer="top"),
-          chain_part=chain([(0, 0), (-4, 6), (-9, 13), (-6, 18)]),
+          weapon=dict(hand="far", angle=-60, layer="top", variant="normal_rev"),
+          chain_part=chain([(0, 0), (-4, 5), (-9, 10), (-8, 14)]),
           extras=[(tangle, "pelvis", 0, 0, "front")]),
-        P(dx=5, head="hurt", lean=(1, 2), head_off=(0, 1), torso="front", planted=False, root=(RX + 5, 45),
-          near_arm=(105, 85), near_fore_len=7, far_arm=(130, 100), near_hand="open",
+        P(dx=5, head="hurt", lean=(1, 3), head_off=(0, 1), torso="front", planted=False, root=(RX + 5, 44),
+          near_arm=(100, 88), near_fore_len=8, far_arm=(130, 100), near_hand="open",
           near_leg=(170, 110), near_shin_len=5, far_leg=(75, 0), far_shin_len=6, far_boot="back", far_boot_off=(0, -2),
           shadow=(10, 2),
-          weapon=dict(hand="far", angle=150, layer="top"),
-          chain_part=chain([(2, 2), (-6, 3), (-13, 2), (-18, 3)]), chain_at="wr_near", chain_layer="front",
-          extras=[(chain([(-8, 10), (0, 13), (-7, 15)], weight=False), "pelvis", 0, 0, "front")]),
+          weapon=dict(hand="far", angle=190, layer="top", variant="normal_rev"),
+          chain_part=chain([(2, -2), (-5, 0), (-12, 1), (-17, 0)]), chain_layer="front"),
         P(dx=4, head="normal", lean=(0, 1), torso="front", planted=False, root=(RX + 4, 42),
           near_arm=(130, 70), far_arm=(110, 120), near_hand="grip",
           near_leg=(150, 105), near_shin_len=6, far_leg=(70, 20), far_shin_len=6, far_boot="back", far_boot_off=(0, -2),
           shadow=(10, 2),
-          weapon=dict(hand="far", angle=135, layer="top"),
-          chain_part=chain([(0, 0), (-6, 6), (-12, 9)])),
+          weapon=dict(hand="far", angle=160, layer="top", variant="normal_rev"),
+          chain_part=chain([(0, 0), (-6, 6), (-12, 8)])),
     ]
 
     # --- dodges ----------------------------------------------------------------
     dodge_up = [
         P(dx=0, lean=(-1, 2), near_leg=(132, 105), far_leg=(48, 75), near_arm=(120, 100), far_arm=(60, 110),
-          weapon=dict(hand="far", angle=60, layer="top"), chain_part=hang((-3, 7), sag=1)),
+          weapon=dict(hand="far", angle=40, layer="top"), chain_part=hang((-3, 7), sag=1)),
         P(dx=-1, planted=False, root=(RX - 1, 24), lean=(-1, 0), shadow=(6, 1),
           near_leg=(190, 115), far_leg=(165, 100), near_boot="tip", far_boot="tip",
           near_arm=(140, 70), far_arm=(40, 100),
@@ -424,7 +443,7 @@ def animations():
     ]
     dodge_down = [
         P(dx=0, lean=(-2, 2), near_leg=(135, 100), far_leg=(45, 80), near_arm=(120, 100), far_arm=(50, 100),
-          weapon=dict(hand="far", angle=50, layer="top"), chain_part=hang((-3, 7), sag=1)),
+          weapon=dict(hand="far", angle=40, layer="top"), chain_part=hang((-3, 7), sag=1)),
         P(dx=0, lean=(-3, 3), head_off=(-1, 1), near_leg=(165, 100), far_leg=(15, 85), near_arm=(150, 100), far_arm=(30, 110),
           far_boot="back",
           weapon=dict(hand="far", angle=20, layer="top"), chain_part=chain([(0, 0), (-4, 4), (-9, 5)])),
@@ -445,40 +464,40 @@ def animations():
           weapon=dict(hand="far", angle=75, layer="top"), chain_part=hang((-5, 7), sag=1)),
     ]
 
-    # --- critical: spin the weight overhead, leap, whip, double sickle cut ------
+    # --- critical: spin the weight overhead, leap, whip it round, double sickle cut
     crit_lean = [
-        P(dx=2, torso="back", lean=(1, 0), near_arm=(-135, -110), far_arm=(20, 10),
+        P(dx=2, torso="back", lean=(1, 0), near_arm=(-135, -110), far_arm=(20, -60),
           near_leg=(115, 98), far_leg=(58, 86),
-          weapon=dict(hand="far", angle=10, layer="top"),
+          weapon=dict(hand="far", angle=-70, layer="top", variant="normal_rev"),
           chain_part=whirl(6, -150),
           effects=[ring("wr_near", 7, -60, -150)]),
-        P(dx=4, torso="back", lean=(2, 1), near_arm=(-135, -110), far_arm=(15, 0),
+        P(dx=4, torso="back", lean=(2, 1), near_arm=(-135, -110), far_arm=(15, -65),
           near_leg=(125, 100), far_leg=(50, 80),
-          weapon=dict(hand="far", angle=0, layer="top"),
+          weapon=dict(hand="far", angle=-75, layer="top", variant="normal_rev"),
           chain_part=whirl(8, -200),
           effects=[ring("wr_near", 9, -40, -200)]),
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), near_arm=(-135, -110), far_arm=(10, -5),
+        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), near_arm=(-135, -110), far_arm=(10, -70),
           near_leg=(135, 102), far_leg=(45, 75),
-          weapon=dict(hand="far", angle=-8, layer="top", variant="glint"),
+          weapon=dict(hand="far", angle=-80, layer="top", variant="glint_rev"),
           chain_part=whirl(9, -230),
-          effects=[ring("wr_near", 10, -20, -230, width=3)]),
+          effects=[ring("wr_near", 10, -60, -230, width=3)]),
     ]
     crit_hold = [
         crit_lean[2],
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), near_arm=(-135, -110), far_arm=(10, -5),
+        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), near_arm=(-135, -110), far_arm=(10, -70),
           near_leg=(135, 102), far_leg=(45, 75),
-          weapon=dict(hand="far", angle=-8, layer="top"),
+          weapon=dict(hand="far", angle=-80, layer="top", variant="normal_rev"),
           chain_part=whirl(9, -250),
-          effects=[ring("wr_near", 10, -40, -250, width=3), (STAR, "wr_near", -6, -7)]),
+          effects=[ring("wr_near", 10, -80, -250, width=3), (STAR, "wr_near", -5, -8)]),
     ]
     crit_lunge = [
         # leap: the weight whips round in a 270° arc
-        P(dx=-6, planted=False, root=(RX - 6, 28), lean=(-2, -1), shadow=(6, 1),
-          near_arm=(-150, -120), far_arm=(20, -20), near_leg=(75, 118), far_leg=(50, 100),
+        P(dx=-6, planted=False, root=(RX - 6, 30), lean=(-2, -1), shadow=(6, 1),
+          near_arm=(-160, -130), far_arm=(20, -40), near_leg=(75, 118), far_leg=(50, 100),
           near_boot="tip", far_boot="tip",
-          weapon=dict(hand="far", angle=-20, layer="top"),
-          chain_part=whirl(10, 200),
-          effects=[ring("wr_near", 12, -70, 200, width=4)]),
+          weapon=dict(hand="far", angle=-50, layer="top", variant="normal_rev"),
+          chain_part=whirl(9, 200),
+          effects=[ring("wr_near", 11, -70, 200, width=4)]),
         # landing + first sickle cut (blur, downward)
         P(dx=-9, torso="side", lean=(-3, 0), far_arm=(-60, -140), near_arm=(150, 120),
           near_leg=(135, 100), far_leg=(50, 80), far_boot="back",
@@ -490,13 +509,13 @@ def animations():
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back",
           weapon=dict(hand="far", angle=185, layer="top"),
           chain_part=hang((-2, 6), sag=1),
-          effects=[slash("sh_far", 26, -110, -185, width=7), (STAR, "wr_far", -7, 5)]),
+          effects=[slash("sh_far", 24, -110, -185, width=7), (STAR, "wr_far", -6, 5)]),
         # second cut: rising (blur)
         P(dx=-11, torso="side", lean=(-3, 1), far_arm=(195, 230), near_arm=(160, 110),
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back",
           weapon=dict(hand="far", angle=-125, layer="top", variant="blur_rev"),
           chain_part=hang((-2, 6), sag=1),
-          effects=[slash("sh_far", 24, 160, 250, width=6)]),
+          effects=[slash("sh_far", 23, 160, 250, width=6)]),
         # follow-through: sickle high
         P(dx=-11, torso="side", lean=(-3, 1), far_arm=(-120, -100), near_arm=(160, 110),
           near_leg=(152, 100), far_leg=(38, 68), far_boot="back",
@@ -508,9 +527,9 @@ def animations():
           near_leg=(140, 98), far_leg=(45, 75), far_boot="back",
           weapon=dict(hand="far", angle=-60, layer="top"),
           chain_part=hang((-3, 7), sag=1)),
-        P(dx=-4, torso="front", lean=(-1, 0), far_arm=(50, 60), near_arm=(125, 100),
+        P(dx=-4, torso="front", lean=(-1, 0), far_arm=(50, 70), near_arm=(125, 100),
           near_leg=(125, 98), far_leg=(55, 85),
-          weapon=dict(hand="far", angle=20, layer="top"),
+          weapon=dict(hand="far", angle=10, layer="top"),
           chain_part=hang((-3, 7), sag=1)),
         P(dx=-1),
     ]
