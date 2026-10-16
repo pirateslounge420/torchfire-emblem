@@ -24,11 +24,11 @@ ROSTER = [
     # name, title, trigram glyph, trigram, weapon, hexagram, colour word
     ("samurai",   "Samurai",   "☱", "Lake",     "Sword",      58, "silver"),
     ("shinobi",   "Shinobi",   "☲", "Fire",     "Kusarigama", 30, "red"),
-    ("berserker", "Berserker", "☳", "Thunder",  "Axe",        51, "cyan"),
+    ("berserker", "Berserker", "☳", "Thunder",  "Axe",        51, "yellow"),
     ("bastion",   "Bastion",   "☶", "Mountain", "Long mace",  52, "orange"),
     ("monk",      "Monk",      "☷", "Earth",    "Staff",       2, "yellow"),
     ("jester",    "Jester",    "☵", "Water",    "Dagger",     29, "indigo"),
-    ("paladin",   "Paladin",   "☰", "Heaven",   "Lance",       1, "purple"),
+    ("paladin",   "Paladin",   "☰", "Heaven",   "Lance",       1, "violet"),
     ("valkyrie",  "Valkyrie",  "☴", "Wind",     "Glaive",     57, "seafoam"),
 ]
 
@@ -37,11 +37,18 @@ ANIM_ORDER = ["idle", "lean", "hold", "lunge", "recover", "block", "parry", "hit
               "crit_lean", "crit_hold", "crit_lunge", "crit_recover"]
 
 
+V2_ALIAS = {"berserker": "pirate", "paladin": "cavalier"}   # v2 folders use the archetype name
+
+
 def load(name):
-    d = os.path.join(ART, name)
-    png = os.path.join(d, f"{name}_sheet.png")
-    js = os.path.join(d, f"{name}_frames.json")
-    if not (os.path.exists(png) and os.path.exists(js)):
+    """Prefer the hand-pixelled v2 sheet when it exists."""
+    cands = [(os.path.join(ART, n + "_v2"), n) for n in (V2_ALIAS.get(name, name), name)] + [(os.path.join(ART, name), name)]
+    for d, n in cands:
+        png = os.path.join(d, f"{n}_sheet.png")
+        js = os.path.join(d, f"{n}_frames.json")
+        if os.path.exists(png) and os.path.exists(js):
+            break
+    else:
         return None
     with open(js) as f:
         meta = json.load(f)
@@ -55,7 +62,8 @@ def load(name):
     im.save(buf, format="PNG", optimize=True)
     b64 = base64.b64encode(buf.getvalue()).decode()
     frames = sum(a["count"] for a in meta["animations"].values())
-    return {"meta": meta, "png": f"data:image/png;base64,{b64}", "swatches": swatches[:16], "frames": frames}
+    return {"meta": meta, "png": f"data:image/png;base64,{b64}", "swatches": swatches[:16], "frames": frames,
+            "v2": d.endswith("_v2")}
 
 
 def main():
