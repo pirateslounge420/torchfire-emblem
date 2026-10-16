@@ -147,8 +147,8 @@ def idle(bob=0, swing=0, drift=False, sash=0):
 
 
 def fist(g, dy=0, dx=0):
-    """the chain looped round the near fist (body rows 21-23, x 6-7), one link out of the bottom"""
-    P(g, 21 + dy, 6, "hg", dx); P(g, 22 + dy, 6, "gh", dx); P(g, 23 + dy, 6, "hg", dx)
+    """the chain looped twice round the near fist (body rows 22-23, x 6-7), one link out of the bottom"""
+    P(g, 22 + dy, 6, "hg", dx); P(g, 23 + dy, 6, "gh", dx)
     P(g, 24 + dy, 5, "ho", dx)
 
 
