@@ -94,10 +94,14 @@ def sickle_back(g, dx=0):
 
 
 def sash_tail(g, y, x, whip=0, dx=0):
-    """2-px red ribbon trailing from the sash's back end at body (x, y): 0 hanging, 1 lifted, 2 streaming"""
+    """2-px red ribbon trailing from the sash's back end at body (x, y): 0 hanging, 1 lifted, 2 streaming,
+    3 hanging but drifted a pixel back (the idle breeze)"""
     if whip == 0:
         P(g, y - 1, x, "ooo", dx); P(g, y, x, "Rrro", dx); P(g, y + 1, x + 1, "oqrro", dx); P(g, y + 2, x + 3, "oqro", dx)
         P(g, y + 3, x + 4, "oqo", dx); P(g, y + 4, x + 4, "oo", dx)
+    elif whip == 3:
+        P(g, y - 1, x, "oooo", dx); P(g, y, x, "Rrrro", dx); P(g, y + 1, x + 1, "oqrrro", dx); P(g, y + 2, x + 4, "oqro", dx)
+        P(g, y + 3, x + 5, "oqo", dx); P(g, y + 4, x + 5, "oo", dx)
     elif whip == 1:
         P(g, y - 1, x, "oooo", dx); P(g, y, x, "Rrrro", dx); P(g, y + 1, x + 1, "oorrro", dx); P(g, y + 2, x + 4, "oqro", dx)
         P(g, y + 3, x + 5, "oo", dx)
