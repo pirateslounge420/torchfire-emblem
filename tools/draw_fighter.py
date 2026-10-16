@@ -2,7 +2,7 @@
 """Render one fighter's sprite sheet from tools/fighters/<name>.py.
 
     python3 tools/draw_fighter.py samurai            # sheet + json + previews
-    python3 tools/draw_fighter.py samurai idle 0 8   # one frame, zoomed 8x, to tools/_peek.png
+    python3 tools/draw_fighter.py samurai idle 0 8   # one frame, zoomed 8x, to tools/_peek_<name>.png
 
 Each fighter module exposes:
     NAME, BOX (64 or 96), PALETTE (pixelkit.Palette), FIGURE (pixelkit.Figure)
@@ -43,7 +43,7 @@ def main():
                 bg = Image.new("RGBA", img.size, (88, 140, 60, 255))
                 bg.alpha_composite(img)
                 bg = bg.resize((img.width * zoom, img.height * zoom), Image.NEAREST)
-                out = os.path.join(HERE, "_peek.png")
+                out = os.path.join(HERE, f"_peek_{name}.png")
                 bg.save(out)
                 print("wrote", out)
                 return

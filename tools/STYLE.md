@@ -114,9 +114,9 @@ blocks on the shoulders, `M m n` plates with `o` seams.
 
 ```
 python3 tools/draw_fighter.py <name>            # sheet + json + gif + tools/_contact_<name>.png
-python3 tools/peek.py <name> idle:0 lunge:1 ... # tools/_peek.png at 6x, --zoom= --cols=
+python3 tools/peek.py <name> idle:0 lunge:1 ... # tools/_peek_<name>.png at 6x, --zoom= --cols=
 ```
-Look at `_peek.png` after every change. Check: feet on the ground line,
+Look at `_peek_<name>.png` after every change. Check: feet on the ground line,
 nothing clipped by the box, weapon attached to the hand, arcs anchored to
 `sh_far`/`wr_far`, hurt face on hit/stagger, ≤ 15 colours.
 

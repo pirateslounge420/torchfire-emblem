@@ -3,7 +3,7 @@
 
     python3 tools/peek.py samurai idle:0 lean:2 lunge:1 crit_lunge:2 [--zoom 6] [--cols 4]
     python3 tools/peek.py samurai lunge          # every frame of one animation
-Writes tools/_peek.png
+Writes tools/_peek_<name>.png
 """
 import importlib
 import os
@@ -47,7 +47,7 @@ def main():
         y = (i // cols) * (fh * zoom + 12)
         out.paste(fr.resize((fw * zoom, fh * zoom), Image.NEAREST), (x, y + 12))
         d.text((x + 2, y), label, fill=(255, 255, 255))
-    p = os.path.join(HERE, "_peek.png")
+    p = os.path.join(HERE, f"_peek_{name}.png")
     out.save(p)
     print("wrote", p)
 
