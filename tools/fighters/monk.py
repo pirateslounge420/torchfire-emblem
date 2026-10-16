@@ -152,11 +152,11 @@ cc......kkk
 .........kk
 """, anchor=(5, 0)),
     "fwd": grid("""
-.Cccccckkk.
-Ccccccc.kk.
-Cccccc..k..
-Cccc.......
-cc.........
+.Cccccckkkk
+.Ccccccckkk
+Cccccc.ckkk
+Ccccc...kk.
+Cccc....k..
 """, anchor=(5, 0)),
 }
 
@@ -240,9 +240,14 @@ def staff(angle, variant="normal"):
     if variant == "blur":
         return blade(at(-6), at(18), width=4, letters=("E", "e", "e"), taper=0.4, edge=None)
     if variant == "spin":
-        # twirled about the hand: the staff slides to its middle, a ring of blur around it
+        # twirled about the hand: the staff slides to its middle; a ring of blur
+        # around it and a ghost of the staff a quarter-turn behind
+        ring = arc((0, 0), 9, 12, angle, angle + 360, letters=("e", "e"))
+        g = math.radians(angle + 90)
+        ghost = capsule((round(-10 * math.cos(g)), round(-10 * math.sin(g))),
+                        (round(10 * math.cos(g)), round(10 * math.sin(g))), 2, ("e", "e", "e"))
         p = capsule(at(-11), at(11), 2, ("L", "l", "j"), shade_px=(0, 1))
-        return arc((0, 0), 9, 12, angle, angle + 360, letters=("e", "e")).union(p)
+        return ring.union(ghost).union(p)
     p = capsule(at(-7), at(15), 2, ("L", "l", "j"), shade_px=(0, 1))
     for (x, y) in list(p.pixels):          # lighter bands near each end
         t = x * dx + y * dy
@@ -305,7 +310,7 @@ def ik(tx, ty, bend=1):
 def sleeve(ua):
     """The rolled robe sleeve: a loose capsule over the upper arm, anchored at the shoulder."""
     r = math.radians(ua)
-    return capsule((0, 0), (round(U * math.cos(r)), round(U * math.sin(r))), 5, ("C", "c", "k"))
+    return capsule((0, 0), (round(U * math.cos(r)), round(U * math.sin(r))), 4, ("C", "c", "k"))
 
 
 def dress(pose, fhand=True):
@@ -319,7 +324,7 @@ def dress(pose, fhand=True):
     return pose
 
 
-def P(dx=0, skirt="rest", far=(1, 6), angle=150, along=8, bf=-1, bn=1,
+def P(dx=0, skirt="rest", far=(1, 6), angle=150, along=9, bf=-1, bn=1,
       variant="normal", layer="front", off=(0, 0), two=True, fhand=True, **kw):
     """Base pose: light ready stance, staff low across the hips in both hands,
     tip toward the foe.
@@ -376,15 +381,15 @@ def animations():
 
     # --- regular attack: draw the staff back along the hip, thrust ------------
     lean = [
-        P(dx=1, lean=(0, 0), far=(5, 8), angle=170, along=7, bn=1),
-        P(dx=3, torso="back", lean=(1, 0), far=(4, 7), angle=178, along=7,
+        P(dx=1, lean=(0, 0), far=(5, 8), angle=170, along=7, bf=1, bn=1),
+        P(dx=3, torso="back", lean=(1, 0), far=(4, 7), angle=178, along=7, bf=1,
           near_leg=(110, 95), far_leg=(55, 85)),
-        P(dx=4, torso="back", lean=(2, 0), far=(5, 7), angle=180, along=7,
+        P(dx=4, torso="back", lean=(2, 0), far=(5, 7), angle=180, along=7, bf=1,
           near_leg=(108, 95), far_leg=(52, 82)),
     ]
     hold = [
         lean[2],
-        P(dx=4, torso="back", lean=(2, -1), far=(5, 6), angle=181, along=7,
+        P(dx=4, torso="back", lean=(2, -1), far=(5, 6), angle=181, along=7, bf=1,
           near_leg=(108, 95), far_leg=(52, 82)),
     ]
     lunge = [
@@ -402,9 +407,9 @@ def animations():
     ]
     recover = [
         # twirl it back
-        P(dx=-6, torso="side", lean=(-2, 1), far=(-7, 7), angle=-150, along=4, variant="spin",
+        P(dx=-6, torso="side", lean=(-2, 1), far=(-8, 6), angle=-75, along=3, variant="spin",
           near_leg=(140, 98), far_leg=(45, 75), far_boot="back", skirt="flare"),
-        P(dx=-3, lean=(-1, 0), far=(-6, 7), angle=-110, along=7,
+        P(dx=-3, lean=(-1, 0), far=(-9, 5), angle=-100, along=7, bn=-1,
           near_leg=(125, 98), far_leg=(55, 85)),
         P(dx=-1),
     ]
@@ -433,13 +438,13 @@ def animations():
     # Stagger (staff): knocked back, jams the staff into the ground and hangs
     # off it, feet leaving the ground, then lands in a low crouch.
     stagger = [
-        P(dx=6, head="hurt", lean=(3, 1), head_off=(1, 0), far=(-4, 9), angle=115, along=5,
+        P(dx=6, head="hurt", lean=(3, 1), head_off=(1, 0), far=(-7, 8), angle=120, along=5,
           near_leg=(128, 108), far_leg=(45, 60), far_boot="back", skirt="fwd"),
         P(dx=5, head="hurt", lean=(1, 2), head_off=(0, 1), planted=False, root=(RX + 5, 31),
           far=(-6, 10), angle=105, off=butt_off(105, 5), along=-2, bn=-1,
           near_leg=(160, 60), far_leg=(120, 40), near_boot="tip", far_boot="tip",
           skirt="flare", shadow=(8, 1)),
-        P(dx=4, head="normal", lean=(1, 2), head_off=(-1, 0), far=(-7, 3), angle=105, along=5,
+        P(dx=3, head="down", lean=(1, 2), far=(-11.5, 2.5), angle=110, off=butt_off(110, 4), along=3,
           near_leg=(165, 100), far_leg=(30, 80), far_boot="back", skirt="flare"),
     ]
 
@@ -452,9 +457,9 @@ def animations():
     ]
     dodge_down = [
         P(dx=0, lean=(-2, 2), near_leg=(135, 100), far_leg=(45, 80), far=(-4, 9), angle=-140),
-        # the splits, hanging on the planted staff
+        # the splits, staff held level like a bar
         P(dx=0, lean=(-2, 3), head="down", near_leg=(178, 180), far_leg=(2, 0), far_boot="back",
-          far=(-8, -9), angle=90, off=butt_off(90, 7), along=-3, bn=-1, skirt="flare"),
+          far=(-4, -1), angle=180, along=7, bn=-1, skirt="flare"),
     ]
     dodge_forward = [
         # a tucked forward roll
@@ -470,8 +475,8 @@ def animations():
         dress(dict(root=(RX + 6, 27), lean=(0, 22), torso="flip", head="flip", planted=False, shadow=(6, 1),
                    near_leg=(-120, -30), far_leg=(-100, -10), near_boot="tip", far_boot="tip",
                    near_boot_off=(0, -3), far_boot_off=(0, -3),
-                   near_arm=(-150, -60), far_arm=(-30, -120), near_hand="grip", far_hand="grip",
-                   weapon=dict(hand="far", angle=160, layer="front"),
+                   near_arm=(-150, -30), far_arm=(-30, -150), near_hand="grip", far_hand="grip",
+                   weapon=dict(hand="far", angle=180, layer="front"),
                    extras=[("skirt_fwd", "pelvis", 0, 0, "front")], order=ORDER,
                    effects=[(dash_lines(0, 0, 2, 7), "pelvis", -18, 2)])),
         P(dx=10, lean=(1, 1), near_leg=(135, 100), far_leg=(45, 80), far=(-2, 10), angle=-135,
@@ -479,18 +484,20 @@ def animations():
     ]
 
     # --- critical: plant the staff, coil, vault into a flying kick, spin strike --
+    # plant the staff in front, slide the hands up it while coiling down
+    coil = P(dx=2, lean=(2, 3), head="down", near_leg=(140, 105), far_leg=(45, 75),
+             far=(-11.5, 2.4), angle=108, off=butt_off(108, 4), along=2, bn=1, variant="glint")
     crit_lean = [
-        P(dx=2, lean=(0, 0), far=(-7, 6), angle=100, along=5, bn=1),
-        P(dx=3, lean=(1, 2), near_leg=(130, 102), far_leg=(50, 80),
-          far=(-7, 5), angle=96, off=butt_off(96, 2), along=5, bn=1),
-        P(dx=4, lean=(2, 3), head="down", head_off=(-1, 0), near_leg=(140, 105), far_leg=(45, 75),
-          far=(-8, 4), angle=93, off=butt_off(93, 4), along=5, bn=1, variant="glint"),
+        P(dx=2, lean=(0, 0), far=(-9.5, 7), angle=108, off=butt_off(108, 3), along=2, bn=1),
+        P(dx=2, lean=(1, 2), near_leg=(130, 102), far_leg=(50, 80),
+          far=(-11, 4), angle=108, off=butt_off(108, 4), along=2, bn=1),
+        coil,
     ]
     crit_hold = [
-        crit_lean[2],
-        P(dx=4, lean=(2, 3), head="down", head_off=(-1, 0), near_leg=(140, 105), far_leg=(45, 75),
-          far=(-8, 4), angle=93, off=butt_off(93, 4), along=5, bn=1,
-          effects=[at_tip(STAR, 93, off=butt_off(93, 4), t=-7, dy=-2)]),
+        coil,
+        P(dx=2, lean=(2, 3), head="down", near_leg=(140, 105), far_leg=(45, 75),
+          far=(-11.5, 2.4), angle=108, off=butt_off(108, 4), along=2, bn=1,
+          effects=[at_tip(STAR, 108, off=butt_off(108, 4), t=13, dy=-1)]),
     ]
     crit_lunge = [
         # vault: hands on top of the planted staff, legs swinging forward
@@ -504,12 +511,12 @@ def animations():
           near_leg=(178, 178), far_leg=(120, 60), near_boot="side", far_boot="tip", skirt="kick",
           effects=[slash("hip_near", 17, 95, 170, width=6)]),
         # lands, whips the staff around
-        P(dx=-10, lean=(-2, 1), far=(-8, 5), angle=-30, along=4, variant="spin",
+        P(dx=-10, lean=(-2, 1), far=(-8, 5), angle=-80, along=3, variant="spin",
           near_leg=(145, 100), far_leg=(45, 78), skirt="flare"),
         # spin strike impact
-        P(dx=-11, torso="side", lean=(-3, 1), far=(-8, 0), angle=180, along=6,
+        P(dx=-11, torso="side", lean=(-3, 1), far=(-7, 0), angle=180, along=6,
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", skirt="flare",
-          effects=[slash("sh_far", 26, -100, -185, width=7), at_tip(STAR, 180, dx=2)]),
+          effects=[slash("sh_far", 24, -95, -162, width=7), at_tip(STAR, 180)]),
         # follow-through
         P(dx=-11, torso="side", lean=(-3, 2), far=(-8, 1), angle=190, along=6,
           near_leg=(152, 100), far_leg=(38, 68), far_boot="back", skirt="flare"),

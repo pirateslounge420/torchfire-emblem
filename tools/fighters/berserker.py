@@ -297,6 +297,11 @@ FIGURE = Figure(
 
 RX = 36   # resting root x; the opponent is to the left
 
+# Layer order for the spin frame where the body has turned and the axe arm
+# swings in front of the torso.
+SPIN_ORDER = ["shadow", "back", "far_leg", "mid", "torso", "far_arm", "near_leg",
+              "front", "head", "near_arm", "top", "effects"]
+
 
 def P(dx=0, tail="rest", hand_front=True, **kw):
     """Base pose: wide ready stance, axe resting on the far shoulder.
@@ -371,7 +376,7 @@ def animations():
         P(dx=-10, torso="side", lean=(-4, 2), far_arm=(150, 115), near_arm=(165, 110),
           near_leg=(150, 98), far_leg=(38, 68), far_boot="back", tail="back",
           weapon=dict(hand="far", angle=135, layer="top"),
-          effects=[slash("sh_far", 27, -120, -195, width=7),
+          effects=[slash("sh_far", 26, -100, -228, width=7),
                    tipfx(STAR, 135), tipfx(DUST, 135, 0, 3)]),
         # follow-through: the body settles over the buried axe
         P(dx=-10, torso="side", lean=(-4, 3), head_off=(0, 1), far_arm=(150, 118), near_arm=(160, 115),
@@ -384,9 +389,9 @@ def animations():
         P(dx=-7, torso="side", lean=(-2, 1), far_arm=(160, 170), near_arm=(140, 100),
           near_leg=(140, 98), far_leg=(45, 75), far_boot="back", tail="back",
           weapon=dict(hand="far", angle=180, layer="top")),
-        P(dx=-3, torso="front", lean=(-1, 0), far_arm=(120, 20), near_arm=(110, 85),
+        P(dx=-3, torso="front", lean=(-1, 0), far_arm=(95, -60), near_arm=(110, 85),
           near_leg=(125, 98), far_leg=(55, 85),
-          weapon=dict(hand="far", angle=-90, layer="top")),
+          weapon=dict(hand="far", angle=-45, layer="top")),
         P(dx=-1),
     ]
 
@@ -423,13 +428,13 @@ def animations():
     # on the haft, head down; then half rises.
     stagger = [
         P(dx=6, head="hurt", lean=(3, 1), head_off=(1, 0), torso="front",
-          near_arm=(130, 40), far_arm=(20, -60), near_hand="open",
+          near_arm=(130, 40), far_arm=(30, -100), near_hand="open",
           near_leg=(130, 108), far_leg=(45, 60), far_boot="back", tail="fwd",
-          weapon=dict(hand="far", angle=-45, layer="top")),
+          weapon=dict(hand="far", angle=-90, layer="top")),
         P(dx=5, head="hurt", lean=(-3, 4), head_off=(-1, 2), torso="front",
           near_arm=(125, 95), far_arm=(145, 110), near_hand="open",
           near_leg=(140, 102), far_leg=(50, 70), far_boot="back", tail="fwd",
-          weapon=dict(hand="far", angle=135, layer="top")),
+          weapon=dict(hand="far", angle=135, layer="top", off=(0, -1))),
         P(dx=4, head="normal", lean=(-2, 2), head_off=(0, 1), torso="front",
           near_arm=(115, 85), far_arm=(140, 105), near_hand="fist",
           near_leg=(130, 100), far_leg=(55, 78), far_boot="front", tail="rest",
@@ -440,7 +445,7 @@ def animations():
     dodge_up = [
         P(dx=0, lean=(-1, 2), near_leg=(135, 105), far_leg=(45, 75), near_arm=(110, 100), far_arm=(70, -90),
           weapon=dict(hand="far", angle=-45, layer="top")),
-        P(dx=-1, planted=False, root=(RX - 1, 25), lean=(-1, 0), shadow=(6, 1),
+        P(dx=-1, planted=False, root=(RX - 1, 28), lean=(-1, 0), shadow=(6, 1),
           near_leg=(190, 115), far_leg=(165, 100), near_boot="tip", far_boot="tip",
           near_arm=(130, 60), far_arm=(50, -100), tail="up",
           weapon=dict(hand="far", angle=-45, layer="top")),
@@ -469,44 +474,46 @@ def animations():
 
     # --- critical: crouch, windmill the axe twice round, overhead chop -------------
     crit_lean = [
-        P(dx=2, torso="back", lean=(1, 0), far_arm=(40, 30), near_arm=(130, 80),
+        P(dx=2, torso="back", lean=(1, 0), far_arm=(70, 60), near_arm=(130, 80),
           near_leg=(118, 98), far_leg=(58, 86), tail="back",
-          weapon=dict(hand="far", angle=0, layer="top")),
-        P(dx=4, torso="back", lean=(2, 1), far_arm=(25, 10), near_arm=(140, 90),
+          weapon=dict(hand="far", angle=45, layer="top")),
+        P(dx=4, torso="back", lean=(2, 1), far_arm=(65, 75), near_arm=(140, 90),
           near_leg=(128, 100), far_leg=(50, 80), tail="back",
-          weapon=dict(hand="far", angle=0, layer="top")),
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(10, -10), near_arm=(150, 100),
+          weapon=dict(hand="far", angle=90, layer="top")),
+        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(60, 80), near_arm=(150, 100),
           near_leg=(138, 102), far_leg=(45, 75), tail="back",
-          weapon=dict(hand="far", angle=-45, layer="top", variant="glint")),
+          weapon=dict(hand="far", angle=90, layer="top", variant="glint")),
     ]
     crit_hold = [
         crit_lean[2],
-        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(10, -10), near_arm=(150, 100),
+        P(dx=5, torso="back", lean=(3, 2), head_off=(-1, 0), far_arm=(60, 80), near_arm=(150, 100),
           near_leg=(138, 102), far_leg=(45, 75), tail="back",
-          weapon=dict(hand="far", angle=-45, layer="top"),
-          effects=[tipfx(STAR, -45)]),
+          weapon=dict(hand="far", angle=90, layer="top"),
+          effects=[tipfx(STAR, 90, -2, 0)]),
     ]
     crit_lunge = [
-        # spin, first half: the axe whirls down and forward
-        P(dx=-4, torso="back", lean=(-1, 1), far_arm=(80, 100), near_arm=(-60, -100), tail="up",
-          near_leg=(135, 100), far_leg=(45, 78),
-          weapon=dict(hand="far", angle=100, layer="top", variant="blur"),
-          effects=[slash("sh_far", 23, 60, -260, width=6)]),
-        # spin, second half: up and over the back
-        P(dx=-6, torso="side", lean=(-2, 0), far_arm=(-100, -80), near_arm=(120, 100), tail="up",
-          near_leg=(140, 100), far_leg=(42, 75),
-            weapon=dict(hand="far", angle=-80, layer="top", variant="blur"),
-          effects=[slash("sh_far", 23, 240, -80, width=6)]),
+        # spin, first turn: the axe whirls back, over and down in front (the
+        # body has turned, so the axe arm is drawn over the torso)
+        P(dx=-4, torso="back", lean=(-1, 1), far_arm=(125, 135), near_arm=(-40, -70), tail="up",
+          near_leg=(130, 100), far_leg=(50, 80), near_boot="tip",
+          order=SPIN_ORDER,
+          weapon=dict(hand="far", angle=130, layer="top", variant="blur"),
+          effects=[slash("sh_far", 22, 100, -230, width=6)]),
+        # spin, second turn: the axe comes round again, now out in front
+        P(dx=-6, torso="side", lean=(-2, 0), far_arm=(-155, -175), near_arm=(70, 110), tail="up",
+          near_leg=(138, 100), far_leg=(44, 76), far_boot="tip",
+          weapon=dict(hand="far", angle=-165, layer="top", variant="blur"),
+          effects=[slash("sh_far", 22, 165, -165, width=6)]),
         # the chop comes over the top
-        P(dx=-8, torso="side", lean=(-3, 0), far_arm=(-90, -130), near_arm=(150, 120), tail="up",
+        P(dx=-8, torso="side", lean=(-3, 0), far_arm=(-85, -125), near_arm=(150, 120), tail="up",
           near_leg=(140, 100), far_leg=(45, 75),
-          weapon=dict(hand="far", angle=-150, layer="top", variant="blur"),
-          effects=[slash("sh_far", 27, -20, -205, width=8)]),
+          weapon=dict(hand="far", angle=-145, layer="top", variant="blur"),
+          effects=[slash("sh_far", 26, -15, -205, width=8)]),
         # impact
         P(dx=-12, torso="side", lean=(-4, 2), far_arm=(150, 115), near_arm=(165, 110),
           near_leg=(152, 98), far_leg=(36, 66), far_boot="back", tail="back",
           weapon=dict(hand="far", angle=135, layer="top"),
-          effects=[slash("sh_far", 28, -125, -200, width=8),
+          effects=[slash("sh_far", 25, -100, -228, width=7),
                    tipfx(STAR, 135), tipfx(DUST, 135, 0, 3)]),
         # follow-through
         P(dx=-12, torso="side", lean=(-4, 3), head_off=(0, 1), far_arm=(150, 118), near_arm=(160, 115),

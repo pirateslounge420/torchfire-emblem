@@ -26,15 +26,15 @@ PALETTE = Palette(NAME, {
 # Great helm, 3/4 view facing left. Anchor = neck (bottom centre). The crest
 # is the two orange rows on top; the visor slit is the `o` row.
 HELM = grid("""
-...CCCc....
-..kCCcccck.
-.MMMMMmmmmk
+....CCc....
+...CCCcck..
+..MMkccckkM
+.MMMMmmmmmn
 .MMMMmmmmmn
 .MMMmmmmmmn
-.Mmmmmmmmnn
-.Moooommmnn
-.Mmmmmmmmnn
-.Mmmmmmmmnn
+.Moooooomnn
+.Mmmommmmnn
+.Mmmommmmnn
 .Mmmmmmmnnn
 .Mmmmmmmnnn
 ..Mmmmmnnn.
@@ -45,13 +45,13 @@ HELM = grid("""
 HELM_HURT = grid("""
 ...........
 ...........
-.MMMMMmmmCc
+...........
+..MMMMmmmCc
 .MMMMmmmmCk
 .MMMmmmmmck
-.Mmmmmmmmkk
-.Moooommmnk
-.Mmmmmmmmnn
-.Mmmmmmmmnn
+.Moooooomkk
+.Mmmommmmnk
+.Mmmommmmnn
 .Mmmmmmmnnn
 .Mmmmmmmnnn
 ..Mmmmmnnn.
@@ -229,24 +229,28 @@ def shockwave(rx, ry, dotted=False):
 # Flanged head authored at 0° (haft enters from the left) and 45° (from the
 # upper-left); the other six angles are rotations, re-lit from the upper-left.
 _HEAD_0 = grid("""
-...m...
-.omMmo.
-.mMmmmm
-mmmmmmm
-.mmmmmm
-.ommmmo
-...m...
-""", anchor=(3, 3))
+....m....
+...mmm.m.
+..mmmmm..
+.mmmmmmm.
+.mmmmmmmm
+.mmmmmmm.
+..mmmmm..
+...mmm.m.
+....m....
+""", anchor=(4, 4))
 
 _HEAD_45 = grid("""
-.ommo..
-ommmmm.
-mmmmmmo
-.mmmmmm
-.mmmmmm
-..mmmmo
-...om..
-""", anchor=(3, 3))
+.........
+...mmm.m.
+..mmmmm..
+.mmmmmmm.
+.mmmmmmmm
+.mmmmmmm.
+..mmmmm..
+.m.mmm.m.
+....m....
+""", anchor=(4, 4))
 
 
 def _relight(p):
@@ -255,7 +259,7 @@ def _relight(p):
     for (x, y), c in p.pixels.items():
         if c in "Mmn":
             v = -0.6 * (x - ax) - 0.8 * (y - ay)
-            c = "M" if v >= 1.9 else ("n" if v <= -1.6 else "m")
+            c = "M" if v >= 1.3 else ("n" if v <= -1.3 else "m")
         out[(x, y)] = c
     return Part(out, p.anchor)
 
@@ -305,7 +309,7 @@ def mace(angle, variant="normal"):
         p = p.union(ellipse((hx, hy), 4.0, 4.0, "e"))
         p = p.union(ellipse((hx, hy), 2.2, 2.2, "E"))
     else:
-        p = capsule((round(-3 * dx), round(-3 * dy)), (round(HAFT * dx), round(HAFT * dy)), 2, ("m", "m", "n"))
+        p = capsule((round(-3 * dx), round(-3 * dy)), (round(HAFT * dx), round(HAFT * dy)), 3, ("m", "m", "n"))
         p.pixels[(round(-3 * dx), round(-3 * dy))] = "M"        # pommel cap
         head = MACE_HEADS[round(angle / 45.0) % 8 * 45]
         p = p.union(_place(head, hx, hy))
@@ -393,8 +397,9 @@ def _solve_arms(pose, far, far_bend, up, bend):
     return pose
 
 
-def P(dx=0, far=None, far_bend=1, up=HAND_UP, bend=1, extra=(), **kw):
-    """Base pose: at rest, mace head on the ground in front, both hands on the haft."""
+def P(dx=0, far=(-1, 1), far_bend=1, up=HAND_UP, bend=1, extra=(), **kw):
+    """Base pose: at rest, mace head on the ground in front, both hands on the haft.
+    `far` is the far wrist relative to the pelvis (None keeps `far_arm`)."""
     base = dict(
         root=(RX + dx, 36), torso="front", head="normal", lean=(-1, 0),
         far_arm=(100, 130), near_arm="auto",
@@ -433,15 +438,15 @@ def animations():
     # --- idle: resting on the mace, a slow 1-px breathe (A B C B) --------------
     idle = [
         P(),
-        P(lean=(-1, 1), far=(-1, 3)),
-        P(lean=(-1, 1), head_off=(0, 1), far=(-1, 3), weapon=W(144)),
-        P(lean=(-1, 1), far=(-1, 3)),
+        P(lean=(-1, 1)),
+        P(lean=(-1, 1), head_off=(0, 1), far=(-2, 1), weapon=W(144)),
+        P(lean=(-1, 1)),
     ]
 
     # --- regular attack: hoist over the far shoulder, smash the ground --------
     lean = [
         P(dx=1, lean=(0, 0), far=(-2, -4), weapon=W(172)),
-        P(dx=3, torso="back", lean=(1, 0), far=(3, -11), far_bend=-1, weapon=W(-100), bend=-1),
+        P(dx=3, torso="back", lean=(1, 0), far=(5, -10), far_bend=-1, weapon=W(-94), bend=-1),
         P(dx=4, torso="back", lean=(2, 0), far=(7, -10), far_bend=-1, weapon=W(-68), bend=-1,
           near_leg=(112, 94), far_leg=(55, 84)),
     ]
@@ -450,7 +455,7 @@ def animations():
         P(dx=4, torso="back", lean=(2, -1), far=(7, -11), far_bend=-1, weapon=W(-70), bend=-1,
           near_leg=(112, 94), far_leg=(55, 84)),
     ]
-    squat = dict(near_leg=(140, 100), far_leg=(40, 80))
+    squat = dict(near_leg=(150, 108), far_leg=(30, 72))
     lunge = [
         # blur: the mace coming over the top
         P(dx=-2, torso="side", lean=(-2, 0), far=(-5, -20), far_bend=-1, bend=-1,
@@ -458,12 +463,12 @@ def animations():
           weapon=W(-150, "blur"),
           effects=[slash("sh_far", 25, -55, -195, width=6)]),
         # impact: the head smashes the ground in front
-        P(dx=-6, torso="side", lean=(-3, 2), far=(-8, 0), weapon=W(141), **squat,
-          extra=[at_head(BUMP, 141, 0, 3)[:4] + ("back",)],
-          effects=[at_head(STAR, 141), at_head(dust(0), 141)]),
+        P(dx=-5, torso="side", lean=(-4, 3), far=(-8, 0), weapon=W(150), **squat,
+          extra=[at_head(BUMP, 150, 0, 3)[:4] + ("back",)],
+          effects=[at_head(STAR, 150), at_head(dust(0), 150)]),
         # follow-through: head still down, body settling
-        P(dx=-6, torso="side", lean=(-3, 3), head_off=(-1, 1), far=(-9, 1), weapon=W(139), **squat,
-          effects=[at_head(dust(1), 139)]),
+        P(dx=-5, torso="side", lean=(-4, 4), head_off=(-1, 1), far=(-9, -1), weapon=W(148), **squat,
+          effects=[at_head(dust(1), 148)]),
     ]
     recover = [
         P(dx=-4, torso="side", lean=(-2, 1), far=(-6, -3), weapon=W(158),
@@ -497,7 +502,7 @@ def animations():
           near_leg=(104, 84), far_leg=(74, 100), far_boot="back",
           far=(-4, -2), far_bend=-1, weapon=W(97, "solo"),
           near_arm=(182, 150), near_hand="open"),
-        P(dx=4, head="hurt", lean=(-1, 2), head_off=(0, 1), far=(-4, -3), weapon=W(118), **squat),
+        P(dx=4, head="hurt", lean=(-1, 2), head_off=(0, 1), far=(-3, -6), weapon=W(118), **squat),
         P(dx=3, head="normal", lean=(0, 1), far=(-3, -1), weapon=W(128),
           near_leg=(128, 100), far_leg=(52, 84)),
     ]
@@ -522,7 +527,7 @@ def animations():
     ]
     dodge_back = [
         P(dx=4, lean=(2, 0), near_leg=(102, 82), far_leg=(62, 100), far=(-2, 0), weapon=W(150),
-          effects=[(dash_lines(0, 0, 2, 7), "pelvis", -18, 5)]),
+          effects=[(dash_lines(0, 0, 2, 7), "pelvis", -19, -2)]),
         P(dx=8, lean=(1, 0), near_leg=(128, 95), far_leg=(70, 90), far=(-1, 1), weapon=W(146)),
     ]
 
@@ -530,13 +535,13 @@ def animations():
     tall = dict(near_leg=(104, 92), far_leg=(76, 88))
     crit_lean = [
         P(dx=1, lean=(0, 0), far=(-3, -5), weapon=W(-158), bend=-1),
-        P(dx=2, torso="back", lean=(1, -1), far=(2, -11), far_bend=-1, weapon=W(-100), bend=-1, **tall),
-        P(dx=3, torso="back", lean=(1, -1), far=(3, -13), far_bend=-1, weapon=W(-84, "glint"), bend=-1, **tall),
+        P(dx=2, lean=(0, -1), far=(-7, -8), weapon=W(-100), bend=-1, **tall),
+        P(dx=3, lean=(0, -1), far=(-8, -10), weapon=W(-88, "glint"), bend=-1, **tall),
     ]
     crit_hold = [
         crit_lean[2],
-        P(dx=3, torso="back", lean=(1, -1), far=(3, -13), far_bend=-1, weapon=W(-84), bend=-1, **tall,
-          effects=[at_head(STAR, -84, -1, -2)]),
+        P(dx=3, lean=(0, -1), far=(-8, -10), weapon=W(-88), bend=-1, **tall,
+          effects=[at_head(STAR, -88, -1, 0)]),
     ]
     crit_lunge = [
         # blur 1: coming forward over the top
@@ -544,23 +549,23 @@ def animations():
           near_leg=(126, 98), far_leg=(54, 84),
           effects=[slash("sh_far", 26, -50, -175, width=6)]),
         # blur 2: horizontal in front, about to come down
-        P(dx=-5, torso="side", lean=(-3, 1), far=(-7, -7), bend=-1, weapon=W(178, "blur"),
+        P(dx=-4, torso="side", lean=(-3, 1), far=(-7, -7), bend=-1, weapon=W(178, "blur"),
           near_leg=(134, 100), far_leg=(46, 80),
           effects=[slash("sh_far", 26, -110, -215, width=7)]),
         # impact: STAR + shockwave along the ground
-        P(dx=-6, torso="side", lean=(-3, 2), far=(-8, 0), weapon=W(141), **squat,
-          extra=[at_head(BUMP, 141, 0, 3)[:4] + ("back",)],
-          effects=[at_head(STAR, 141), at_head(dust(0), 141), at_head(shockwave(9, 3), 141, 1, 3)]),
+        P(dx=-4, torso="side", lean=(-4, 3), far=(-7, 0), weapon=W(150), **squat,
+          extra=[at_head(BUMP, 150, 0, 3)[:4] + ("back",)],
+          effects=[at_head(STAR, 150), at_head(dust(0), 150), at_head(shockwave(10, 3), 150, 1, 3)]),
         # dust settling 1
-        P(dx=-6, torso="side", lean=(-3, 3), head_off=(-1, 1), far=(-9, 1), weapon=W(139), **squat,
-          extra=[at_head(BUMP, 139, 0, 3)[:4] + ("back",)],
-          effects=[at_head(dust(1), 139), at_head(shockwave(12, 4, dotted=True), 139, 2, 3)]),
+        P(dx=-4, torso="side", lean=(-4, 4), head_off=(-1, 1), far=(-8, 1), weapon=W(148), **squat,
+          extra=[at_head(BUMP, 148, 0, 3)[:4] + ("back",)],
+          effects=[at_head(dust(1), 148), at_head(shockwave(12, 4, dotted=True), 148, 3, 3)]),
         # dust settling 2
-        P(dx=-6, torso="side", lean=(-3, 2), far=(-9, 0), weapon=W(139), **squat,
-          effects=[at_head(dust(2), 139)]),
+        P(dx=-4, torso="side", lean=(-4, 3), far=(-8, 0), weapon=W(148), **squat,
+          effects=[at_head(dust(2), 148)]),
     ]
     crit_recover = [
-        P(dx=-5, torso="side", lean=(-2, 1), far=(-6, -3), weapon=W(158),
+        P(dx=-4, torso="side", lean=(-2, 1), far=(-6, -3), weapon=W(158),
           near_leg=(132, 100), far_leg=(48, 82)),
         P(dx=-2, lean=(-1, 0), far=(-3, -2), weapon=W(128)),
         P(dx=-1),
