@@ -4,9 +4,10 @@ Three hand-drawn bodies (body.txt wide low stance, body_back.txt twisted-away
 wind-up with both hands raised, body_lunge.txt folded-forward crouch with both
 arms driven down) plus hand-placed overlays for the far arm, the big broad axe
 and the smear. The attack follows the six beats of the GBA Brigand / Warrior
-sheets: stance (axe low in front) → axe hung straight down, hands stacked →
-raised overhead behind the head, two hands → one big smear over the head →
-crouched two-handed chop buried at the foe's feet → the axe hauled back up.
+sheets: stance (axe level in front, edge down) → axe hung straight down from
+stacked hands → raised overhead behind the head, two hands → one big smear over
+the head → crouched two-handed chop buried at the foe's feet → the axe hauled
+back up.
 
 Run:  python3 tools/hand/pirate/frames.py
   -> pirate_attack.png / .gif next to this file, Godot sheet in godot/art/pirate_v2/
@@ -24,8 +25,8 @@ GROUND = 53          # row the feet stand on
 X_OFF = 18           # body grid column 0 -> box column
 ORIGIN = (36, 54)
 
-# 15 opaque colours. W doubles as teeth, eye glint, steel edge glint and smear core;
-# Y (pale yellow) is the axe edge glow and the smear fringe; C shades the steel by the socket.
+# 15 opaque colours. W doubles as teeth, eye glint, steel glint and smear core;
+# Y (pale yellow) is the axe edge glow and the smear fringe; C shades the steel by the eye.
 PAL = Palette(NAME, {
     "W": (248, 248, 248), "M": (152, 160, 184),
     "Y": (255, 236, 136), "y": (240, 186, 28), "v": (170, 116, 16),
@@ -41,168 +42,133 @@ def body(pose="body", dx=0, dy=0):
 
 
 def P(g, y, x, text):
-    """overlay in body-grid coordinates (row 0 = top of the 40-row body)"""
-    g.put(y + (GROUND - 39), x + X_OFF, text)
+    """overlay in body-grid coordinates (row 0 = top of the 40-row body); '.' leaves the pixel alone"""
+    g.put(y + (GROUND - 39), x + X_OFF, text.replace(".", "?"))
 
 
-def PB(g, y, x, text):
-    """overlay BEHIND the body: only writes onto empty pixels"""
-    by, bx = y + (GROUND - 39), x + X_OFF
-    for i, ch in enumerate(text):
-        if ch == "?" or ch == ".":
-            continue
-        if 0 <= by < g.h and 0 <= bx + i < g.w and g.g[by][bx + i] == ".":
-            g.g[by][bx + i] = ch
-
-
-def block(g, y, x, rows, behind=False):
+def block(g, y, x, rows):
     """hand-drawn multi-row overlay ('.' = leave alone)"""
     for j, ln in enumerate(rows):
-        (PB if behind else P)(g, y + j, x, ln.replace(".", "?"))
+        P(g, y + j, x, ln)
 
 
-def haft(g, y, x, dyx, n, pat="oLlo"):
-    """2-px haft from body coords (x,y); dyx = (dy, dx) per step; n steps"""
-    dy, ddx = dyx
-    for i in range(n):
-        P(g, y + dy * i, x + ddx * i, pat)
-
-
-# --- the axe head: one bit two heads wide, pale-yellow edge glow, steel body ------------
-# edge DOWN (socket at the top, local cols 6-9): stance, impact, haul
+# --- the broad axe: one bit, two heads wide. The crescent's horns run along the haft, the
+# pale-yellow edge faces away from it; the haft passes through the eye (the C patch) and
+# is drawn FIRST so the horn tips sit in front of it.
+# edge DOWN, haft horizontal along the top (eye at local cols 7-10, rows 1-3)
 AXE_DOWN = [
-    "......oooo......",
-    ".....oCCCCo.....",
-    "....oCMMMMMo....",
-    "...oCMMMMMMMo...",
-    "..oMMMMMMMMMMo..",
-    ".oMMMMMMMMMMMMo.",
-    "oMMMMMMMMMMMMMMo",
-    "oYWMMMMMMMMMMMYo",
-    "oYYWWMMMMMMMYYYo",
-    ".oYYYYYYYYYYYYo.",
-    "..oooooooooooo..",
+    "oo.....oooo.....oo",
+    "oYo...oCCCCo...oYo",
+    "oYMoo.oCCCCo.ooMYo",
+    "oYMMMooCCCCooMMMYo",
+    ".oYMMMMMMMMMMMMYo.",
+    ".oYWMMMMMMMMMMMYo.",
+    "..oYWWMMMMMMMMYo..",
+    "...oYYWWMMMMYYo...",
+    "....ooYYYYYYoo....",
+    "......oooooo......",
 ]
-# edge UP-LEFT (socket at the lower right, local (13,11)): raised
+# edge UP-LEFT, haft at 45 degrees along the inner arc (eye at local (7-8, 7-8))
 AXE_DIAG = [
-    "......oooo......",
-    "....ooYYMMoo....",
-    "...oYYWWMMMMo...",
-    "..oYWMMMMMMMMo..",
-    ".oYWMMMMMMMMMMo.",
-    ".oYMMMMMMMMMMCo.",
-    "oYMMMMMMMMMMMCo.",
-    "oYMMMMMMMMMMCCo.",
-    "oYMMMMMMMMMCCo..",
-    "oYMMMMMMMMCCo...",
-    ".oYMMMMMMMCo....",
-    "..oYMMMMMCo.....",
-    "...oYMMMo.......",
-    ".....ooo........",
+    "......ooooooo..",
+    "....ooYYYMMMMoo",
+    "...oYYWWMMMMMMo",
+    "..oYWWMMMMMMMo.",
+    ".oYWMMMMMMMMo..",
+    ".oYMMMMMMMMo...",
+    "oYMMMMMMMMo....",
+    "oYMMMMMMCo.....",
+    "oYMMMMMCo......",
+    "oYMMMMCo.......",
+    "oYMMMCo........",
+    "oYMMCo.........",
+    "oYMCo..........",
+    "oYCo...........",
+    "ooo............",
 ]
-
-
-def mirror(rows):
-    return [r[::-1] for r in rows]
 
 
 def rot_ccw(rows):
-    """rotate a block 90 degrees counter-clockwise (edge DOWN -> edge RIGHT)"""
+    """rotate a block 90 degrees counter-clockwise (edge DOWN -> edge RIGHT, haft vertical)"""
     w = len(rows[0])
     return ["".join(r[c] for r in rows) for c in range(w - 1, -1, -1)]
 
 
+def hand(g, y, x):
+    """3x3 fist with its outline"""
+    P(g, y - 1, x - 1, "ooooo"); P(g, y, x - 1, "oSSso"); P(g, y + 1, x - 1, "oSszo"); P(g, y + 2, x - 1, "oszzo"); P(g, y + 3, x - 1, "ooooo")
+
+
 # --- frames -------------------------------------------------------------------
-def far_arm_stance(g):
-    """far forearm curling in front of the belly to the rear hand on the haft"""
-    P(g, 19, 18, "ozo"); P(g, 20, 16, "oszo"); P(g, 21, 15, "oCcko"); P(g, 22, 14, "ocCko")
-    P(g, 23, 13, "oCcko")
-
-
-def hands_stance(g):
-    P(g, 24, 12, "oSSso"); P(g, 25, 12, "oSszo"); P(g, 26, 12, "oszzo"); P(g, 27, 13, "ooo")   # rear hand
-    P(g, 25, 6, "oSSso"); P(g, 26, 6, "oSszo"); P(g, 27, 6, "oszzo"); P(g, 28, 7, "ooo")       # lead hand (over the haft)
-
-
 def idle(bob=0):
     g = body()
     if bob:
         g.shift_region(0, 0, BOX, GROUND - 12, 0, bob)
-    far_arm_stance(g)
-    # haft held nearly level, pointing at the foe; head hanging edge-down in front of the shin
-    for i in range(14):
-        P(g, 26 + (1 if i > 6 else 0), 14 - i, "L")
-        P(g, 27 + (1 if i > 6 else 0), 14 - i, "l")
-        P(g, 25 + (1 if i > 6 else 0), 14 - i, "o")
-        P(g, 28 + (1 if i > 6 else 0), 14 - i, "o")
-    P(g, 25, 15, "o"); P(g, 26, 15, "o"); P(g, 27, 15, "o")
-    block(g, 27, -9, AXE_DOWN)
-    hands_stance(g)
+    # far forearm (bandaged) comes down across the sash to the rear hand
+    P(g, 19, 20, "ozo"); P(g, 20, 19, "oszo"); P(g, 21, 17, "oCcko"); P(g, 22, 15, "oCcko"); P(g, 23, 13, "ocCko"); P(g, 24, 12, "oCko")
+    # haft held level, pointing at the foe: rows 26-27 from the rear hand to 2 px past the eye
+    P(g, 25, -7, "o" * 21); P(g, 26, -7, "L" * 21); P(g, 27, -7, "l" * 21); P(g, 28, -7, "o" * 21)
+    block(g, 25, -12, AXE_DOWN)
+    hand(g, 25, 11); hand(g, 25, 7)
     return g.tidy()
 
 
 def axe_hung():
     """beat 2: the axe hangs straight down from stacked hands, head resting at the front foot"""
     g = body(dx=1)
-    # far forearm comes down the front of the chest to the upper hand
-    P(g, 18, 18, "ozo"); P(g, 19, 16, "oszo"); P(g, 20, 14, "oCcko"); P(g, 21, 13, "ocCko")
-    # vertical haft from the upper hand down into the socket
-    for i in range(10):
-        P(g, 22 + i, 10, "oLlo")
-    block(g, 30, 5, rot_ccw(AXE_DOWN))
-    P(g, 22, 9, "oSSso"); P(g, 23, 9, "oSszo"); P(g, 24, 9, "oszzo")      # upper (rear) hand
-    P(g, 26, 8, "oSSso"); P(g, 27, 8, "oSszo"); P(g, 28, 8, "oszzo"); P(g, 29, 9, "ooo")  # lead hand
+    g.clear(X_OFF + 6, GROUND - 39 + 25, X_OFF + 12, GROUND - 39 + 29)     # the body's own hand
+    P(g, 18, 20, "ozo"); P(g, 19, 18, "oszo"); P(g, 20, 16, "oCcko"); P(g, 21, 14, "ocCko")   # far forearm
+    for y in range(20, 34):
+        P(g, y, 9, "oLlo")
+    block(g, 23, 9, rot_ccw(AXE_DOWN))
+    hand(g, 22, 10); hand(g, 25, 9)
     return g.tidy()
 
 
 def raised(tremble=0):
     """beat 3: twisted away, both hands up behind the head, the axe head high behind"""
-    g = body("body_back", dx=-5, dy=tremble)
-    haft(g, 4, 39, (-1, 1), 8)                        # up-right through the hands to the socket
-    P(g, 6, 38, "oLlo"); P(g, 7, 37, "oLlo")          # butt of the haft below the hands
-    block(g, -10, 34, AXE_DIAG)
-    # hands re-drawn over the haft
-    P(g, 1, 38, "oSSso"); P(g, 2, 37, "oSoSszo"); P(g, 3, 37, "oSsozzo"); P(g, 4, 37, "oszzoo"); P(g, 5, 37, "ozzo")
+    g = body("body_back", dx=-6, dy=tremble)
+    for i in range(11):                               # haft from the butt up-right through the hands to the eye
+        P(g, 6 - i, 36 + i, "oLlo")
+    block(g, -9, 37, AXE_DIAG)
+    P(g, 1, 39, "oSSso"); P(g, 2, 37, "oSoSszo"); P(g, 3, 37, "oSsozzo"); P(g, 4, 37, "oszzoo"); P(g, 5, 37, "ozzo")
     return g.tidy()
 
 
 SMEAR = [
-    (-13, 39, "YY"), (-12, 36, "YYWWY"), (-11, 33, "YYWWWWY"), (-10, 30, "YYWWWWWWY"),
-    (-9, 28, "YWWWWWWWWY"), (-8, 26, "YWWWWWWWWWY"), (-7, 24, "YWWWWWWWWWWY"), (-6, 22, "YWWWWWWWWWWWY"),
-    (-5, 21, "YWWWWWWWWWWWY"), (-4, 20, "YWWWWWWWWWWWY"), (-3, 19, "YWWWWWWWWWWWY"), (-2, 18, "YWWWWWWWWWWWY"),
-    (-1, 18, "YWWWWWWWWWWY"), (0, 17, "YWWWWWWWWWWY"), (1, 17, "YWWWWWWWWWY"), (2, 17, "YWWWWWWWWY"),
-    (3, 17, "YWWWWWWWY"), (4, 18, "YWWWWWWY"), (5, 18, "YWWWWWY"), (6, 19, "YWWWWY"), (7, 19, "YYYYY"),
+    (-13, 41, "YY"), (-12, 38, "YYWWY"), (-11, 35, "YYWWWWY"), (-10, 32, "YYWWWWWWY"),
+    (-9, 30, "YWWWWWWWWY"), (-8, 28, "YWWWWWWWWWY"), (-7, 26, "YWWWWWWWWWWY"), (-6, 24, "YWWWWWWWWWWWY"),
+    (-5, 23, "YWWWWWWWWWWWY"), (-4, 22, "YWWWWWWWWWWWY"), (-3, 21, "YWWWWWWWWWWWY"), (-2, 20, "YWWWWWWWWWWWY"),
+    (-1, 20, "YWWWWWWWWWWY"), (0, 19, "YWWWWWWWWWWY"), (1, 19, "YWWWWWWWWWY"), (2, 19, "YWWWWWWWWY"),
+    (3, 19, "YWWWWWWWY"), (4, 20, "YWWWWWWY"), (5, 20, "YWWWWWY"), (6, 21, "YWWWWY"), (7, 21, "YYYYY"),
 ]
 
 
 def smear():
     """beat 4: the whole axe head becomes one pale wedge sweeping over the head"""
-    g = body("body_back", dx=-7, dy=1)
+    g = body("body_back", dx=-8, dy=1)
     for y, x, t in SMEAR:
-        P(g, y, x - 7, t)
+        P(g, y, x - 8, t)
     return g.tidy()
 
 
 def impact():
     """beat 5: crouched two-handed chop, the head buried at the foe's feet"""
     g = body("body_lunge", dx=-4)
-    for i in range(7):                                # haft from the hands down-left to the socket
-        P(g, 27 + i // 2, 3 - i, "oLlo")
+    for i in range(16):                               # haft from the rear hand down-left, 3 px drop over its length
+        P(g, 27 + i // 6, 8 - i, "o"); P(g, 28 + i // 6, 8 - i, "L"); P(g, 29 + i // 6, 8 - i, "l"); P(g, 30 + i // 6, 8 - i, "o")
     block(g, 30, -13, AXE_DOWN)
-    # hands over the haft
-    P(g, 26, 1, "oSSso"); P(g, 27, 1, "oSszo"); P(g, 28, 1, "oszzo"); P(g, 29, 2, "ooo")
-    P(g, 27, 5, "oSso"); P(g, 28, 5, "oszo"); P(g, 29, 6, "oo")
+    hand(g, 26, 2); hand(g, 27, 6)
     return g.tidy()
 
 
 def lower():
     """beat 6: hauling the axe back up out of the ground"""
     g = body("body_lunge", dx=-1)
-    for i in range(8):
-        P(g, 27 - i // 2, 3 - i, "oLlo")
-    block(g, 23, -14, AXE_DOWN)
-    P(g, 26, 1, "oSSso"); P(g, 27, 1, "oSszo"); P(g, 28, 1, "oszzo"); P(g, 29, 2, "ooo")
-    P(g, 27, 5, "oSso"); P(g, 28, 5, "oszo"); P(g, 29, 6, "oo")
+    for i in range(14):
+        P(g, 27 - i // 3, 7 - i, "o"); P(g, 28 - i // 3, 7 - i, "L"); P(g, 29 - i // 3, 7 - i, "l"); P(g, 30 - i // 3, 7 - i, "o")
+    block(g, 22, -14, AXE_DOWN)
+    hand(g, 26, 2); hand(g, 27, 6)
     return g.tidy()
 
 
