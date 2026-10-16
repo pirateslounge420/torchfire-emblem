@@ -107,7 +107,7 @@ class Canvas:
         if 0 <= x < self.w and 0 <= y < self.h and c != KEEP:
             self.px[y][x] = c
 
-    def blit(self, part: Part, x: int, y: int, outline=True, over=True):
+    def blit(self, part: Part, x: int, y: int, outline=True, over=True, outline_letter="o"):
         """Place `part` so its anchor lands on (x, y).
 
         outline=True draws a dark ring around the part's silhouette *under* the
@@ -130,7 +130,7 @@ class Canvas:
                 under = self.get(cx, cy)
                 if over or under == TRANSPARENT:
                     if under not in NO_OUTLINE:   # don't outline over slash effects
-                        self.set(cx, cy, "o")
+                        self.set(cx, cy, outline_letter if under != TRANSPARENT else "o")
         for (px, py), c in part.pixels.items():
             cx, cy = px + ox, py + oy
             if over or self.get(cx, cy) == TRANSPARENT:
