@@ -257,22 +257,16 @@ def flurry(theta, fade=False):
     fade: the ring breaking up into dots, the weight already pulled halfway in"""
     g = spin_body(1, True)
     if not fade:
-        for i, (y, x) in enumerate(ring_pixels(R)):
-            ring_put(g, y, x, "H" if (i // 3) % 2 == 0 else "e")
-        for (y, x) in ring_pixels(R - 1):
-            if ((y * 3 + x) % 4) == 0:
-                ring_put(g, y, x, "e")
-        weight_blur(g, theta)
-        for back in (135, 200):               # afterimage dots of the weight a beat ago
-            y, x = polar(theta - back, R + 1)
-            ring_put(g, y, x, "g")
+        composite_effect(g, ring_smear(theta))
     else:
+        fx = Grid(BOX, BOX)
         for i, (y, x) in enumerate(ring_pixels(R)):
             if i % 3 == 0:
-                ring_put(g, y, x, "e")
+                P(fx, y, x, "e")
         for back in (0, 60, 130):
             y, x = polar(theta - back, R)
-            ring_put(g, y, x, "g")
+            P(fx, y, x, "g")
+        composite_effect(g, fx)
         wy, wx = polar(theta + 40, 5)         # the weight yanked halfway in, chain shortening
         chain_to(g, HAND, (wy, wx))
         weight(g, wy - 1, wx - 1)
