@@ -154,6 +154,7 @@ Rows are the **bottom (base)** trigram; columns are the **top** trigram. Each ce
 ## 10. Art Direction (Locked, Trilogy-Wide)
 
 - **In-match animation style:** GBA-era Fire Emblem pixel art — specifically sprites sourced from *Fire Emblem: The Blazing Blade*.
+- **Battle sprite frame size (locked Oct 15, 2026):** 64×64 pixels per frame for base (on-foot) fighters. Mounted and flying units will need a larger box, to be set when their art starts. For scale, GBA Fire Emblem infantry stand roughly 32–40 px tall inside a 240×160 screen.
 - **Character portraits & key art:** classic Yu-Gi-Oh OCG card art, Volume 1 through Rise of Destiny (1999–2004 era).
 - Both choices are **locked** as standards for the entire trilogy, not just Fighter — establishing them here in Game 1 is part of the risk-front-loading strategy (see Section 1).
 

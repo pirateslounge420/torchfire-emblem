@@ -3,7 +3,7 @@ extends Node2D
 ## One combatant. Owns its HP, its pose, and its sprite.
 ##
 ## PLACEHOLDER ART: until the hand-drawn GBA-style frames land, every pose is
-## generated in code as a 32x32 pixel figure (see _build_placeholder_frames).
+## generated in code inside the locked 64x64 frame box (see _build_placeholder_frames).
 ## To swap in real art, drop a SpriteFrames resource into `frames` in the
 ## editor and the placeholder builder is skipped. Pose names must match POSES.
 
@@ -94,13 +94,13 @@ func _frames_for_pose(p: String) -> Array[Texture2D]:
 	return out
 
 
-## Draws a 32x32 figure: head, torso, a weapon arm. dx/dy shift the body,
+## Draws a figure in the 64x64 frame box: head, torso, a weapon arm. dx/dy shift the body,
 ## arm_dx extends the weapon. `accent` colors the weapon.
 func _figure(dx: int, dy: int, arm_dx: int, accent: Color = Color.LIGHT_GRAY) -> Texture2D:
-	var img := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	var img := Image.create(64, 64, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
-	var cx := 14 + dx
-	var cy := 16 + dy
+	var cx := 30 + dx
+	var cy := 36 + dy
 	# head
 	_rect(img, cx - 2, cy - 10, 5, 5, body_color.lightened(0.3))
 	# torso
@@ -114,6 +114,6 @@ func _figure(dx: int, dy: int, arm_dx: int, accent: Color = Color.LIGHT_GRAY) ->
 
 
 func _rect(img: Image, x: int, y: int, w: int, h: int, c: Color) -> void:
-	for i in range(max(0, x), min(32, x + w)):
-		for j in range(max(0, y), min(32, y + h)):
+	for i in range(max(0, x), min(64, x + w)):
+		for j in range(max(0, y), min(64, y + h)):
 			img.set_pixel(i, j, c)
