@@ -32,7 +32,7 @@ def stance(bob=0):
     f = Frame(DW, DH)
     b = bob
     # ---- hair tail, hanging down the back (behind everything)
-    tail = Part("tail", [(96, 40 + b), (101, 38 + b), (104, 48 + b), (103, 62 + b), (101, 76 + b), (98, 84 + b), (96, 78 + b), (97, 64 + b), (97, 50 + b)], "a")
+    tail = Part("tail", [(96, 31 + b), (102, 30 + b), (105, 44 + b), (104, 60 + b), (102, 76 + b), (99, 86 + b), (97, 80 + b), (98, 64 + b), (97, 48 + b)], "a")
     tail.band([(99, 40 + b), (104, 48 + b), (103, 76 + b), (100, 84 + b), (100, 60 + b)], "r")
     tail.fold([(100, 44 + b), (101, 70 + b)], "A")
     # ---- far sleeve (behind the torso)
@@ -86,31 +86,33 @@ def stance(bob=0):
         hand.fold([(x0, y0 + b), (x0, y0 + 3 + b)], "z")
     hand.fold([(58, 68 + b), (66, 69 + b)], "z")                                          # the fingertips' edge
     hand.fold([(65, 60 + b), (68, 63 + b)], "z")                                          # the thumb
-    # ---- head: face, then hair over it
-    face = Part("face", [(75, 15 + b), (86, 15 + b), (89, 20 + b), (89, 27 + b), (85, 34 + b), (80, 37 + b), (76, 34 + b), (72, 27 + b), (72, 20 + b)], "S")
-    face.band([(86, 15 + b), (89, 20 + b), (89, 27 + b), (85, 34 + b), (85, 24 + b)], "s")   # a narrow shadow on the far cheek only
-    face.fold([(76, 33 + b), (80, 36 + b), (85, 33 + b)], "z")                                 # jaw, tapering to the chin
-    face.fold([(74, 22 + b), (77, 21 + b)], "z"); face.fold([(80, 21 + b), (83, 22 + b)], "z")   # brows
-    face.dot(73, 26 + b, "z")                                                                  # nose tip at the profile edge
-    face.fold([(77, 31 + b), (80, 31 + b)], "z")                                               # mouth, centred
-    hair = Part("hair", [(70, 12 + b), (78, 8 + b), (88, 8 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (90, 22 + b),
-                         (86, 16 + b), (82, 20 + b), (79, 15 + b), (76, 21 + b), (73, 17 + b), (70, 22 + b), (68, 18 + b)], "a")
-    hair.band([(72, 12 + b), (78, 8 + b), (88, 8 + b), (90, 12 + b), (80, 12 + b), (74, 16 + b)], "A")
-    hair.band([(92, 12 + b), (96, 12 + b), (99, 22 + b), (98, 34 + b), (94, 40 + b), (92, 32 + b), (91, 20 + b)], "r")
-    hair.fold([(84, 9 + b), (90, 14 + b), (93, 24 + b)], "r")
-    hair.fold([(76, 10 + b), (74, 16 + b)], "A")
-    sidelock = Part("sidelock", [(88, 20 + b), (92, 20 + b), (93, 36 + b), (90, 42 + b), (88, 36 + b)], "a")
-    sidelock.band([(90, 20 + b), (92, 20 + b), (93, 36 + b), (91, 40 + b)], "r")
-    tie = Part("tie", [(95, 36 + b), (100, 35 + b), (101, 40 + b), (96, 41 + b)], "R")
-
-    f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, sidelock, tie)
+    # ---- head (Kenshin build): a short, soft face with big eyes and a small pointed chin; spiky long
+    # bangs parting over the brow; two long side locks down past the jaw; the tail tied at the back of the head
+    face = Part("face", [(73, 16 + b), (87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (81, 35 + b), (75, 32 + b), (70, 27 + b), (70, 21 + b)], "S")
+    face.band([(87, 16 + b), (91, 21 + b), (91, 27 + b), (87, 32 + b), (86, 24 + b)], "s")   # narrow far-cheek shadow
+    face.fold([(75, 31 + b), (81, 34 + b), (87, 31 + b)], "z")                                 # small chin
+    face.fold([(73, 22 + b), (77, 21 + b)], "z"); face.fold([(81, 21 + b), (85, 22 + b)], "z")   # brows
+    face.fold([(73, 23 + b), (70, 27 + b), (73, 28 + b)], "z")                                # the nose: bridge down to a tip, back under
+    face.fold([(77, 30 + b), (81, 30 + b)], "z")                                               # mouth
+    hair = Part("hair", [(68, 14 + b), (74, 8 + b), (82, 6 + b), (92, 8 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b),
+                         (90, 20 + b), (88, 24 + b), (86, 17 + b), (83, 25 + b), (80, 17 + b), (77, 25 + b), (74, 18 + b), (71, 26 + b), (69, 22 + b)], "a")
+    hair.band([(72, 12 + b), (78, 8 + b), (88, 7 + b), (92, 10 + b), (84, 11 + b), (76, 14 + b)], "A")
+    hair.band([(93, 10 + b), (98, 14 + b), (99, 24 + b), (97, 34 + b), (93, 38 + b), (92, 26 + b), (92, 16 + b)], "r")
+    hair.fold([(85, 8 + b), (91, 13 + b), (94, 24 + b)], "r")
+    hair.fold([(78, 10 + b), (76, 16 + b)], "A"); hair.fold([(82, 9 + b), (81, 16 + b)], "A")
+    lock_near = Part("lock_near", [(70, 22 + b), (74, 22 + b), (75, 36 + b), (74, 48 + b), (71, 52 + b), (69, 44 + b), (69, 32 + b)], "a")
+    lock_near.band([(70, 22 + b), (72, 22 + b), (72, 48 + b), (71, 52 + b), (69, 44 + b), (69, 32 + b)], "A")
+    lock_far = Part("lock_far", [(88, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (88, 46 + b), (87, 32 + b)], "a")
+    lock_far.band([(91, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (91, 40 + b)], "r")
+    tie = Part("tie", [(95, 28 + b), (100, 27 + b), (101, 32 + b), (96, 33 + b)], "R")
+    f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, lock_near, lock_far, tie)
     f.scale(SCALE, 80, DGROUND + 1, 48, GROUND + 1)
     f.w, f.h = W, H
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
     ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE))
-    for x in (44, 45, 49, 50):
-        g.g[ey][x] = "o"
+    for x in (44, 45, 50, 51):
+        g.g[ey][x] = "o"; g.g[ey + 1][x] = "o"
     return g
 
 
