@@ -281,7 +281,7 @@ def animations():
         # follow-through: blade dips low
         P(dx=-9, torso="side", lean=(-3, 1), far_arm=(178, 190), near_arm=(170, 110),
           near_leg=(150, 98), far_leg=(40, 70), far_boot="back", tail="flare", pony="back",
-          weapon=dict(hand="far", angle=195, layer="top")),
+          weapon=dict(hand="far", angle=160, layer="top")),
     ]
     recover = [
         P(dx=-6, torso="side", lean=(-2, 1), far_arm=(150, 160), near_arm=(140, 100),
@@ -408,12 +408,12 @@ def animations():
         # impact on landing
         P(dx=-11, torso="side", lean=(-3, 1), far_arm=(178, 185), near_arm=(165, 100),
           near_leg=(150, 100), far_leg=(40, 70), far_boot="back", tail="flare", pony="back",
-          weapon=dict(hand="far", angle=185, layer="top"),
+          weapon=dict(hand="far", angle=170, layer="top"),
           effects=[slash("sh_far", 27, -120, -190, width=8), (STAR, "wr_far", -16, 2)]),
         # follow-through
         P(dx=-11, torso="side", lean=(-3, 2), far_arm=(180, 200), near_arm=(165, 100),
           near_leg=(152, 100), far_leg=(38, 68), far_boot="back", tail="flare", pony="back",
-          weapon=dict(hand="far", angle=205, layer="top")),
+          weapon=dict(hand="far", angle=155, layer="top")),
     ]
     crit_recover = [
         P(dx=-9, torso="side", lean=(-2, 1), far_arm=(150, 160), near_arm=(140, 100),

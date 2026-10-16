@@ -127,13 +127,13 @@ class Figure:
         J = {"pelvis": pelvis, "neck": neck, "sh_near": sh_near, "sh_far": sh_far,
              "hip_near": hip_near, "hip_far": hip_far}
         for side in ("near", "far"):
-            ua, fa = pose.get(f"{side}_arm", (90, 90))
+            ua, fa = pose.get(f"{side}_arm") or (90, 90)
             ul = pose.get(f"{side}_upper_len", b["upper"])
             fl = pose.get(f"{side}_fore_len", b["fore"])
             el = _pt(J[f"sh_{side}"], ua, ul)
             wr = _pt(el, fa, fl)
             J[f"el_{side}"], J[f"wr_{side}"] = el, wr
-            ta, sa = pose.get(f"{side}_leg", (90, 90))
+            ta, sa = pose.get(f"{side}_leg") or (90, 90)
             tl = pose.get(f"{side}_thigh_len", b["thigh"])
             sl = pose.get(f"{side}_shin_len", b["shin"])
             kn = _pt(J[f"hip_{side}"], ta, tl)

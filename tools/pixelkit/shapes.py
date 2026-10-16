@@ -195,3 +195,48 @@ def fill_polygon(points, letter="c") -> Part:
             for x in range(int(math.floor(xs[i] + 0.5)), int(math.floor(xs[i + 1] + 0.5))):
                 out[(x, y)] = letter
     return Part(out, (0, 0))
+
+
+def shaded_ellipse(center, rx, ry, letters=("L", "l", "j"), tilt=0.0, hi_px=1.5, sh_px=2.5) -> Part:
+    """A filled ellipse with a highlight band on the upper-left rim and a
+    shadow band on the lower-right rim. tilt rotates it (degrees, clockwise)."""
+    hi, base, sh = letters
+    cx, cy = center
+    t = math.radians(tilt)
+    ct, st = math.cos(t), math.sin(t)
+    R = max(rx, ry) + 2
+    out = {}
+    for y in range(int(cy - R), int(cy + R + 1)):
+        for x in range(int(cx - R), int(cx + R + 1)):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            lx, ly = dx * ct + dy * st, -dx * st + dy * ct       # into ellipse space
+            q = (lx / rx) ** 2 + (ly / ry) ** 2
+            if q > 1.0:
+                continue
+            # approximate distance to the rim along the light axis
+            # light vector in ellipse space
+            lvx, lvy = LIGHT[0] * ct + LIGHT[1] * st, -LIGHT[0] * st + LIGHT[1] * ct
+            # how far this point is toward the lit rim: project onto the light dir, normalised by rim
+            s = (lx / rx) * lvx + (ly / ry) * lvy          # -1 .. 1 roughly
+            edge = 1.0 - math.sqrt(q)                       # 0 at rim, 1 at centre (in normalised units)
+            edge_px = edge * min(rx, ry)
+            if s > 0.25 and edge_px < hi_px:
+                out[(x, y)] = hi
+            elif s < -0.15 and edge_px < sh_px:
+                out[(x, y)] = sh
+            else:
+                out[(x, y)] = base
+    return Part(out, (0, 0))
+
+
+def tapered_chain(points, w0, w1, letters=("L", "l", "j")) -> Part:
+    """A polyline whose width tapers from w0 at the first point to w1 at the
+    last (tails, necks, wing fingers). Built from short capsules."""
+    out = Part({}, (0, 0))
+    n = len(points) - 1
+    for i in range(n):
+        wa = w0 + (w1 - w0) * i / n
+        wb = w0 + (w1 - w0) * (i + 1) / n
+        seg = capsule(points[i], points[i + 1], (wa + wb) / 2, letters)
+        out = out.union(seg)
+    return out

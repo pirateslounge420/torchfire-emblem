@@ -1,0 +1,111 @@
+{
+  "frame_size": 96,
+  "frame_w": 96,
+  "frame_h": 96,
+  "columns": 16,
+  "faces": "left",
+  "animations": {
+    "idle": {
+      "start": 0,
+      "count": 4,
+      "loop": true,
+      "fps": 6
+    },
+    "lean": {
+      "start": 4,
+      "count": 3,
+      "loop": false,
+      "fps": 10
+    },
+    "hold": {
+      "start": 7,
+      "count": 2,
+      "loop": true,
+      "fps": 5
+    },
+    "lunge": {
+      "start": 9,
+      "count": 3,
+      "loop": false,
+      "fps": 20
+    },
+    "recover": {
+      "start": 12,
+      "count": 3,
+      "loop": false,
+      "fps": 9
+    },
+    "block": {
+      "start": 15,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "parry": {
+      "start": 17,
+      "count": 3,
+      "loop": false,
+      "fps": 12
+    },
+    "hit": {
+      "start": 20,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "stagger": {
+      "start": 22,
+      "count": 3,
+      "loop": false,
+      "fps": 6
+    },
+    "dodge_up": {
+      "start": 25,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "dodge_down": {
+      "start": 27,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "dodge_forward": {
+      "start": 29,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "dodge_back": {
+      "start": 31,
+      "count": 2,
+      "loop": false,
+      "fps": 10
+    },
+    "crit_lean": {
+      "start": 33,
+      "count": 3,
+      "loop": false,
+      "fps": 10
+    },
+    "crit_hold": {
+      "start": 36,
+      "count": 2,
+      "loop": true,
+      "fps": 5
+    },
+    "crit_lunge": {
+      "start": 38,
+      "count": 5,
+      "loop": false,
+      "fps": 20
+    },
+    "crit_recover": {
+      "start": 43,
+      "count": 3,
+      "loop": false,
+      "fps": 9
+    }
+  }
+}

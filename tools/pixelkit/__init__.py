@@ -24,14 +24,14 @@ Letter conventions (keep these so parts can be shared between fighters):
 See `tools/STYLE.md` for the drawing rules the fighters follow.
 """
 from .canvas import Canvas, Part, grid, flip_part, rot90_part, TRANSPARENT, NO_OUTLINE
-from .shapes import capsule, polyline_capsule, blade, arc, ellipse, fill_polygon, line
+from .shapes import capsule, polyline_capsule, blade, arc, ellipse, fill_polygon, line, shaded_ellipse, tapered_chain
 from .figure import Figure, BUILD
 from .palette import Palette, check_palette
 from .sheet import Animation, pack_sheet, preview_gif, preview_png, contact_sheet
 
 __all__ = [
     "Canvas", "Part", "grid", "flip_part", "rot90_part", "TRANSPARENT", "NO_OUTLINE",
-    "capsule", "polyline_capsule", "blade", "arc", "ellipse", "fill_polygon", "line",
+    "capsule", "polyline_capsule", "blade", "arc", "ellipse", "fill_polygon", "line", "shaded_ellipse", "tapered_chain",
     "Figure", "BUILD",
     "Palette", "check_palette",
     "Animation", "pack_sheet", "preview_gif", "preview_png", "contact_sheet",
