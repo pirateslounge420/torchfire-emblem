@@ -34,18 +34,18 @@ Each trigram brings one archetype and one weapon to every fighter it appears in.
 
 | Trigram | Archetype | Weapon | Color | Mount | Steed creature (male / female) | Pure fighter (doubled) |
 |---|---|---|---|---|---|---|
-| ☰ Qián (Heaven) | Vanguard (ground cavalry) | Axes | Purple | Ground | War horse / zebra | Paladin |
-| ☳ Zhèn (Thunder) | Damage Magic | Heavy staff (long, heavy-headed, two-handed, slow) | Cyan | — | Wolf / jackal | Shaman |
-| ☵ Kǎn (Water) | Trickster Mage | Throwing cards | Indigo | — | Crane / heron | Jester |
-| ☶ Gèn (Mountain) | Heavy Armor | Glaive | Orange | — | Tortoise / turtle | Bastion |
-| ☷ Kūn (Earth) | Support Magic | Short staff (healer's rod, quick) | Yellow | — | Boar / warthog | Sage |
-| ☴ Xùn (Wind) | Flying Cavalry | Lance | Seafoam (light green) | Flying | Wyvern / drake | Valkyrie |
-| ☲ Lí (Fire) | Rogue | Daggers | Red | — | Lion / tiger | Shinobi |
-| ☱ Duì (Lake) | Swordsman | Sword | Silver | — | Mountain goat / sheep | Samurai |
+| ☰ Qián (Heaven) | Cavalry (ground) | Lance | Purple | Ground | War horse / zebra | Paladin |
+| ☳ Zhèn (Thunder) | Pirate | Axe | Cyan | — | Wolf / jackal | Berserker |
+| ☵ Kǎn (Water) | Trickster | Dagger | Indigo | — | Crane / heron | Jester |
+| ☶ Gèn (Mountain) | General (heavy armor) | Long mace (mace/hammer family: slow, two-handed, built for reach) | Orange | — | Tortoise / turtle | Bastion |
+| ☷ Kūn (Earth) | Cleric | Staff | Yellow | — | Boar / warthog | Cleric |
+| ☴ Xùn (Wind) | Flyer | Glaive | Seafoam (light green) | Flying | Wyvern / drake | Valkyrie |
+| ☲ Lí (Fire) | Shinobi | Kusarigama | Red | — | Lion / tiger | Shinobi |
+| ☱ Duì (Lake) | Samurai | Sword | Silver | — | Mountain goat / sheep | Samurai |
 
 *The steed creature column is the creature a mounted fighter rides when this trigram is its base (Section 6). Only the male creature ships at launch.*
 
-**Weapon lineup (locked Oct 15, 2026).** Fighter is a gladiator-style tournament, so there are no ranged weapons: the bow, shield and gauntlets are gone. The two staffs must read differently on the sprite — Earth's is short and fast, Thunder's is long and heavy. Shinobi (Fire) and Samurai (Lake) are now in Fighter; Shinobi is released from the Game 3 reserved list, and Captain is no longer used. *OPEN: whether Water's throwing cards get a ranged exemption as spell delivery rather than archer's reach.*
+**Weapon lineup (locked Oct 15, 2026).** All eight weapons are physical and none are ranged: Fighter is a gladiator-style tournament, so there are no magic users in it at all. Magic (light, dark, anima, and so on) is being designed as its own separate school for a later game, and a later game will mix the two. The eight were chosen so no two silhouettes read as cousins at sprite scale. Mace and hammer are one category; the General's is the long, two-handed version. Shinobi and Berserker are released from the Game 3 reserved list; Captain, Shaman and Sage are no longer used. Weapon material tiers (wood, stone, bronze, steel) were discussed and deliberately held for Game 2, since Fighter has no progression.
 
 **Colors** follow the traditional Five Elements colors (as color only — the Five Elements aren't a mechanic in Fighter): Thunder and Wind share Wood's blue-green family, Earth and Mountain share Earth's warm tones, Lake takes Metal's silver, Fire is red and Water is indigo. Heaven is the exception: its purple comes from the Purple Forbidden Enclosure, the Celestial Emperor's star-palace. Shading notes: keep Thunder's cyan leaning blue and Wind's seafoam leaning green, and keep Water's indigo on the blue side so it doesn't drift into Heaven's purple.
 
@@ -53,7 +53,7 @@ Each trigram brings one archetype and one weapon to every fighter it appears in.
 
 ## 4. How the Two Trigrams Combine
 
-- **Both weapons:** a fighter wields the weapons of both its trigrams, so Fire over Mountain fights with daggers and a glaive. A pure fighter wields its trigram's single weapon.
+- **Both weapons:** a fighter wields the weapons of both its trigrams, so Fire over Mountain fights with a kusarigama and a long mace. A pure fighter wields its trigram's single weapon.
 - **Both colors:** a fighter carries both of its trigrams' color palettes, each kept clean and readable — never mixed into one blended hue. A pure fighter carries its trigram's single palette.
 - **Bottom trigram = base archetype:** who the fighter started as.
 - **Top trigram = what they became:** the class their base grew into.
