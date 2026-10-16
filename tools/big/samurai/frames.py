@@ -107,13 +107,26 @@ def stance(bob=0):
     lock_far = Part("lock_far", [(88, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (88, 46 + b), (87, 32 + b)], "a")
     lock_far.band([(91, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (91, 40 + b)], "r")
     tie = Part("tie", [(95, 28 + b), (100, 27 + b), (101, 32 + b), (96, 33 + b)], "R")
-    f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, lock_near, lock_far, tie)
-    f.scale(SCALE, 80, DGROUND + 1, W // 2, GROUND + 1)
+    # ---- reframe to GBA Fire Emblem proportions (Mike, Oct 16): a bigger head (~1/3 of the height),
+    # a broader, shorter body, shorter legs and a wider stance. Applied as group stretches in design space.
+    head_parts = [face, hair, lock_near, lock_far, tie, tail]
+    body_parts = [far_sleeve, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand]
+    leg_parts = [foot_near, foot_far, hak]
+    head_parts = [p.stretched(1.14, 1.14, 82, 36 + b) for p in head_parts]        # about the neck base
+    body_parts = [p.stretched(1.16, 1.0, 82, 36 + b) for p in body_parts]         # broader shoulders/torso
+    leg_parts = [p.stretched(1.22, 0.86, 81, DGROUND + 1) for p in leg_parts]      # shorter legs, wider stance
+    body_parts = [p.stretched(1.0, 1.0, 0, 0) for p in body_parts]
+    hak_top = 64 * 0.86 + (DGROUND + 1) * 0.14                                     # where the shortened hakama now starts
+    body_parts = [p.stretched(1.0, (hak_top - 36) / (64 - 36), 82, 36 + b) for p in body_parts]   # torso reaches the new waist
+    f.add(*[p for p in [head_parts[5], body_parts[0]] ], *leg_parts, *body_parts[1:], *head_parts[:5])
+    f.scale(SCALE * 0.94, 80, DGROUND + 1, W // 2, GROUND + 1)
     f.w, f.h = W, H
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
-    ey = GROUND + 1 + int(round((22 + b - DGROUND - 1) * SCALE))
-    ex = [W // 2 + int(round((dx - 80) * SCALE)) for dx in (73, 80)]
+    s = SCALE * 0.94
+    eyy = 36 + b + (22 + b - 36 - b) * 1.14
+    ey = GROUND + 1 + int(round((eyy - DGROUND - 1) * s))
+    ex = [W // 2 + int(round((82 + (dx - 82) * 1.14 - 80) * s)) for dx in (73, 80)]
     # bigger anime eyes, 3x3 like the pixeljoint reference: a thin dark upper edge, a tall violet iris
     # with a light glint top-left and a dark pupil bottom-right
     for x in ex:

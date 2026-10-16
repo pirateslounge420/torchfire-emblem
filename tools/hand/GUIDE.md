@@ -84,6 +84,26 @@ Water **blue**, Lake **indigo**, Heaven **violet**, Wind **magenta**.
   the shoulder at idle; Shinobi = face hidden (mask + wrap, eye slit), flourish
   whirls the chain weight.
 
+## From fe-battle-animations.neocities.org (Mike pointed at it, Oct 16)
+
+- 16 colours including transparent and the outline → 14 for the sprite + outline
+  (40,40,40 = #282828, the darkest colour; no pure black — "black" is a dark cool grey).
+- Outline covers a lot of the sprite. Inside it: blades edge in the darkest metal,
+  skin in the darkest skin; the outline colour is used sparingly inside (eyes).
+- Skin, metal and leather never share colours (so generics can be recoloured).
+- Light from above, highlights stronger on the camera-facing side; a blob shadow
+  under the feet is part of the sprite.
+- Standing straight: women 32 px, men 34; range 30–38. Heads are ~1/3 of the
+  height, bodies broad and short, stances wide. (Our big units keep these
+  RATIOS at 128-box scale: head ≈ 1/3, shoulders ≈ 40% of height, legs ≈ 45%.)
+- Standing pose: angled to the camera, neutral, weapon pointing down, resting
+  on the ground or on the shoulder. Held indefinitely when idle.
+- Timing in 60ths: movement images 2–7 frames each, pauses before a strike
+  10–30; heavier units hold frames longer. Smears: simple shapes, bright
+  shades, no outline, no detail. Crits more elaborate than normal attacks.
+- Full set per weapon: attack + crit at 1 range, ranged attack + crit, armed
+  dodge, unarmed dodge, miss (Eirika's sword attack is 19 images, 47 total).
+
 ## The six beats of an attack (every GBA sword/axe/lance sheet uses them)
 
 1. **stance** — wide, low, weight on the back foot, weapon held low-back.

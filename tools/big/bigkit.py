@@ -96,6 +96,15 @@ class Part:
         p.dots = [(int(round(t((x, y))[0])), int(round(t((x, y))[1])), l) for x, y, l in self.dots]
         return p
 
+    def stretched(self, sx, sy, ox, oy):
+        """scale x by sx and y by sy about (ox, oy), in place"""
+        t = lambda p: (ox + (p[0] - ox) * sx, oy + (p[1] - oy) * sy)
+        p = Part(self.name, [t(q) for q in self.pts], self.fill, self.outline)
+        p.bands = [([t(q) for q in b], l) for b, l in self.bands]
+        p.folds = [([t(q) for q in f], l, w) for f, l, w in self.folds]
+        p.dots = [(int(round(t((x, y))[0])), int(round(t((x, y))[1])), l) for x, y, l in self.dots]
+        return p
+
     def raster(self, w, h):
         """returns a dict {(x,y): letter} for this part alone, outlined"""
         mask = poly_mask(self.pts, w, h)
