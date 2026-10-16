@@ -131,9 +131,9 @@ def hand(g, y, x, dx=0, dy=0):
 
 
 def arm(g, pts, dx=0, dy=0):
-    """thin plate arm: a chain of 2-px segments, each (row, col) = left end of 'okko'"""
+    """thin plate arm: a chain of 2-px segments, each (row, col) = left end of 'omko' (steel edge + plate)"""
     for y, x in pts:
-        P(g, y, x, "okko", dx, dy)
+        P(g, y, x, "omko", dx, dy)
 
 
 # --- rest ---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ REST_ARM = [(17, 36), (18, 36), (19, 36), (20, 35), (21, 35), (22, 34), (23, 33)
 
 
 def rest_lance(g, dx=0, dy=0):
-    lance(g, 32, 52, 32, 4, dx, dy)
+    lance(g, 36, 52, 27, 3, dx, dy)
     arm(g, REST_ARM, dx, dy)
     hand(g, 26, 31, dx, dy)
 
@@ -183,13 +183,13 @@ def levelled(tremble=0):
     return g.tidy()
 
 
-def arm_extended(g, dx=0):
+def arm_extended(g, dx=0, dy=0):
     """the thrusting arm, straight forward from the pauldron over the horse's head, gauntlet at the end"""
-    P(g, 21, 21, "ooooooooo", dx)
-    P(g, 22, 20, "ommmokkkk", dx)
-    P(g, 23, 20, "omkkokkkk", dx)
-    P(g, 24, 20, "okkkokkkko", dx)
-    P(g, 25, 21, "ooooooooo", dx)
+    P(g, 21, 21, "ooooooooo", dx, dy)
+    P(g, 22, 20, "ommmokkkk", dx, dy)
+    P(g, 23, 20, "omkkokkkk", dx, dy)
+    P(g, 24, 20, "okkkokkkko", dx, dy)
+    P(g, 25, 21, "ooooooooo", dx, dy)
 
 
 SMEAR = [
@@ -210,11 +210,11 @@ def smear():
     return g.tidy()
 
 
-def impact():
-    """beat 5: full gallop stretch, lance at full extension forward"""
-    g = body("body_lunge", dx=-2)
-    lance(g, 26, 23, -6, 23, dx=-2)
-    arm_extended(g, -2)
+def impact(jolt=0):
+    """beat 5: full gallop stretch, lance at full extension forward (jolt: 1-px shudder on the hold)"""
+    g = body("body_lunge", dx=-2, dy=jolt)
+    lance(g, 26, 23, -6, 23, dx=-2, dy=jolt)
+    arm_extended(g, -2, jolt)
     return g.tidy()
 
 
@@ -237,11 +237,12 @@ def raise_to_rest():
 
 
 # --- select flourish ---------------------------------------------------------------------
-REAR_HAND = (37, -8)      # the raised gauntlet in the full-rear frames (body coords)
-REAR_ARM = [(2, 40), (1, 40), (0, 39), (-1, 39), (-2, 38), (-3, 38), (-4, 37), (-5, 37), (-6, 36)]
+REAR_HAND = (31, -7)      # the raised gauntlet in the full-rear frames (body coords)
+REAR_ARM = [(2, 39), (1, 38), (0, 37), (-1, 36), (-2, 35), (-3, 34), (-4, 33), (-5, 32)]
+RING = 15
 
 
-def twirl_pts(ang, tip=20, butt=22):
+def twirl_pts(ang, tip=18, butt=20):
     hx, hy = REAR_HAND
     c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
     return round(hx - c * butt), round(hy + s * butt), round(hx + c * tip), round(hy - s * tip)
@@ -261,7 +262,7 @@ def gather():
     """s0: anticipation - horse tucks its head, rider lifts the upright lance a hand's width"""
     g = body()
     region(g, 12, 9, 31, 26, 0, 1)
-    lance(g, 32, 42, 32, -6)
+    lance(g, 36, 42, 27, -7)
     arm(g, [(17, 36), (18, 35), (19, 34), (20, 33)])
     hand(g, 20, 31)
     return g.outline_missing(skip="Hh").tidy()
@@ -284,22 +285,23 @@ def full_rear(beat):
     if beat == 0:
         twirl_lance(g, 60)
     elif beat == 1:
-        ring(g, hx, hy, 19, 60, 125, core=False)
+        ring(g, hx, hy, RING, 60, 125, core=False)
         twirl_lance(g, 120, behind_butt=True)
     elif beat == 2:
-        ring(g, hx, hy, 19, 55, 185)
+        ring(g, hx, hy, RING, 55, 185)
         twirl_lance(g, 175, behind_butt=True)
         bx, by, tx, ty = twirl_pts(120)            # ghost of beat 1's position
         afterimage(g, hx, hy, tx, ty)
     elif beat == 3:
-        ring(g, hx, hy, 19, 0, 360)
+        ring(g, hx, hy, RING, 0, 360)
         twirl_lance(g, 60)
     else:
-        for y, x in ((-27, 30), (-29, 44), (-24, 52), (-20, 18), (-14, 56), (-26, 37)):
+        for y, x in ((-23, 26), (-24, 38), (-19, 45), (-15, 14), (-9, 48), (-21, 32), (-12, 12)):
             px(g, y, x, "h", behind=True)
         twirl_lance(g, 80)
     arm(g, REAR_ARM)
     hand(g, hy, hx - 1)
+    P(g, 3, 38, "oo")                                  # pauldron edge where the arm leaves the shoulder
     return g.tidy()
 
 
@@ -355,9 +357,9 @@ def animations():
         "idle": ([rest(i) for i in range(8)], 6, True),
         "select": ([gather(), half_rear(), full_rear(0), full_rear(1), full_rear(2), full_rear(3), full_rear(4),
                     coming_down(), land(), landed()], 10, False),
-        "lean": ([couched_back(), levelled(), levelled()], 10, False),
+        "lean": ([couched_back(), levelled(), levelled(-1)], 10, False),
         "hold": ([levelled(), levelled(-1)], 5, True),
-        "lunge": ([smear(), impact(), impact()], 20, False),
+        "lunge": ([smear(), impact(), impact(-1)], 20, False),
         "recover": ([settle(), raise_to_rest(), rest(0)], 9, False),
     }
 
