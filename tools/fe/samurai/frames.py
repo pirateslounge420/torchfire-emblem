@@ -15,7 +15,7 @@ PAL = Palette(NAME, {
     "n": (148, 148, 176),                                                # hakama shadow (= g)
     "R": (200, 56, 64), "r": (120, 24, 40),                              # obi; r = hair shadow
     "A": (255, 128, 64), "a": (222, 64, 30),                             # scarlet hair
-    "L": (96, 60, 36),                                                   # leather (soles, hilt wrap) — its own colour, per the FE rule
+    "L": (96, 60, 36), "l": (96, 60, 36),                                                 # leather (soles, hilt wrap) — its own colour, per the FE rule
     "C": (40, 40, 40),                                                   # saya lacquer = outline black
 })
 
