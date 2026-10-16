@@ -13,8 +13,8 @@ from bigkit import Part, Frame, Palette, render, strip  # noqa: E402
 
 NAME = "samurai"
 DW, DH, DGROUND = 160, 128, 117        # design space
-W, H, GROUND = 96, 96, 89              # the base box
-SCALE = 0.8
+W, H, GROUND = 128, 128, 119           # the base box (Mike, Oct 16: try 128x128)
+SCALE = 1.06                            # figure ~111 px
 
 PAL = Palette(NAME, {
     "H": (184, 190, 210), "h": (184, 190, 210), "g": (112, 118, 146),   # white dropped to make room for the orange hair; H = h
@@ -106,14 +106,15 @@ def stance(bob=0):
     lock_far.band([(91, 22 + b), (93, 22 + b), (94, 36 + b), (93, 50 + b), (90, 54 + b), (91, 40 + b)], "r")
     tie = Part("tie", [(95, 28 + b), (100, 27 + b), (101, 32 + b), (96, 33 + b)], "R")
     f.add(tail, far_sleeve, foot_near, foot_far, hak, torso, neck, obi, knot, saya, tsuba, hilt, sleeve, hand, face, hair, lock_near, lock_far, tie)
-    f.scale(SCALE, 80, DGROUND + 1, 48, GROUND + 1)
+    f.scale(SCALE, 80, DGROUND + 1, W // 2, GROUND + 1)
     f.w, f.h = W, H
     g = f.raster()
     # eyes: placed in box pixels after scaling so both are exactly 2 px wide (Mike)
-    ey = GROUND + 1 + int(round((24 + b - DGROUND - 1) * SCALE)) - 2
+    ey = GROUND + 1 + int(round((22 + b - DGROUND - 1) * SCALE))
+    ex = [W // 2 + int(round((dx - 80) * SCALE)) for dx in (73, 80)]
     # bigger anime eyes, 3x3 like the pixeljoint reference: a thin dark upper edge, a tall violet iris
     # with a light glint top-left and a dark pupil bottom-right
-    for x in (43, 49):
+    for x in ex:
         g.g[ey - 1][x] = "o"; g.g[ey - 1][x + 1] = "o"; g.g[ey - 1][x + 2] = "o"
         g.g[ey][x] = "h"; g.g[ey][x + 1] = "k"; g.g[ey][x + 2] = "k"
         g.g[ey + 1][x] = "k"; g.g[ey + 1][x + 1] = "k"; g.g[ey + 1][x + 2] = "o"
