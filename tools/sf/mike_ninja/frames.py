@@ -57,7 +57,7 @@ def breathe(k):
     """idle: everything above the belt rises 1 px and settles; the eyes glint on the top of the breath"""
     g = body()
     if k:
-        g.shift_region(0, 0, BOX, TOP + 29, 0, -1)
+        g.stretch(0, 0, BOX, TOP + 29, 0, -1)
     return g.tidy()
 
 

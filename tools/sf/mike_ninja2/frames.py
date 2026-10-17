@@ -80,15 +80,16 @@ def paste(g, block, x, y, rot=0):
 
 
 def breathe(k):
-    """idle: chest and head rise 1 px; the arms lag a frame behind"""
+    """idle: the chest and head rise 1 px — the torso STRETCHES at the belt (the belt's top row repeats)
+    so nothing tears; the arms lag a frame behind, stretching at the shoulder the same way"""
     g = body()
     if k >= 1:
-        g.shift_region(0, TOP, BOX, TOP + BELT, 0, -1)
+        g.stretch(0, TOP, BOX, TOP + BELT, 0, -1)
     if k == 1 or k == 3:
         for reg in (NEAR_ARM, FAR_ARM):
             x0, y0, x1, y1 = reg
             bx, by = S(x0, y0)
-            g.shift_region(bx, by - 1, bx + (x1 - x0), by + (y1 - y0), 0, 1)
+            g.stretch(bx, by - 1, bx + (x1 - x0), by + (y1 - y0), 0, 1)
     return g.tidy()
 
 

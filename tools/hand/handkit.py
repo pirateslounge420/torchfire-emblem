@@ -103,6 +103,37 @@ class Grid:
                     n.g[ny][nx] = self.g[y][x]
         return n
 
+    def stretch(self, x0, y0, x1, y1, dx=0, dy=0):
+        """Move the region by (dx, dy) and FILL the strip it vacates by repeating the region's own edge
+        row/column, so the body stretches a pixel instead of tearing (breathing, lagging limbs)."""
+        rows = [self.g[y][x0:x1] for y in range(y0, y1)]
+        self.shift_region(x0, y0, x1, y1, dx, dy)
+        if dy < 0:                                   # moved up: repeat the bottom row into the gap
+            edge = rows[-1]
+            for y in range(y1 + dy, y1):
+                for i, c in enumerate(edge):
+                    if c != ".":
+                        self.g[y][x0 + i] = c
+        elif dy > 0:                                 # moved down: repeat the top row
+            edge = rows[0]
+            for y in range(y0, y0 + dy):
+                for i, c in enumerate(edge):
+                    if c != ".":
+                        self.g[y][x0 + i] = c
+        if dx < 0:
+            for y in range(y0 + max(dy, 0), y1 + min(dy, 0)):
+                c = self.g[y][x1 + dx - 1]
+                for x in range(x1 + dx, x1):
+                    if c != ".":
+                        self.g[y][x] = c
+        elif dx > 0:
+            for y in range(y0 + max(dy, 0), y1 + min(dy, 0)):
+                c = self.g[y][x0 + dx]
+                for x in range(x0, x0 + dx):
+                    if c != ".":
+                        self.g[y][x] = c
+        return self
+
     def shift_region(self, x0, y0, x1, y1, dx, dy):
         """Move a rectangle of pixels (used to lean a head or slide a foot)."""
         buf = {}
